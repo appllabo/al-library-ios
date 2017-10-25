@@ -2,14 +2,14 @@ import UIKit
 import SVGKit
 import INSPullToRefresh
 
-class ALArticleTableViewController: ALSwipeTabContentViewController {
+class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALArticleTableViewCellSetting
+	internal let cellSetting: ALWebsiteArticleTableViewCellSetting
 	internal var articles = [ALJsonArticle]()
-	internal var cells = [ALArticleTableViewCell]()
+	internal var cells = [ALWebsiteArticleTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALArticleTableViewCellSetting) {
+	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteArticleTableViewCellSetting) {
 		self.cellSetting = cellSetting
 		
 		super.init(title: title, isTabContent: isTabContent)
@@ -80,15 +80,15 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 	
 	/*
 	func refresh() {
-		self.tableView.ins_beginPullToRefresh()
+	self.tableView.ins_beginPullToRefresh()
 	}*/
 }
 
-extension ALArticleTableViewController {
+extension ALWebsiteArticleTableViewController {
 	func load(isRemove: Bool, done: @escaping () -> Void) {
 	}}
 
-extension ALArticleTableViewController: UITableViewDataSource {
+extension ALWebsiteArticleTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.cells.count
 	}
@@ -102,7 +102,7 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	}
 }
 
-extension ALArticleTableViewController: UITableViewDelegate {
+extension ALWebsiteArticleTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		self.articles[indexPath.row].isRead = true
 		self.cells[indexPath.row].read()

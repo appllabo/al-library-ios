@@ -64,7 +64,7 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 		self.stackViewWebsite.layoutMargins = self.setting.paddingWebsite
 		self.stackViewWebsite.isLayoutMarginsRelativeArrangement = true
 		
-		self.stackViewWebsite.addArrangedSubview(imageViewWebsite)
+		self.stackViewWebsite.addArrangedSubview(self.imageViewWebsite)
 		self.stackViewWebsite.addArrangedSubview(stackViewWebsiteRight)
 		
 		self.stackViewImage.layoutMargins = self.setting.paddingImage
