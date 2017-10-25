@@ -14,10 +14,17 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		self.webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
 		self.webView.backgroundColor = .clear
 		self.webView.isOpaque = false
-		self.view.addSubview(self.webView)
+		
+		self.webView.addObserver(self, forKeyPath :"estimatedProgress", options: .new, context: nil)
+		self.webView.addObserver(self, forKeyPath :"title", options: .new, context: nil)
+		self.webView.addObserver(self, forKeyPath :"loading", options: .new, context: nil)
+		self.webView.addObserver(self, forKeyPath :"canGoBack", options: .new, context: nil)
+		self.webView.addObserver(self, forKeyPath :"canGoForward", options: .new, context: nil)
 		
 		let request: URLRequest = URLRequest(url: URL(string: url)!)
 		self.webView.load(request)
+		
+		self.view.addSubview(self.webView)
 		
 		self.activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
 		self.activityIndicator.center = self.view.center
@@ -33,6 +40,12 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	
 	deinit {
 		self.webView.scrollView.delegate = nil
+		
+		self.webView.removeObserver(self, forKeyPath: "estimatedProgress")
+		self.webView.removeObserver(self, forKeyPath: "title")
+		self.webView.removeObserver(self, forKeyPath: "loading")
+		self.webView.removeObserver(self, forKeyPath: "canGoBack")
+		self.webView.removeObserver(self, forKeyPath: "canGoForward")
 	}
 	
 	override func viewDidLoad() {
@@ -56,6 +69,13 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
+	}
+	
+	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+		self.observeValue(self.webView, forKeyPath: keyPath)
+	}
+	
+	func observeValue(_ webView: WKWebView, forKeyPath keyPath: String?) {
 	}
 	
 	func didStartProvisionalNavigation(_ navigation: WKNavigation!) {
