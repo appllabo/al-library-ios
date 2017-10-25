@@ -2,7 +2,7 @@ import UIKit
 import SVGKit
 import AlamofireImage
 
-public class ALArticleImageTableViewCellSetting {
+public class ALImageArticleTableViewCellSetting {
 	public var paddingWebsite = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
 	public var paddingImage = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
 	public var paddingTitle = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
@@ -17,8 +17,8 @@ public class ALArticleImageTableViewCellSetting {
 	}
 }
 
-public class ALArticleImageTableViewCell: UITableViewCell {
-	public let setting: ALArticleImageTableViewCellSetting
+public class ALImageArticleTableViewCell: UITableViewCell {
+	public let setting: ALImageArticleTableViewCellSetting
 	
 	private let labelTitle = UILabel()
 	private let imageViewWebsite = UIImageView()
@@ -30,11 +30,11 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 	
 	private let article: ALJsonArticle
 	
-	public init(article: ALJsonArticle, setting: ALArticleImageTableViewCellSetting) {
+	public init(article: ALJsonArticle, setting: ALImageArticleTableViewCellSetting) {
 		self.article = article
 		self.setting = setting
 		
-		super.init(style: .default, reuseIdentifier: "ALArticleImageTableViewCell")
+		super.init(style: .default, reuseIdentifier: "ALImageArticleTableViewCell")
 		
 		let labelWebsite = UILabel()
 		labelWebsite.font = .boldSystemFont(ofSize: 12)
@@ -130,7 +130,7 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 	override public func layoutSubviews() {
 		super.layoutSubviews()
 		
-		let heightThumbnail = (self.contentView.frame.width - 16) / 4 * 3
+		let heightThumbnail = (self.contentView.frame.width - 16) / 16 * 9
 		
 		self.stackViewWebsite.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
 		self.stackViewImage.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
