@@ -56,6 +56,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 		labelWebsite.textAlignment = .left
 		labelWebsite.textColor = self.setting.colorWebsite
 		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
 		
 		self.stackViewRight.axis = .vertical
 		self.stackViewRight.alignment = .fill
@@ -65,6 +66,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 		stackViewBottom.axis = .horizontal
 		stackViewBottom.alignment = .bottom
 		stackViewBottom.distribution = .fill
+		stackViewBottom.spacing = 4
 		
 		stackViewBottom.addArrangedSubview(self.imageViewWebsite)
 		stackViewBottom.addArrangedSubview(labelWebsite)

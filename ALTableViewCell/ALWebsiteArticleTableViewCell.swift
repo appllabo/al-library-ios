@@ -43,15 +43,18 @@ public class ALWebsiteArticleTableViewCell: UITableViewCell {
 		self.titleLabel.text = article.title
 		
 		let labelDate = UILabel()
-		labelDate.font = setting.fontDate
-		labelDate.textColor = self.setting.colorDate
 		labelDate.text = article.date
+		labelDate.font = setting.fontDate
+		labelDate.textAlignment = .left
+		labelDate.textColor = self.setting.colorDate
 		
 		let labelWebsite = UILabel()
+		labelWebsite.text = article.website
 		labelWebsite.font = setting.fontWebsite
 		labelWebsite.textAlignment = .right
 		labelWebsite.textColor = self.setting.colorWebsite
-		labelWebsite.text = article.website
+		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
 		
 		self.stackViewRight.axis = .vertical
 		self.stackViewRight.alignment = .fill
@@ -61,6 +64,7 @@ public class ALWebsiteArticleTableViewCell: UITableViewCell {
 		stackViewBottom.axis = .horizontal
 		stackViewBottom.alignment = .bottom
 		stackViewBottom.distribution = .fill
+		stackViewBottom.spacing = 8
 		
 		stackViewBottom.addArrangedSubview(labelDate)
 		stackViewBottom.addArrangedSubview(labelWebsite)
