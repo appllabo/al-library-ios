@@ -3,7 +3,7 @@ import UIKit
 class ALStackPageContentViewController: UIViewController {
 	public var attributedTitleMain: NSMutableAttributedString {
 		let attributedText = NSMutableAttributedString(string: self.title ?? "Main")
-		let lineHeight: CGFloat = 22.0
+		let lineHeight = CGFloat(22.0)
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byTruncatingTail
 		paragraphStyle.minimumLineHeight = lineHeight
@@ -15,7 +15,7 @@ class ALStackPageContentViewController: UIViewController {
 	
 	public var attributedTitleSub: NSMutableAttributedString {
 		let attributedText = NSMutableAttributedString(string: self.title ?? "Sub")
-		let lineHeight: CGFloat = 22.0
+		let lineHeight = CGFloat(22.0)
 		let paragraphStyle = NSMutableParagraphStyle()
 		paragraphStyle.lineBreakMode = .byTruncatingTail
 		paragraphStyle.minimumLineHeight = lineHeight
