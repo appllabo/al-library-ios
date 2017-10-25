@@ -102,7 +102,7 @@ extension ALImageArticleTableViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return 54 + tableView.frame.width / 16 * 9 + 96
+		return 54 + tableView.frame.width / 16 * 9 + 64
 	}
 }
 
