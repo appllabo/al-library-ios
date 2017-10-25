@@ -5,13 +5,7 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	fileprivate let activityIndicator = UIActivityIndicatorView()
 	
 	init(title: String, url: String, isTabContent: Bool) {
-		print("ALWebPageViewController:init")
-		
 		super.init(title: title, isTabContent: isTabContent)
-		
-		self.view.backgroundColor = DesignParameter.ViewBackgroundColor
-		
-		self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
 		
 		self.webView.navigationDelegate = self
 //		self.webView.UIDelegate = self
@@ -31,8 +25,6 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
 		self.activityIndicator.startAnimating()
 //		self.webView.addSubview(self.activityIndicator)
-		
-		self.view.backgroundColor = DesignParameter.ViewBackgroundColor
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -40,8 +32,6 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	}
 	
 	deinit {
-		print("WebPageViewController:deinit")
-		
 		self.webView.scrollView.delegate = nil
 	}
 	
@@ -69,15 +59,12 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	}
 	
 	func didStartProvisionalNavigation(_ navigation: WKNavigation!) {
-		print("didStartProvisionalNavigation")
 	}
 	
 	func didFinish(_ navigation: WKNavigation!) {
-		print("didFinish")
 	}
 	
 	func evaluate(_ path: String) {
-		print("evaluate")
 	}
 }
 
