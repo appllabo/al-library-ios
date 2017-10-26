@@ -6,6 +6,9 @@ public class ALImageArticleTableViewCellSetting {
 	public var paddingWebsite = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
 	public var paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
+	public var radiusWebsiteImage = CGFloat(18)
+	public var fontWebsite = UIFont.boldSystemFont(ofSize: 16)
+	public var fontDate = UIFont.systemFont(ofSize: 14)
 	public var colorBackground = UIColor.clear
 	public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
 	public var colorRead = UIColor(hex: 0x707070, alpha: 1.0)
@@ -39,13 +42,13 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		super.init(style: .default, reuseIdentifier: "ALImageArticleTableViewCell")
 		
 		let labelWebsite = UILabel()
-		labelWebsite.font = .boldSystemFont(ofSize: 12)
+		labelWebsite.font = self.setting.fontWebsite
 		labelWebsite.textAlignment = .left
 		labelWebsite.textColor = self.setting.colorWebsite
 		labelWebsite.text = article.website
 		
 		let labelDate = UILabel()
-		labelDate.font = .systemFont(ofSize: 12)
+		labelDate.font = self.setting.fontDate
 		labelDate.textColor = self.setting.colorBottom
 		labelDate.text = article.date
 		
@@ -53,7 +56,7 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		stackViewWebsiteRight.axis = .vertical
 		stackViewWebsiteRight.alignment = .leading
 		stackViewWebsiteRight.distribution = .equalSpacing
-		stackViewWebsiteRight.spacing = 4
+		stackViewWebsiteRight.spacing = 2
 		stackViewWebsiteRight.setContentHuggingPriority(0, for: .horizontal)
 		
 		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
@@ -152,7 +155,7 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		
 		let imagePlaceholder = UIImage()
 		
-		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: 29, height: 29), radius: 24.5)
+		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2, height: self.setting.radiusWebsiteImage * 2), radius: self.setting.radiusWebsiteImage)
 		let urlWebsiteImage = URL(string: self.article.websiteImage)!
 		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
 		
