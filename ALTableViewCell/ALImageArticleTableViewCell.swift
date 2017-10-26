@@ -30,6 +30,8 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 	
 	private let article: ALJsonArticle
 	
+	private var isLayouted = false
+	
 	public init(article: ALJsonArticle, setting: ALImageArticleTableViewCellSetting) {
 		self.article = article
 		self.setting = setting
@@ -121,7 +123,7 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 //		self.contentView.addSubview(self.stackViewTitle)
 		self.contentView.addSubview(self.labelTitle)
 		
-		if (self.article.isRead == true) {
+		if self.article.isRead == true {
 			self.read()
 		}
 	}
@@ -132,6 +134,16 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 	
 	override public func layoutSubviews() {
 		super.layoutSubviews()
+		
+		if self.isLayouted == true {
+			return
+		}
+		
+		self.layout()
+	}
+	
+	func layout() {
+		self.isLayouted = true
 		
 		let heightThumbnail = (self.contentView.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
 		
