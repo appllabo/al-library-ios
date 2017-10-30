@@ -15,6 +15,10 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 	
 	internal var isEnableForward: Bool = false
     
+	internal var titleViewFrame: CGRect {
+		return CGRect(x: 0, y: 0, width: self.view.frame.width - 96, height: 44)
+	}
+	
     init(contentViewController: ALStackPageContentViewController) {
 		super.init(isSloppySwipe: true, contentViewController: contentViewController, transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
 		
@@ -30,7 +34,7 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		
 		self.setViewControllers(self.contentViewControllers, direction: .forward, animated: true, completion: nil)
 		
-		self.titleView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width - 80, height: 44)
+		self.titleView.frame = titleViewFrame
 		
 		self.labelTitle.frame = self.titleView.frame
 		self.labelTitle.numberOfLines = 2

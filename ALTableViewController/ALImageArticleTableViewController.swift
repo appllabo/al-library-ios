@@ -2,14 +2,14 @@ import UIKit
 import SVGKit
 import INSPullToRefresh
 
-class ALArticleTableViewController: ALSwipeTabContentViewController {
+class ALImageArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALArticleTableViewCellSetting
+	internal let cellSetting: ALImageArticleTableViewCellSetting
 	internal var articles = [ALJsonArticle]()
-	internal var cells = [ALArticleTableViewCell]()
+	internal var cells = [ALImageArticleTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALArticleTableViewCellSetting) {
+	init(title: String, isTabContent: Bool, cellSetting: ALImageArticleTableViewCellSetting) {
 		self.cellSetting = cellSetting
 		
 		super.init(title: title, isTabContent: isTabContent)
@@ -20,7 +20,6 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingImage.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		self.tableView.estimatedRowHeight = self.cellSetting.height
 		
 		if self.isTabContent == true {
 			self.tableView.contentInset.top = 64
@@ -75,20 +74,25 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 	}
 	
 	func pullToRefresh() {
-		print("pullToRefresh")
+		self.load(isRemove: true, done: {
+			self.tableView.ins_endPullToRefresh()
+		})
 	}
 	
-	/*
 	func refresh() {
 		self.tableView.ins_beginPullToRefresh()
-	}*/
+		
+		self.load(isRemove: true, done: {
+			self.tableView.ins_endPullToRefresh()
+		})
+	}
 }
 
-extension ALArticleTableViewController {
+extension ALImageArticleTableViewController {
 	func load(isRemove: Bool, done: @escaping () -> Void) {
 	}}
 
-extension ALArticleTableViewController: UITableViewDataSource {
+extension ALImageArticleTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.cells.count
 	}
@@ -98,11 +102,11 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cells[indexPath.row].setting.height
+		return 54 + tableView.frame.width / 16 * 9 + 64
 	}
 }
 
-extension ALArticleTableViewController: UITableViewDelegate {
+extension ALImageArticleTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		self.articles[indexPath.row].isRead = true
 		self.cells[indexPath.row].read()

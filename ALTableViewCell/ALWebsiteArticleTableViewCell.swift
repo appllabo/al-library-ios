@@ -1,9 +1,9 @@
 import UIKit
 import AlamofireImage
 
-public class ALArticleTableViewCellSetting {
+public class ALWebsiteArticleTableViewCellSetting {
 	public var height = CGFloat(102.0)
-	public var radiusImage = CGFloat(4.0)
+	public var borderRadiusImage = CGFloat(4.0)
 	public var paddingImage = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 	public var paddingContent = UIEdgeInsets(top: 12, left: 4, bottom: 12, right: 12)
 	public var colorBackground = UIColor.clear
@@ -20,8 +20,8 @@ public class ALArticleTableViewCellSetting {
 	}
 }
 
-public class ALArticleTableViewCell: UITableViewCell {
-	public let setting: ALArticleTableViewCellSetting
+public class ALWebsiteArticleTableViewCell: UITableViewCell {
+	public let setting: ALWebsiteArticleTableViewCellSetting
 	public var isLayouted = false
 	
 	private let thumbnailView = UIImageView()
@@ -30,11 +30,11 @@ public class ALArticleTableViewCell: UITableViewCell {
 	
 	private let article: ALJsonArticle
 	
-	public init(article: ALJsonArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting()) {
+	public init(article: ALJsonArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting()) {
 		self.article = article
 		self.setting = setting
 		
-		super.init(style: .default, reuseIdentifier: "ALArticleTableViewCell")
+		super.init(style: .default, reuseIdentifier: "ALWebsiteArticleTableViewCell")
 		
 		self.titleLabel.font = setting.fontTitle
 		self.titleLabel.numberOfLines = 2
@@ -43,15 +43,18 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.titleLabel.text = article.title
 		
 		let labelDate = UILabel()
-		labelDate.font = setting.fontDate
-		labelDate.textColor = self.setting.colorDate
 		labelDate.text = article.date
+		labelDate.font = setting.fontDate
+		labelDate.textAlignment = .left
+		labelDate.textColor = self.setting.colorDate
 		
 		let labelWebsite = UILabel()
+		labelWebsite.text = article.website
 		labelWebsite.font = setting.fontWebsite
 		labelWebsite.textAlignment = .right
 		labelWebsite.textColor = self.setting.colorWebsite
-		labelWebsite.text = article.website
+		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
 		
 		self.stackViewRight.axis = .vertical
 		self.stackViewRight.alignment = .fill
@@ -61,6 +64,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 		stackViewBottom.axis = .horizontal
 		stackViewBottom.alignment = .bottom
 		stackViewBottom.distribution = .fill
+		stackViewBottom.spacing = 8
 		
 		stackViewBottom.addArrangedSubview(labelDate)
 		stackViewBottom.addArrangedSubview(labelWebsite)
@@ -103,7 +107,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 		let widthThumbnail = heightThumbnail
 		
 		let image = UIImage()
-		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusImage)
+		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.borderRadiusImage)
 		let url = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
 		self.thumbnailView.af_setImage(withURL: url, placeholderImage: image, filter: filter)
 		
@@ -117,3 +121,4 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.titleLabel.textColor = self.setting.colorRead
 	}
 }
+

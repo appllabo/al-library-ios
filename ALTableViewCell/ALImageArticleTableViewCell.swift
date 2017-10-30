@@ -1,11 +1,14 @@
 import UIKit
-import SVGKit
+//import SVGKit
 import AlamofireImage
 
-public class ALArticleImageTableViewCellSetting {
+public class ALImageArticleTableViewCellSetting {
 	public var paddingWebsite = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-	public var paddingImage = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-	public var paddingTitle = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+	public var paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
+	public var radiusWebsiteImage = CGFloat(18)
+	public var fontWebsite = UIFont.boldSystemFont(ofSize: 16)
+	public var fontDate = UIFont.systemFont(ofSize: 14)
 	public var colorBackground = UIColor.clear
 	public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
 	public var colorRead = UIColor(hex: 0x707070, alpha: 1.0)
@@ -17,33 +20,35 @@ public class ALArticleImageTableViewCellSetting {
 	}
 }
 
-public class ALArticleImageTableViewCell: UITableViewCell {
-	public let setting: ALArticleImageTableViewCellSetting
+public class ALImageArticleTableViewCell: UITableViewCell {
+	public let setting: ALImageArticleTableViewCellSetting
 	
 	private let labelTitle = UILabel()
 	private let imageViewWebsite = UIImageView()
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewWebsite = UIStackView()
 	private let stackViewImage = UIStackView()
-	private let stackViewTitle = UIStackView()
-	private let stackViewButton = UIStackView()
+//	private let stackViewTitle = UIStackView()
+//	private let stackViewButton = UIStackView()
 	
 	private let article: ALJsonArticle
 	
-	public init(article: ALJsonArticle, setting: ALArticleImageTableViewCellSetting) {
+	private var isLayouted = false
+	
+	public init(article: ALJsonArticle, setting: ALImageArticleTableViewCellSetting) {
 		self.article = article
 		self.setting = setting
 		
-		super.init(style: .default, reuseIdentifier: "ALArticleImageTableViewCell")
+		super.init(style: .default, reuseIdentifier: "ALImageArticleTableViewCell")
 		
 		let labelWebsite = UILabel()
-		labelWebsite.font = .boldSystemFont(ofSize: 12)
+		labelWebsite.font = self.setting.fontWebsite
 		labelWebsite.textAlignment = .left
 		labelWebsite.textColor = self.setting.colorWebsite
 		labelWebsite.text = article.website
 		
 		let labelDate = UILabel()
-		labelDate.font = .systemFont(ofSize: 12)
+		labelDate.font = self.setting.fontDate
 		labelDate.textColor = self.setting.colorBottom
 		labelDate.text = article.date
 		
@@ -51,7 +56,7 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 		stackViewWebsiteRight.axis = .vertical
 		stackViewWebsiteRight.alignment = .leading
 		stackViewWebsiteRight.distribution = .equalSpacing
-		stackViewWebsiteRight.spacing = 4
+		stackViewWebsiteRight.spacing = 2
 		stackViewWebsiteRight.setContentHuggingPriority(0, for: .horizontal)
 		
 		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
@@ -64,7 +69,7 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 		self.stackViewWebsite.layoutMargins = self.setting.paddingWebsite
 		self.stackViewWebsite.isLayoutMarginsRelativeArrangement = true
 		
-		self.stackViewWebsite.addArrangedSubview(imageViewWebsite)
+		self.stackViewWebsite.addArrangedSubview(self.imageViewWebsite)
 		self.stackViewWebsite.addArrangedSubview(stackViewWebsiteRight)
 		
 		self.stackViewImage.layoutMargins = self.setting.paddingImage
@@ -77,6 +82,7 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 		self.labelTitle.textColor = self.setting.colorTitle
 		self.labelTitle.text = article.title
 		
+		/*
 		self.stackViewTitle.axis = .vertical
 		self.stackViewTitle.spacing = 8
 		self.stackViewTitle.layoutMargins = self.setting.paddingTitle
@@ -113,12 +119,14 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 		self.stackViewButton.addArrangedSubview(labelEmpty)
 		
 		self.stackViewTitle.addArrangedSubview(self.stackViewButton)
+		*/
 		
 		self.contentView.addSubview(self.stackViewWebsite)
 		self.contentView.addSubview(self.stackViewImage)
-		self.contentView.addSubview(self.stackViewTitle)
+//		self.contentView.addSubview(self.stackViewTitle)
+		self.contentView.addSubview(self.labelTitle)
 		
-		if (self.article.isRead == true) {
+		if self.article.isRead == true {
 			self.read()
 		}
 	}
@@ -130,14 +138,24 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 	override public func layoutSubviews() {
 		super.layoutSubviews()
 		
-		let heightThumbnail = (self.contentView.frame.width - 16) / 4 * 3
+		if self.isLayouted == true {
+			return
+		}
+		
+		self.layout()
+	}
+	
+	func layout() {
+		self.isLayouted = true
+		
+		let heightThumbnail = (self.contentView.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
 		
 		self.stackViewWebsite.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
 		self.stackViewImage.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
 		
 		let imagePlaceholder = UIImage()
 		
-		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: 29, height: 29), radius: 24.5)
+		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2, height: self.setting.radiusWebsiteImage * 2), radius: self.setting.radiusWebsiteImage)
 		let urlWebsiteImage = URL(string: self.article.websiteImage)!
 		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
 		
@@ -145,7 +163,8 @@ public class ALArticleImageTableViewCell: UITableViewCell {
 		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
 		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
 		
-		self.stackViewTitle.frame = CGRect(x: 0, y: heightThumbnail + 54, width: self.contentView.frame.width, height: 96)
+//		self.stackViewTitle.frame = CGRect(x: 0, y: heightThumbnail + 54, width: self.contentView.frame.width, height: 96)
+		self.labelTitle.frame = CGRect(x: self.setting.paddingTitle.left, y: heightThumbnail + 54 + self.setting.paddingTitle.top, width: self.contentView.frame.width - self.setting.paddingTitle.left - self.setting.paddingTitle.right, height: 64 - self.setting.paddingTitle.top - self.setting.paddingTitle.bottom)
 	}
 	
 	internal func read() {

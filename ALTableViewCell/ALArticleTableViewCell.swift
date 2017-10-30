@@ -3,7 +3,8 @@ import AlamofireImage
 
 public class ALArticleTableViewCellSetting {
 	public var height = CGFloat(102.0)
-	public var radiusImage = CGFloat(4.0)
+	public var borderRadiusImage = CGFloat(4.0)
+	public var radiusWebsiteImage = CGFloat(8.5)
 	public var paddingImage = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 	public var paddingContent = UIEdgeInsets(top: 12, left: 4, bottom: 12, right: 12)
 	public var colorBackground = UIColor.clear
@@ -25,6 +26,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 	public var isLayouted = false
 	
 	private let thumbnailView = UIImageView()
+	private let imageViewWebsite = UIImageView()
 	private let titleLabel = UILabel()
 	private let stackViewRight = UIStackView()
 	
@@ -43,15 +45,18 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.titleLabel.text = article.title
 		
 		let labelDate = UILabel()
-		labelDate.font = setting.fontDate
-		labelDate.textColor = self.setting.colorDate
 		labelDate.text = article.date
+		labelDate.font = setting.fontDate
+		labelDate.textAlignment = .right
+		labelDate.textColor = self.setting.colorDate
 		
 		let labelWebsite = UILabel()
-		labelWebsite.font = setting.fontWebsite
-		labelWebsite.textAlignment = .right
-		labelWebsite.textColor = self.setting.colorWebsite
 		labelWebsite.text = article.website
+		labelWebsite.font = setting.fontWebsite
+		labelWebsite.textAlignment = .left
+		labelWebsite.textColor = self.setting.colorWebsite
+		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
 		
 		self.stackViewRight.axis = .vertical
 		self.stackViewRight.alignment = .fill
@@ -61,9 +66,11 @@ public class ALArticleTableViewCell: UITableViewCell {
 		stackViewBottom.axis = .horizontal
 		stackViewBottom.alignment = .bottom
 		stackViewBottom.distribution = .fill
+		stackViewBottom.spacing = 4
 		
-		stackViewBottom.addArrangedSubview(labelDate)
+		stackViewBottom.addArrangedSubview(self.imageViewWebsite)
 		stackViewBottom.addArrangedSubview(labelWebsite)
+		stackViewBottom.addArrangedSubview(labelDate)
 		
 		self.stackViewRight.addArrangedSubview(self.titleLabel)
 		self.stackViewRight.addArrangedSubview(stackViewBottom)
@@ -102,10 +109,15 @@ public class ALArticleTableViewCell: UITableViewCell {
 		let heightThumbnail = heightImage - self.setting.paddingImage.top - self.setting.paddingImage.bottom
 		let widthThumbnail = heightThumbnail
 		
-		let image = UIImage()
-		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusImage)
+		let imagePlaceholder = UIImage()
+		
+		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2, height: self.setting.radiusWebsiteImage * 2), radius: self.setting.radiusWebsiteImage)
+		let urlWebsiteImage = URL(string: self.article.websiteImage)!
+		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
+		
+		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.borderRadiusImage)
 		let url = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
-		self.thumbnailView.af_setImage(withURL: url, placeholderImage: image, filter: filter)
+		self.thumbnailView.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filter)
 		
 		let widthRight = self.contentView.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
