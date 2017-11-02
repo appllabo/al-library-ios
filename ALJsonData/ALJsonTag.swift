@@ -15,6 +15,10 @@ public class ALJsonTag: NSObject, NSCoding {
 		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
 	}
 	
+	public var contentCount: Int {
+		return 0
+	}
+	
 	public var string: String {
 		return "\(self.json)"
 	}
