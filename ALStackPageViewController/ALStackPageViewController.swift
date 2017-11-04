@@ -170,11 +170,11 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
     }
 	
 	func backHome(sender: UIButton) {
-		self.navigationController!.popToRootViewController(animated: true)
+		self.navigationController?.popToRootViewController(animated: true)
 	}
 	
 	func backPrev(sender: UIButton) {
-		self.navigationController!.popViewController(animated: true)
+		self.navigationController?.popViewController(animated: true)
 	}
 	
 	func push(viewController: ALStackPageContentViewController) {
