@@ -1,8 +1,6 @@
 import SwiftyJSON
 
-public class ALJsonTag: NSObject, NSCoding {
-	internal var json: JSON
-	
+public class ALJsonTag: ALJsonData {
 	public var name: String? {
 		return nil
 	}
@@ -17,31 +15,5 @@ public class ALJsonTag: NSObject, NSCoding {
 	
 	public var contentCount: Int {
 		return 0
-	}
-	
-	public var string: String {
-		return "\(self.json)"
-	}
-	
-	init(json: JSON) {
-		self.json = json
-	}
-	
-	public func encode(with aCoder: NSCoder) {
-		if let dictionary = self.json.dictionaryObject {
-			aCoder.encode(dictionary, forKey: "dictionary")
-		} else {
-			print("Error ALJsonTag:encode")
-		}
-	}
-	
-	required public init?(coder aDecoder: NSCoder) {
-		guard let dictionary = aDecoder.decodeObject(forKey: "dictionary") else {
-			print("Error ALJsonTag:init")
-			
-			return nil	
-		}
-		
-		self.json = JSON(dictionary)
 	}
 }
