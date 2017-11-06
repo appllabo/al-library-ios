@@ -75,13 +75,18 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 	}
 	
 	func pullToRefresh() {
-		print("pullToRefresh")
+		self.load(isRemove: true, done: {
+			self.tableView.ins_endPullToRefresh()
+		})
 	}
 	
-	/*
 	func refresh() {
-	self.tableView.ins_beginPullToRefresh()
-	}*/
+		self.tableView.ins_beginPullToRefresh()
+		
+		self.load(isRemove: true, done: {
+			self.tableView.ins_endPullToRefresh()
+		})
+	}
 }
 
 extension ALWebsiteArticleTableViewController {
