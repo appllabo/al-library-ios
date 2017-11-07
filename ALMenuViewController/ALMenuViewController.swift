@@ -7,7 +7,7 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		case String(String)
 		case Array([SectionData])
 		case Dictionary([String: SectionData])
-		case Closure(() -> Void)
+		case Closure((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)
 	}
 	
 	internal var sections: [[String: SectionData]] {
@@ -117,7 +117,7 @@ extension ALMenuViewController: UITableViewDelegate {
 		if case let .Array(contents) = self.sections[indexPath.section]["contents"]! {
 			if case let .Dictionary(content) = contents[indexPath.row] {
 				if case let .Closure(method) = content["method"]! {
-					method()
+					method(tableView, indexPath)
 				}
 			}
 		}
