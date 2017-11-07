@@ -50,8 +50,6 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
-		self.automaticallyAdjustsScrollViewInsets = true
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -98,16 +96,18 @@ extension ALWebPageViewController: WKNavigationDelegate {
 	}
 	
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (@escaping (WKNavigationActionPolicy) -> Void)) {
-		let urlRequest = navigationAction.request.url!.absoluteString
-		
-		if (urlRequest.hasPrefix("native://") == true) {
-			let path = urlRequest.components(separatedBy: "native://")
-			
-			if (path[1] != "") {
-				self.evaluate(path[1])
+		if let url = navigationAction.request.url {
+			if url.absoluteString.hasPrefix("native://") == true {
+				let path = url.absoluteString.components(separatedBy: "native://")
+				
+				if path[1] != "" {
+					self.evaluate(path[1])
+				}
+				
+				decisionHandler(.cancel)
+			} else {
+				decisionHandler(.allow)
 			}
-			
-			decisionHandler(.cancel)
 		} else {
 			decisionHandler(.allow)
 		}
