@@ -4,11 +4,11 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
 	internal let indicatorInfo: IndicatorInfo
 	internal let isTabContent: Bool
 	
-	init(title: String, isTabContent: Bool, isSloppySwipe: Bool) {
+	init(title: String, isTabContent: Bool) {
 		self.indicatorInfo = IndicatorInfo(title: title)
 		self.isTabContent = isTabContent
 		
-		super.init(isSloppySwipe: isSloppySwipe)
+		super.init(isSloppySwipe: !self.isTabContent)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

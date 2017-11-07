@@ -4,8 +4,8 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
 	fileprivate let activityIndicator = UIActivityIndicatorView()
 	
-	init(title: String, url: String, isTabContent: Bool) {
-		super.init(title: title, isTabContent: isTabContent)
+	init(title: String, url: String, isTabContent: Bool, isSloppySwipe: Bool) {
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.navigationDelegate = self
 //		self.webView.UIDelegate = self

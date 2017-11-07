@@ -9,10 +9,10 @@ class ALImageArticleTableViewController: ALSwipeTabContentViewController {
 	internal var articles = [ALJsonArticle]()
 	internal var cells = [ALImageArticleTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALImageArticleTableViewCellSetting) {
+	init(title: String, isTabContent: Bool, cellSetting: ALImageArticleTableViewCellSetting, isSloppySwipe: Bool) {
 		self.cellSetting = cellSetting
 		
-		super.init(title: title, isTabContent: isTabContent)
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.frame = self.view.frame
 		self.tableView.delegate = self

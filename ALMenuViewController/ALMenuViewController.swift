@@ -14,8 +14,8 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		return []
 	}
 	
-	override init(title: String, isTabContent: Bool) {
-		super.init(title: title, isTabContent: isTabContent)
+	override init(title: String, isTabContent: Bool, isSloppySwipe: Bool) {
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
 		

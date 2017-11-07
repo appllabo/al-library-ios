@@ -2,27 +2,26 @@ import UIKit
 import SVGKit
 import INSPullToRefresh
 
-class ALArticleTableViewController: ALSwipeTabContentViewController {
+class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALArticleTableViewCellSetting
-	internal var articles = [ALJsonArticle]()
-	internal var cells = [ALArticleTableViewCell]()
+	internal let cellSetting: ALWebsiteTableViewCellSetting
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALArticleTableViewCellSetting, isSloppySwipe: Bool) {
+	internal var websites = [ALJsonWebsite]()
+	internal var cells = [ALWebsiteTableViewCell]()
+	
+	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteTableViewCellSetting) {
 		self.cellSetting = cellSetting
 		
-		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
+		super.init(title: title, isTabContent: isTabContent)
 		
 		self.tableView.frame = self.view.frame
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
-		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingImage.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		self.tableView.estimatedRowHeight = self.cellSetting.height
 		
-		if self.isTabContent == true {
+		if self.isTabContent == true {			
 			self.tableView.contentInset.top = 64
 			self.tableView.scrollIndicatorInsets.top = 64
 			self.tableView.contentInset.bottom += 44
@@ -71,11 +70,11 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(article: ALJsonArticle) {
+	func open(website: ALJsonWebsite) {
 	}
 	
 	func pullToRefresh() {
-		self.load(isRemove: true, done: {
+		self.load(done: {
 			self.tableView.ins_endPullToRefresh()
 		})
 	}
@@ -83,17 +82,17 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 	func refresh() {
 		self.tableView.ins_beginPullToRefresh()
 		
-		self.load(isRemove: true, done: {
+		self.load(done: {
 			self.tableView.ins_endPullToRefresh()
 		})
 	}
 }
 
-extension ALArticleTableViewController {
-	func load(isRemove: Bool, done: @escaping () -> Void) {
+extension ALWebsiteTableViewController {
+	func load(done: @escaping () -> Void) {
 	}}
 
-extension ALArticleTableViewController: UITableViewDataSource {
+extension ALWebsiteTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.cells.count
 	}
@@ -101,17 +100,10 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		return self.cells[indexPath.row]
 	}
-	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cells[indexPath.row].setting.height
-	}
 }
 
-extension ALArticleTableViewController: UITableViewDelegate {
+extension ALWebsiteTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.articles[indexPath.row].isRead = true
-		self.cells[indexPath.row].read()
-		
-		self.open(article: self.articles[indexPath.row])
+		self.open(website: self.websites[indexPath.row])
 	}
 }

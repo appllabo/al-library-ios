@@ -10,10 +10,10 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 	internal var tags = [ALJsonTag]()
 	internal var cells = [ALTagTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALTagTableViewCellSetting) {
+	init(title: String, isTabContent: Bool, cellSetting: ALTagTableViewCellSetting, isSloppySwipe: Bool) {
 		self.cellSetting = cellSetting
 		
-		super.init(title: title, isTabContent: isTabContent)
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.frame = self.view.frame
 		self.tableView.delegate = self

@@ -15,12 +15,20 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 	
 	internal var isEnableForward: Bool = false
     
-	internal var titleViewFrame: CGRect {
-		return CGRect(x: 0, y: 0, width: self.view.frame.width - 96, height: 44)
+	internal var colorLabelTitleTop: UIColor {
+		return .init(hex: 0x000000, alpha: 1.0)
 	}
 	
-    init(contentViewController: ALStackPageContentViewController) {
-		super.init(isSloppySwipe: true, contentViewController: contentViewController, transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+	internal var colorLabelWebsiteTop: UIColor {
+		return .init(hex: 0x808080, alpha: 1.0)
+	}
+	
+	internal var titleViewFrame: CGRect {
+		return .init(x: 0, y: 0, width: self.view.frame.width - 96, height: 44)
+	}
+	
+    init(contentViewController: ALStackPageContentViewController, isSloppySwipe: Bool) {
+		super.init(contentViewController: contentViewController, transitionStyle: .scroll, navigationOrientation: .horizontal, isSloppySwipe: isSloppySwipe, options: nil)
 		
 		self.labelTitle.text = contentViewController.title
     }
@@ -39,6 +47,7 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		self.labelTitle.frame = self.titleView.frame
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.font = .boldSystemFont(ofSize: 16)
+		self.labelTitle.textColor = self.colorLabelTitleTop
 		self.labelTitle.textAlignment = .center
 		
 		self.stackViewTitlePage.axis = .vertical
@@ -48,10 +57,10 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		self.stackViewTitlePage.alpha = 0.0
 		
 		self.labelTitleTop.font = .boldSystemFont(ofSize: 16)
-		self.labelTitleTop.textColor = UIColor.init(hex: 0x000000, alpha: 1.0)
+		self.labelTitleTop.textColor = self.colorLabelTitleTop
 		self.labelTitleTop.numberOfLines = 1
 		
-		self.pageControl.pageIndicatorTintColor = UIColor.init(hex: 0x808080, alpha: 1.0)
+		self.pageControl.pageIndicatorTintColor = self.colorLabelWebsiteTop
 		self.pageControl.currentPageIndicatorTintColor = self.view.tintColor
 		self.pageControl.backgroundColor = .clear
 		self.pageControl.numberOfPages = 1
@@ -69,11 +78,11 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		self.stackViewWebsiteTitle.alpha = 0.0
 		
 		self.labelWebsiteTop.font = .systemFont(ofSize: 11)
-		self.labelWebsiteTop.textColor = UIColor.init(hex: 0x808080, alpha: 1.0)
+		self.labelWebsiteTop.textColor = self.colorLabelWebsiteTop
 		self.labelWebsiteTop.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleSub
 		
 		self.labelTitleBottom.font = .boldSystemFont(ofSize: 16)
-		self.labelTitleBottom.textColor = UIColor.init(hex: 0x000000, alpha: 1.0)
+		self.labelTitleBottom.textColor = self.colorLabelTitleTop
 		self.labelTitleBottom.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleMain
 		
 		self.stackViewWebsiteTitle.addArrangedSubview(self.labelWebsiteTop)

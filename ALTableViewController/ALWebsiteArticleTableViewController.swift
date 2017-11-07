@@ -9,10 +9,10 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 	internal var articles = [ALJsonArticle]()
 	internal var cells = [ALWebsiteArticleTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteArticleTableViewCellSetting) {
+	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteArticleTableViewCellSetting, isSloppySwipe: Bool) {
 		self.cellSetting = cellSetting
 		
-		super.init(title: title, isTabContent: isTabContent)
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.frame = self.view.frame
 		self.tableView.delegate = self
