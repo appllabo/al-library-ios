@@ -1,4 +1,5 @@
 import WebKit
+import SwiftyJSON
 
 class ALWebPageViewController: ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
@@ -82,7 +83,7 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	func didFinish(_ navigation: WKNavigation!) {
 	}
 	
-	func evaluate(_ path: String) {
+	func evaluate(_ json: JSON) {
 	}
 }
 
@@ -100,8 +101,11 @@ extension ALWebPageViewController: WKNavigationDelegate {
 			if url.absoluteString.hasPrefix("native://") == true {
 				let path = url.absoluteString.components(separatedBy: "native://")
 				
-				if path[1] != "" {
-					self.evaluate(path[1])
+				if let param = path[1].removingPercentEncoding {
+					let json = JSON(parseJSON: param)
+					self.evaluate(json)
+				} else {
+					print(path[1])
 				}
 				
 				decisionHandler(.cancel)
