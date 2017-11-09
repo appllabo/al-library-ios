@@ -28,9 +28,9 @@ public class ALWebsiteArticleTableViewCell: UITableViewCell {
 	private let titleLabel = UILabel()
 	private let stackViewRight = UIStackView()
 	
-	private let article: ALJsonArticle
+	private let article: ALArticle
 	
-	public init(article: ALJsonArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting()) {
+	public init(article: ALArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting()) {
 		self.article = article
 		self.setting = setting
 		

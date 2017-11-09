@@ -1,6 +1,6 @@
 import SwiftyJSON
 
-public class ALJsonTag: ALJsonData {
+public class ALTag: ALData {
 	public var name: String? {
 		return nil
 	}

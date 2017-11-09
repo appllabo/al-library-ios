@@ -6,7 +6,7 @@ class ALImageArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
 	internal let cellSetting: ALImageArticleTableViewCellSetting
-	internal var articles = [ALJsonArticle]()
+	internal var articles = [ALArticle]()
 	internal var cells = [ALImageArticleTableViewCell]()
 	
 	init(title: String, isTabContent: Bool, cellSetting: ALImageArticleTableViewCellSetting, isSloppySwipe: Bool) {
@@ -70,7 +70,7 @@ class ALImageArticleTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(article: ALJsonArticle) {
+	func open(article: ALArticle) {
 	}
 	
 	func pullToRefresh() {

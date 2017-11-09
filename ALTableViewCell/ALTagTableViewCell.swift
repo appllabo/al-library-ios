@@ -12,7 +12,7 @@ public class ALTagTableViewCellSetting {
 }
 
 class ALTagTableViewCell: UITableViewCell {
-	init(tag: ALJsonTag, setting: ALTagTableViewCellSetting) {
+	init(tag: ALTag, setting: ALTagTableViewCellSetting) {
 		super.init(style: .value1, reuseIdentifier: "ALTagTableViewCell")
 		
 		let image = SVGKImage(named: "Resource/Icon/tag.svg")!

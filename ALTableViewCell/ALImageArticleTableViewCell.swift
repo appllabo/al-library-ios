@@ -31,11 +31,11 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 //	private let stackViewTitle = UIStackView()
 //	private let stackViewButton = UIStackView()
 	
-	private let article: ALJsonArticle
+	private let article: ALArticle
 	
 	private var isLayouted = false
 	
-	public init(article: ALJsonArticle, setting: ALImageArticleTableViewCellSetting) {
+	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
 		self.article = article
 		self.setting = setting
 		

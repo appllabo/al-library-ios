@@ -7,7 +7,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 	
 	internal let cellSetting: ALTagTableViewCellSetting
 	
-	internal var tags = [ALJsonTag]()
+	internal var tags = [ALTag]()
 	internal var cells = [ALTagTableViewCell]()
 	
 	init(title: String, isTabContent: Bool, cellSetting: ALTagTableViewCellSetting, isSloppySwipe: Bool) {
@@ -70,7 +70,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(tag: ALJsonTag) {
+	func open(tag: ALTag) {
 	}
 	
 	func pullToRefresh() {

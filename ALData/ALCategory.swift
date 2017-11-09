@@ -1,6 +1,6 @@
 import SwiftyJSON
 
-public class ALJsonCategory: ALJsonData {
+public class ALCategory: ALData {
 	public var name: String? {
 		return nil
 	}

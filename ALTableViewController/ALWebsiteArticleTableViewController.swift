@@ -6,7 +6,7 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
 	internal let cellSetting: ALWebsiteArticleTableViewCellSetting
-	internal var articles = [ALJsonArticle]()
+	internal var articles = [ALArticle]()
 	internal var cells = [ALWebsiteArticleTableViewCell]()
 	
 	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteArticleTableViewCellSetting, isSloppySwipe: Bool) {
@@ -71,7 +71,7 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(article: ALJsonArticle) {
+	func open(article: ALArticle) {
 	}
 	
 	func pullToRefresh() {

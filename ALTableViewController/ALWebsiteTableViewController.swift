@@ -7,7 +7,7 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 	
 	internal let cellSetting: ALWebsiteTableViewCellSetting
 	
-	internal var websites = [ALJsonWebsite]()
+	internal var websites = [ALWebsite]()
 	internal var cells = [ALWebsiteTableViewCell]()
 	
 	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteTableViewCellSetting, isSloppySwipe: Bool) {
@@ -70,7 +70,7 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(website: ALJsonWebsite) {
+	func open(website: ALWebsite) {
 	}
 	
 	func pullToRefresh() {

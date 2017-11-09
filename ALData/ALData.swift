@@ -1,6 +1,6 @@
 import SwiftyJSON
 
-public class ALJsonData: NSObject, NSCoding {
+public class ALData: NSObject, NSCoding {
 	internal var json: JSON
 	
 	public var string: String {

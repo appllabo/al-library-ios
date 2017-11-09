@@ -1,6 +1,6 @@
 import SwiftyJSON
 
-public class ALJsonWebsite: ALJsonData {
+public class ALWebsite: ALData {
 	public var name: String {
 		return "name"
 	}

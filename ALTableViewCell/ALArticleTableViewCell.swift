@@ -30,9 +30,9 @@ public class ALArticleTableViewCell: UITableViewCell {
 	private let titleLabel = UILabel()
 	private let stackViewRight = UIStackView()
 	
-	private let article: ALJsonArticle
+	private let article: ALArticle
 	
-	public init(article: ALJsonArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting()) {
+	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting()) {
 		self.article = article
 		self.setting = setting
 		
