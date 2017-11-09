@@ -29,8 +29,6 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 	
     init(contentViewController: ALStackPageContentViewController, isSloppySwipe: Bool) {
 		super.init(contentViewController: contentViewController, transitionStyle: .scroll, navigationOrientation: .horizontal, isSloppySwipe: isSloppySwipe, options: nil)
-		
-		self.labelTitle.text = contentViewController.title
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,6 +42,7 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		
 		self.titleView.frame = titleViewFrame
 		
+		self.labelTitle.text = self.contentViewControllers[0].title
 		self.labelTitle.frame = self.titleView.frame
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.font = .boldSystemFont(ofSize: 16)
