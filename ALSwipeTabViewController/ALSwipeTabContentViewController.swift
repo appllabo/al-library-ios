@@ -22,7 +22,7 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
 		
 		self.title = self.indicatorInfo.title
 		
-		if (self.isTabContent == true) {
+		if self.isTabContent == true {
 			self.view.frame = CGRect(x: self.view.frame.origin.x, y: self.view.frame.origin.y - 44.0, width: self.view.frame.width, height: self.view.frame.height)
 		}
 	}
