@@ -14,36 +14,15 @@ class ALImageArticleTableViewController: ALSwipeTabContentViewController {
 		
 		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
-		self.tableView.frame = self.view.frame
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
 		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingImage.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		
-		if self.isTabContent == true {
-			self.tableView.contentInset.top = 64
-			self.tableView.scrollIndicatorInsets.top = 64
-			self.tableView.contentInset.bottom += 44
-			self.tableView.scrollIndicatorInsets.bottom += 44
-		}
-		
-		let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")!
-		svgCircleWhite.size = CGSize(width: 24, height: 24)
-		let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")!
-		svgCircleLight.size = CGSize(width: 24, height: 24)
-		
-		let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
-		let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor))!
-		
+
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
 			self.pullToRefresh()
 		})
-		
-		self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
-		self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
-		
-		self.view.addSubview(self.tableView)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -56,6 +35,29 @@ class ALImageArticleTableViewController: ALSwipeTabContentViewController {
 		}
 		
 		super.viewDidLoad()
+		
+		self.tableView.frame = self.view.frame		
+		
+		if self.isTabContent == true {
+			let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+			let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+			
+			self.tableView.contentInset.top = heightStatusBar + heightNavigationBar + 44
+			self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar + 44
+		}
+		
+		let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")!
+		svgCircleWhite.size = CGSize(width: 24, height: 24)
+		let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")!
+		svgCircleLight.size = CGSize(width: 24, height: 24)
+		
+		let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
+		let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor))!
+		
+		self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
+		self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
+		
+		self.view.addSubview(self.tableView)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
