@@ -50,7 +50,22 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
+		if #available(iOS 11.0, *) {
+			self.webView.scrollView.contentInsetAdjustmentBehavior = .never
+		}
+		
 		super.viewDidLoad()
+		
+		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+		
+		self.webView.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
+		self.webView.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+		
+		if self.isTabContent == true {
+			self.webView.scrollView.contentInset.top += 44.0
+			self.webView.scrollView.scrollIndicatorInsets.top += 44.0
+		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -60,6 +75,19 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 			self.navigationController?.navigationBar.shadowImage = nil
 			self.navigationController?.setToolbarHidden(true, animated: true)
 		}
+	}
+	
+	override func viewWillLayoutSubviews() {
+		self.webView.frame = self.view.bounds
+		
+		var heightSafeArea = CGFloat(0.0)
+		
+		if #available(iOS 11.0, *) {
+			heightSafeArea = self.view.safeAreaInsets.bottom
+		}
+		
+		self.webView.scrollView.contentInset.bottom = heightSafeArea
+		self.webView.scrollView.scrollIndicatorInsets.bottom = heightSafeArea
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
