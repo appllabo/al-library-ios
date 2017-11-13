@@ -63,6 +63,14 @@ public class ALArticleTableViewCell: UITableViewCell {
 		
 		super.init(style: .default, reuseIdentifier: reuseIdentifier)
 		
+		self.initContentView()
+	}
+	
+	required public init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	public func initContentView() {
 		self.titleLabel.font = setting.fontTitle
 		self.titleLabel.numberOfLines = 2
 		self.titleLabel.textAlignment = .left
@@ -84,10 +92,6 @@ public class ALArticleTableViewCell: UITableViewCell {
 		}
 	}
 	
-	required public init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
 	override public func layoutSubviews() {
 		super.layoutSubviews()
 		
@@ -95,12 +99,12 @@ public class ALArticleTableViewCell: UITableViewCell {
 			return
 		}
 		
+		self.isLayouted = true
+		
 		self.layout()
 	}
 	
 	func layout() {
-		self.isLayouted = true
-		
 		let heightImage = self.contentView.frame.height
 		let widthImage = heightImage
 		

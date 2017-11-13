@@ -1,26 +1,29 @@
 import UIKit
 import AlamofireImage
 
-public class ALImageArticleTableViewCellSetting {
+public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 	public var paddingWebsite = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-	public var paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
-	public var fontWebsite = UIFont.boldSystemFont(ofSize: 16)
-	public var fontDate = UIFont.systemFont(ofSize: 14)
-	public var colorBackground = UIColor.clear
-	public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
-	public var colorRead = UIColor(hex: 0x707070, alpha: 1.0)
-	public var colorWebsite = UIColor(hex: 0x000000, alpha: 1.0)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
 	
-	public init() {
+	public override init() {
+		super.init()
 		
+		self.paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+		self.fontWebsite = UIFont.boldSystemFont(ofSize: 16)
+		self.fontDate = UIFont.systemFont(ofSize: 14)
+		self.colorBackground = UIColor.clear
+		self.colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
+		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
+		self.colorWebsite = UIColor(hex: 0x000000, alpha: 1.0)
 	}
 }
 
-public class ALImageArticleTableViewCell: UITableViewCell {
-	public let setting: ALImageArticleTableViewCellSetting
+public class ALImageArticleTableViewCell: ALArticleTableViewCell {
+	public var settingImage: ALImageArticleTableViewCellSetting {
+		return self.setting as! ALImageArticleTableViewCellSetting
+	}
 	
 	private let labelTitle = UILabel()
 	private let imageViewWebsite = UIImageView()
@@ -28,16 +31,15 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 	private let stackViewWebsite = UIStackView()
 	private let stackViewImage = UIStackView()
 	
-	private let article: ALArticle
-	
-	private var isLayouted = false
-	
 	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
-		self.article = article
-		self.setting = setting
-		
-		super.init(style: .default, reuseIdentifier: "ALImageArticleTableViewCell")
-		
+		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
+	}
+	
+	required public init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override public func initContentView() {
 		let labelWebsite = UILabel()
 		labelWebsite.font = self.setting.fontWebsite
 		labelWebsite.textAlignment = .left
@@ -46,7 +48,7 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		
 		let labelDate = UILabel()
 		labelDate.font = self.setting.fontDate
-		labelDate.textColor = self.setting.colorBottom
+		labelDate.textColor = self.settingImage.colorBottom
 		labelDate.text = article.date
 		
 		let stackViewWebsiteRight = UIStackView()
@@ -63,7 +65,7 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		self.stackViewWebsite.alignment = .center
 		self.stackViewWebsite.distribution = .fill
 		self.stackViewWebsite.spacing = 8
-		self.stackViewWebsite.layoutMargins = self.setting.paddingWebsite
+		self.stackViewWebsite.layoutMargins = self.settingImage.paddingWebsite
 		self.stackViewWebsite.isLayoutMarginsRelativeArrangement = true
 		
 		self.stackViewWebsite.addArrangedSubview(self.imageViewWebsite)
@@ -88,23 +90,7 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		}
 	}
 	
-	required public init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	override public func layoutSubviews() {
-		super.layoutSubviews()
-		
-		if self.isLayouted == true {
-			return
-		}
-		
-		self.layout()
-	}
-	
-	func layout() {
-		self.isLayouted = true
-		
+	override func layout() {
 		let heightThumbnail = (self.contentView.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
 		
 		self.stackViewWebsite.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
@@ -112,7 +98,7 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		
 		let imagePlaceholder = UIImage()
 		
-		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2, height: self.setting.radiusWebsiteImage * 2), radius: self.setting.radiusWebsiteImage)
+		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2), radius: self.settingImage.radiusWebsiteImage)
 		let urlWebsiteImage = URL(string: self.article.websiteImage)!
 		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
 		
@@ -120,10 +106,8 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
 		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
 		
-		self.labelTitle.frame = CGRect(x: self.setting.paddingTitle.left, y: heightThumbnail + 54 + self.setting.paddingTitle.top, width: self.contentView.frame.width - self.setting.paddingTitle.left - self.setting.paddingTitle.right, height: 64 - self.setting.paddingTitle.top - self.setting.paddingTitle.bottom)
-	}
-	
-	internal func read() {
-		self.self.labelTitle.textColor = self.setting.colorRead
+		self.labelTitle.frame = CGRect(x: self.settingImage.paddingTitle.left, y: heightThumbnail + 54 + self.settingImage.paddingTitle.top, width: self.contentView.frame.width - self.settingImage.paddingTitle.left - self.settingImage.paddingTitle.right, height: 64 - self.settingImage.paddingTitle.top - self.settingImage.paddingTitle.bottom)
+		
+		self.setting.height = 54 + self.contentView.frame.width / 16 * 9 + 64
 	}
 }
