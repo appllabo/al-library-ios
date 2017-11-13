@@ -1,5 +1,4 @@
 import UIKit
-//import SVGKit
 import AlamofireImage
 
 public class ALImageArticleTableViewCellSetting {
@@ -28,8 +27,6 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewWebsite = UIStackView()
 	private let stackViewImage = UIStackView()
-//	private let stackViewTitle = UIStackView()
-//	private let stackViewButton = UIStackView()
 	
 	private let article: ALArticle
 	
@@ -82,48 +79,8 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		self.labelTitle.textColor = self.setting.colorTitle
 		self.labelTitle.text = article.title
 		
-		/*
-		self.stackViewTitle.axis = .vertical
-		self.stackViewTitle.spacing = 8
-		self.stackViewTitle.layoutMargins = self.setting.paddingTitle
-		self.stackViewTitle.isLayoutMarginsRelativeArrangement = true
-		
-		self.stackViewTitle.addArrangedSubview(labelTitle)
-		
-		self.stackViewButton.axis = .horizontal
-		self.stackViewButton.alignment = .top
-		self.stackViewButton.distribution = .fill
-		self.stackViewButton.spacing = 8
-		
-		let imageLike = SVGKImage(named: "Resource/Icon/like.svg")!
-		let imageComment = SVGKImage(named: "Resource/Icon/speech-baloon.svg")!
-		
-		imageLike.size = CGSize(width: 24, height: 24)
-		imageComment.size = CGSize(width: 24, height: 24)
-		
-		let imageViewLike = UIImageView()
-		let imageViewComment = UIImageView()
-		
-		imageViewLike.image = imageLike.uiImage.withRenderingMode(.alwaysTemplate)
-		imageViewComment.image = imageComment.uiImage.withRenderingMode(.alwaysTemplate)
-		
-		imageViewLike.tintColor = self.setting.colorBottom
-		imageViewComment.tintColor = self.setting.colorBottom
-		
-		let labelEmpty = UILabel()
-		labelEmpty.setContentHuggingPriority(0, for: .horizontal)
-		labelEmpty.text = ""
-		
-		self.stackViewButton.addArrangedSubview(imageViewLike)
-		self.stackViewButton.addArrangedSubview(imageViewComment)
-		self.stackViewButton.addArrangedSubview(labelEmpty)
-		
-		self.stackViewTitle.addArrangedSubview(self.stackViewButton)
-		*/
-		
 		self.contentView.addSubview(self.stackViewWebsite)
 		self.contentView.addSubview(self.stackViewImage)
-//		self.contentView.addSubview(self.stackViewTitle)
 		self.contentView.addSubview(self.labelTitle)
 		
 		if self.article.isRead == true {
@@ -163,7 +120,6 @@ public class ALImageArticleTableViewCell: UITableViewCell {
 		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
 		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
 		
-//		self.stackViewTitle.frame = CGRect(x: 0, y: heightThumbnail + 54, width: self.contentView.frame.width, height: 96)
 		self.labelTitle.frame = CGRect(x: self.setting.paddingTitle.left, y: heightThumbnail + 54 + self.setting.paddingTitle.top, width: self.contentView.frame.width - self.setting.paddingTitle.left - self.setting.paddingTitle.right, height: 64 - self.setting.paddingTitle.top - self.setting.paddingTitle.bottom)
 	}
 	

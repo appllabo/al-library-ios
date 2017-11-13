@@ -2,24 +2,23 @@ import UIKit
 import SVGKit
 import INSPullToRefresh
 
-class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
+class ALTagTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALWebsiteArticleTableViewCellSetting
-	internal var articles = [ALArticle]()
-	internal var cells = [ALWebsiteArticleTableViewCell]()
+	internal let cellSetting: ALTagTableViewCellSetting
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteArticleTableViewCellSetting, isSloppySwipe: Bool) {
+	internal var tags = [ALTag]()
+	internal var cells = [ALTagTableViewCell]()
+	
+	init(title: String, isTabContent: Bool, cellSetting: ALTagTableViewCellSetting, isSloppySwipe: Bool) {
 		self.cellSetting = cellSetting
 		
 		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
-		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingImage.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		self.tableView.estimatedRowHeight = self.cellSetting.height
 		
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
 			self.pullToRefresh()
@@ -76,11 +75,11 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(article: ALArticle) {
+	func open(tag: ALTag) {
 	}
 	
 	func pullToRefresh() {
-		self.load(isRemove: true, done: {
+		self.load(done: {
 			self.tableView.ins_endPullToRefresh()
 		})
 	}
@@ -88,17 +87,18 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 	func refresh() {
 		self.tableView.ins_beginPullToRefresh()
 		
-		self.load(isRemove: true, done: {
+		self.load(done: {
 			self.tableView.ins_endPullToRefresh()
 		})
 	}
 }
 
-extension ALWebsiteArticleTableViewController {
-	func load(isRemove: Bool, done: @escaping () -> Void) {
-	}}
+extension ALTagTableViewController {
+	func load(done: @escaping () -> Void) {
+	}
+}
 
-extension ALWebsiteArticleTableViewController: UITableViewDataSource {
+extension ALTagTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.cells.count
 	}
@@ -106,17 +106,11 @@ extension ALWebsiteArticleTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		return self.cells[indexPath.row]
 	}
-	
-	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cells[indexPath.row].setting.height
+}
+
+extension ALTagTableViewController: UITableViewDelegate {
+	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.open(tag: self.tags[indexPath.row])
 	}
 }
 
-extension ALWebsiteArticleTableViewController: UITableViewDelegate {
-	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.articles[indexPath.row].isRead = true
-		self.cells[indexPath.row].read()
-		
-		self.open(article: self.articles[indexPath.row])
-	}
-}

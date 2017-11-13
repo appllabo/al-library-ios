@@ -1,7 +1,7 @@
 import UIKit
 import AlamofireImage
 
-public class ALWebsiteArticleTableViewCellSetting {
+public class ALArticleTableViewCellSetting {
 	public var height = CGFloat(102.0)
 	public var borderRadiusImage = CGFloat(4.0)
 	public var paddingImage = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -20,45 +20,30 @@ public class ALWebsiteArticleTableViewCellSetting {
 	}
 }
 
-public class ALWebsiteArticleTableViewCell: UITableViewCell {
-	public let setting: ALWebsiteArticleTableViewCellSetting
+public class ALArticleTableViewCell: UITableViewCell {
+	public let setting: ALArticleTableViewCellSetting
 	public var isLayouted = false
 	
 	private let thumbnailView = UIImageView()
 	private let titleLabel = UILabel()
 	private let stackViewRight = UIStackView()
 	
-	private let article: ALArticle
+	internal let article: ALArticle
 	
-	public init(article: ALArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting()) {
-		self.article = article
-		self.setting = setting
-		
-		super.init(style: .default, reuseIdentifier: "ALWebsiteArticleTableViewCell")
-		
-		self.titleLabel.font = setting.fontTitle
-		self.titleLabel.numberOfLines = 2
-		self.titleLabel.textAlignment = .left
-		self.titleLabel.textColor = self.setting.colorTitle
-		self.titleLabel.text = article.title
-		
+	public var stackViewBottom: UIStackView {
 		let labelDate = UILabel()
-		labelDate.text = article.date
-		labelDate.font = setting.fontDate
+		labelDate.text = self.article.date
+		labelDate.font = self.setting.fontDate
 		labelDate.textAlignment = .left
 		labelDate.textColor = self.setting.colorDate
 		
 		let labelWebsite = UILabel()
-		labelWebsite.text = article.website
-		labelWebsite.font = setting.fontWebsite
+		labelWebsite.text = self.article.website
+		labelWebsite.font = self.setting.fontWebsite
 		labelWebsite.textAlignment = .right
 		labelWebsite.textColor = self.setting.colorWebsite
 		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
-		
-		self.stackViewRight.axis = .vertical
-		self.stackViewRight.alignment = .fill
-		self.stackViewRight.distribution = .equalSpacing
 		
 		let stackViewBottom = UIStackView()
 		stackViewBottom.axis = .horizontal
@@ -69,8 +54,27 @@ public class ALWebsiteArticleTableViewCell: UITableViewCell {
 		stackViewBottom.addArrangedSubview(labelDate)
 		stackViewBottom.addArrangedSubview(labelWebsite)
 		
+		return stackViewBottom
+	}
+	
+	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting(), reuseIdentifier: String) {
+		self.article = article
+		self.setting = setting
+		
+		super.init(style: .default, reuseIdentifier: reuseIdentifier)
+		
+		self.titleLabel.font = setting.fontTitle
+		self.titleLabel.numberOfLines = 2
+		self.titleLabel.textAlignment = .left
+		self.titleLabel.textColor = self.setting.colorTitle
+		self.titleLabel.text = article.title
+		
+		self.stackViewRight.axis = .vertical
+		self.stackViewRight.alignment = .fill
+		self.stackViewRight.distribution = .equalSpacing
+		
 		self.stackViewRight.addArrangedSubview(self.titleLabel)
-		self.stackViewRight.addArrangedSubview(stackViewBottom)
+		self.stackViewRight.addArrangedSubview(self.stackViewBottom)
 		
 		self.contentView.addSubview(self.thumbnailView)
 		self.contentView.addSubview(self.stackViewRight)
@@ -106,10 +110,10 @@ public class ALWebsiteArticleTableViewCell: UITableViewCell {
 		let heightThumbnail = heightImage - self.setting.paddingImage.top - self.setting.paddingImage.bottom
 		let widthThumbnail = heightThumbnail
 		
-		let image = UIImage()
+		let imagePlaceholder = UIImage()
 		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.borderRadiusImage)
 		let url = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
-		self.thumbnailView.af_setImage(withURL: url, placeholderImage: image, filter: filter)
+		self.thumbnailView.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filter)
 		
 		let widthRight = self.contentView.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
@@ -121,4 +125,3 @@ public class ALWebsiteArticleTableViewCell: UITableViewCell {
 		self.titleLabel.textColor = self.setting.colorRead
 	}
 }
-

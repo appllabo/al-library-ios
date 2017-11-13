@@ -2,15 +2,15 @@ import UIKit
 import SVGKit
 import INSPullToRefresh
 
-class ALTagTableViewController: ALSwipeTabContentViewController {
+class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALTagTableViewCellSetting
+	internal let cellSetting: ALWebsiteTableViewCellSetting
 	
-	internal var tags = [ALTag]()
-	internal var cells = [ALTagTableViewCell]()
+	internal var websites = [ALWebsite]()
+	internal var cells = [ALWebsiteTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALTagTableViewCellSetting, isSloppySwipe: Bool) {
+	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteTableViewCellSetting, isSloppySwipe: Bool) {
 		self.cellSetting = cellSetting
 		
 		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
@@ -75,7 +75,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(tag: ALTag) {
+	func open(website: ALWebsite) {
 	}
 	
 	func pullToRefresh() {
@@ -93,11 +93,12 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 	}
 }
 
-extension ALTagTableViewController {
+extension ALWebsiteTableViewController {
 	func load(done: @escaping () -> Void) {
-	}}
+	}
+}
 
-extension ALTagTableViewController: UITableViewDataSource {
+extension ALWebsiteTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.cells.count
 	}
@@ -107,9 +108,8 @@ extension ALTagTableViewController: UITableViewDataSource {
 	}
 }
 
-extension ALTagTableViewController: UITableViewDelegate {
+extension ALWebsiteTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.open(tag: self.tags[indexPath.row])
+		self.open(website: self.websites[indexPath.row])
 	}
 }
-
