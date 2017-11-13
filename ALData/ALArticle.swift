@@ -13,6 +13,10 @@ public class ALArticle: ALData {
 		return "website"
 	}
 	
+	public var stringTags: String {
+		return "tags"
+	}
+	
 	public var img: String {
 		return "img"
 	}
@@ -22,6 +26,10 @@ public class ALArticle: ALData {
 	}
 	
 	public var websiteImage: String {
+		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+	}
+	
+	public var tagImage: String {
 		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
 	}
 	

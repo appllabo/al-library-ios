@@ -1,6 +1,9 @@
 import UIKit
+import SVGKit
 
 public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
+	public var radiusTagImage = CGFloat(8.5)
+	
 	public override init() {
 		
 	}
@@ -12,28 +15,35 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	public override var stackViewBottom: UIStackView {
+		let imageViewTag = UIImageView()
+		let image = SVGKImage(named: "Resource/Icon/tag-filled.svg")!
+		image.size = CGSize(width: self.settingTag.radiusTagImage * 2, height: self.settingTag.radiusTagImage * 2)
+		imageViewTag.image = image.uiImage.withRenderingMode(.alwaysTemplate)
+		imageViewTag.tintColor = self.settingTag.tintColor
+		
+		let labelTag = UILabel()
+		labelTag.text = self.article.stringTags
+		labelTag.font = self.settingTag.fontWebsite
+		labelTag.textAlignment = .left
+		labelTag.textColor = self.settingTag.colorWebsite
+		labelTag.setContentHuggingPriority(0, for: .horizontal)
+		labelTag.setContentCompressionResistancePriority(0, for: .horizontal)
+		
 		let labelDate = UILabel()
 		labelDate.text = self.article.date
 		labelDate.font = self.settingTag.fontDate
-		labelDate.textAlignment = .left
-		labelDate.textColor = self.setting.colorDate
-		
-		let labelWebsite = UILabel()
-		labelWebsite.text = self.article.website
-		labelWebsite.font = self.settingTag.fontWebsite
-		labelWebsite.textAlignment = .right
-		labelWebsite.textColor = self.settingTag.colorWebsite
-		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		labelDate.textAlignment = .right
+		labelDate.textColor = self.settingTag.colorDate
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
 		stackView.alignment = .bottom
 		stackView.distribution = .fill
-		stackView.spacing = 8
+		stackView.spacing = 4
 		
+		stackView.addArrangedSubview(imageViewTag)
+		stackView.addArrangedSubview(labelTag)
 		stackView.addArrangedSubview(labelDate)
-		stackView.addArrangedSubview(labelWebsite)
 		
 		return stackView
 	}

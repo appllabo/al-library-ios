@@ -10,39 +10,39 @@ public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSettin
 }
 
 public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
+	private let imageViewWebsite = UIImageView()
+	
 	public var settingWebsite: ALWebsiteArticleTableViewCellSetting {
 		return self.setting as! ALWebsiteArticleTableViewCellSetting
 	}
 	
 	public override var stackViewBottom: UIStackView {
-		let labelDate = UILabel()
-		labelDate.text = self.article.date
-		labelDate.font = self.settingWebsite.fontDate
-		labelDate.textAlignment = .left
-		labelDate.textColor = self.setting.colorDate
-		
 		let labelWebsite = UILabel()
 		labelWebsite.text = self.article.website
 		labelWebsite.font = self.settingWebsite.fontWebsite
-		labelWebsite.textAlignment = .right
+		labelWebsite.textAlignment = .left
 		labelWebsite.textColor = self.settingWebsite.colorWebsite
 		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		
+		let labelDate = UILabel()
+		labelDate.text = self.article.date
+		labelDate.font = self.settingWebsite.fontDate
+		labelDate.textAlignment = .right
+		labelDate.textColor = self.setting.colorDate
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
 		stackView.alignment = .bottom
 		stackView.distribution = .fill
-		stackView.spacing = 8
+		stackView.spacing = 4
 		
 		stackView.addArrangedSubview(self.imageViewWebsite)
-		stackView.addArrangedSubview(labelDate)
 		stackView.addArrangedSubview(labelWebsite)
+		stackView.addArrangedSubview(labelDate)
 		
 		return stackView
 	}
-	
-	private let imageViewWebsite = UIImageView()
 	
 	public init(article: ALArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting()) {
 		super.init(article: article, setting: setting, reuseIdentifier: "ALWebsiteArticleTableViewCell")

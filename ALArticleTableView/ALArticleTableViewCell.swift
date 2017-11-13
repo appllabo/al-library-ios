@@ -5,7 +5,7 @@ public class ALArticleTableViewCellSetting {
 	public var height = CGFloat(102.0)
 	public var borderRadiusImage = CGFloat(4.0)
 	public var paddingImage = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-	public var paddingContent = UIEdgeInsets(top: 12, left: 4, bottom: 12, right: 12)
+	public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
 	public var colorBackground = UIColor.clear
 	public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
 	public var colorRead = UIColor(hex: 0x707070, alpha: 1.0)
@@ -14,6 +14,7 @@ public class ALArticleTableViewCellSetting {
 	public var fontTitle = UIFont.boldSystemFont(ofSize: 17)
 	public var fontDate = UIFont.systemFont(ofSize: 12)
 	public var fontWebsite = UIFont.systemFont(ofSize: 12)
+	public var tintColor = UIColor.black
 	
 	public init() {
 		
