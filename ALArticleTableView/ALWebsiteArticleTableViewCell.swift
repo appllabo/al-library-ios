@@ -29,17 +29,17 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
 		
-		let stackViewBottom = UIStackView()
-		stackViewBottom.axis = .horizontal
-		stackViewBottom.alignment = .bottom
-		stackViewBottom.distribution = .fill
-		stackViewBottom.spacing = 8
+		let stackView = UIStackView()
+		stackView.axis = .horizontal
+		stackView.alignment = .bottom
+		stackView.distribution = .fill
+		stackView.spacing = 8
 		
-		stackViewBottom.addArrangedSubview(self.imageViewWebsite)
-		stackViewBottom.addArrangedSubview(labelDate)
-		stackViewBottom.addArrangedSubview(labelWebsite)
+		stackView.addArrangedSubview(self.imageViewWebsite)
+		stackView.addArrangedSubview(labelDate)
+		stackView.addArrangedSubview(labelWebsite)
 		
-		return stackViewBottom
+		return stackView
 	}
 	
 	private let imageViewWebsite = UIImageView()

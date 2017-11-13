@@ -28,18 +28,16 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	private let labelTitle = UILabel()
 	private let imageViewWebsite = UIImageView()
 	private let imageViewThumbnail = UIImageView()
-	private let stackViewWebsite = UIStackView()
 	private let stackViewImage = UIStackView()
 	
-	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
-	}
-	
-	required public init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	override public func initContentView() {
+	public var stackViewTop: UIStackView {
+		let stackViewWebsiteRight = UIStackView()
+		stackViewWebsiteRight.axis = .vertical
+		stackViewWebsiteRight.alignment = .leading
+		stackViewWebsiteRight.distribution = .equalSpacing
+		stackViewWebsiteRight.spacing = 2
+		stackViewWebsiteRight.setContentHuggingPriority(0, for: .horizontal)
+		
 		let labelWebsite = UILabel()
 		labelWebsite.font = self.setting.fontWebsite
 		labelWebsite.textAlignment = .left
@@ -51,26 +49,34 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		labelDate.textColor = self.settingImage.colorBottom
 		labelDate.text = article.date
 		
-		let stackViewWebsiteRight = UIStackView()
-		stackViewWebsiteRight.axis = .vertical
-		stackViewWebsiteRight.alignment = .leading
-		stackViewWebsiteRight.distribution = .equalSpacing
-		stackViewWebsiteRight.spacing = 2
-		stackViewWebsiteRight.setContentHuggingPriority(0, for: .horizontal)
-		
 		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
 		stackViewWebsiteRight.addArrangedSubview(labelDate)
 		
-		self.stackViewWebsite.axis = .horizontal
-		self.stackViewWebsite.alignment = .center
-		self.stackViewWebsite.distribution = .fill
-		self.stackViewWebsite.spacing = 8
-		self.stackViewWebsite.layoutMargins = self.settingImage.paddingWebsite
-		self.stackViewWebsite.isLayoutMarginsRelativeArrangement = true
+		let stackView = UIStackView()
+		stackView.axis = .horizontal
+		stackView.alignment = .center
+		stackView.distribution = .fill
+		stackView.spacing = 8
+		stackView.layoutMargins = self.settingImage.paddingWebsite
+		stackView.isLayoutMarginsRelativeArrangement = true
 		
-		self.stackViewWebsite.addArrangedSubview(self.imageViewWebsite)
-		self.stackViewWebsite.addArrangedSubview(stackViewWebsiteRight)
+		stackView.addArrangedSubview(self.imageViewWebsite)
+		stackView.addArrangedSubview(stackViewWebsiteRight)
 		
+		stackView.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
+		
+		return stackView
+	}
+	
+	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
+		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
+	}
+	
+	required public init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override public func initContentView() {
 		self.stackViewImage.layoutMargins = self.setting.paddingImage
 		self.stackViewImage.isLayoutMarginsRelativeArrangement = true
 		self.stackViewImage.addArrangedSubview(self.imageViewThumbnail)
@@ -81,7 +87,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.labelTitle.textColor = self.setting.colorTitle
 		self.labelTitle.text = article.title
 		
-		self.contentView.addSubview(self.stackViewWebsite)
+		self.contentView.addSubview(self.stackViewTop)
 		self.contentView.addSubview(self.stackViewImage)
 		self.contentView.addSubview(self.labelTitle)
 		
@@ -93,7 +99,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	override func layout() {
 		let heightThumbnail = (self.contentView.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
 		
-		self.stackViewWebsite.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
+		//self.stackViewWebsite.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
 		self.stackViewImage.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
 		
 		let imagePlaceholder = UIImage()
