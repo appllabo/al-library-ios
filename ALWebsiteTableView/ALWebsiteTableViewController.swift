@@ -84,7 +84,7 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 		})
 	}
 	
-	func refresh() {
+	func beginPullToRefresh() {
 		self.tableView.ins_beginPullToRefresh()
 	}
 }
