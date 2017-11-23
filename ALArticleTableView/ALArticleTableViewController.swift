@@ -2,19 +2,18 @@ import UIKit
 import SVGKit
 import INSPullToRefresh
 
-class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
+class ALArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALWebsiteArticleTableViewCellSetting
-	internal var articles = [ALJsonArticle]()
-	internal var cells = [ALWebsiteArticleTableViewCell]()
+	internal let cellSetting: ALArticleTableViewCellSetting
+	internal var articles = [ALArticle]()
+	internal var cells = [ALArticleTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteArticleTableViewCellSetting) {
+	init(title: String, isTabContent: Bool, cellSetting: ALArticleTableViewCellSetting, isSloppySwipe: Bool) {
 		self.cellSetting = cellSetting
 		
-		super.init(title: title, isTabContent: isTabContent)
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
-		self.tableView.frame = self.view.frame
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
 		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingImage.left, 0, 0)
@@ -22,29 +21,11 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 		self.tableView.backgroundColor = .clear
 		self.tableView.estimatedRowHeight = self.cellSetting.height
 		
-		if self.isTabContent == true {
-			self.tableView.contentInset.top = 64
-			self.tableView.scrollIndicatorInsets.top = 64
-			self.tableView.contentInset.bottom += 44
-			self.tableView.scrollIndicatorInsets.bottom += 44
-		}
-		
-		let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")!
-		svgCircleWhite.size = CGSize(width: 24, height: 24)
-		let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")!
-		svgCircleLight.size = CGSize(width: 24, height: 24)
-		
-		let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
-		let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor))!
-		
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
-			self.pullToRefresh()
+			self.load(isRemove: true, done: {
+				self.tableView.ins_endPullToRefresh()
+			})
 		})
-		
-		self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
-		self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
-		
-		self.view.addSubview(self.tableView)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -57,6 +38,32 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 		}
 		
 		super.viewDidLoad()
+		
+		self.tableView.frame = self.view.frame
+		
+		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+		
+		self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
+		self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+		
+		if self.isTabContent == true {
+			self.tableView.contentInset.top += 44.0
+			self.tableView.scrollIndicatorInsets.top += 44.0
+		}
+		
+		let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")!
+		svgCircleWhite.size = CGSize(width: 24, height: 24)
+		let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")!
+		svgCircleLight.size = CGSize(width: 24, height: 24)
+		
+		let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
+		let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor))!
+		
+		self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
+		self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
+		
+		self.view.addSubview(self.tableView)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -71,24 +78,23 @@ class ALWebsiteArticleTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-	func open(article: ALJsonArticle) {
+	func open(article: ALArticle) {
 	}
 	
-	func pullToRefresh() {
-		print("pullToRefresh")
-	}
-	
-	/*
 	func refresh() {
-	self.tableView.ins_beginPullToRefresh()
-	}*/
+		self.load(isRemove: true, done: {})
+	}
+	
+	func pullRefresh() {
+		self.tableView.ins_beginPullToRefresh()
+	}
 }
 
-extension ALWebsiteArticleTableViewController {
+extension ALArticleTableViewController {
 	func load(isRemove: Bool, done: @escaping () -> Void) {
 	}}
 
-extension ALWebsiteArticleTableViewController: UITableViewDataSource {
+extension ALArticleTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.cells.count
 	}
@@ -102,7 +108,7 @@ extension ALWebsiteArticleTableViewController: UITableViewDataSource {
 	}
 }
 
-extension ALWebsiteArticleTableViewController: UITableViewDelegate {
+extension ALArticleTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		self.articles[indexPath.row].isRead = true
 		self.cells[indexPath.row].read()

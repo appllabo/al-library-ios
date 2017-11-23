@@ -1,22 +1,18 @@
 import SwiftyJSON
 
-public class ALJsonCategory: NSObject, NSCoding {
+public class ALData: NSObject, NSCoding {
 	internal var json: JSON
-	
-	public var name: String? {
-		return nil
-	}
-	
-	public var id: String {
-		return "id"
-	}
-	
-	public var img: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
-	}
 	
 	public var string: String {
 		return "\(self.json)"
+	}
+	
+	init(string: String) {
+		self.json = JSON(parseJSON: string)
+	}
+	
+	init(dictionary: Any) {
+		self.json = JSON(dictionary)
 	}
 	
 	init(json: JSON) {
@@ -27,13 +23,13 @@ public class ALJsonCategory: NSObject, NSCoding {
 		if let dictionary = self.json.dictionaryObject {
 			aCoder.encode(dictionary, forKey: "dictionary")
 		} else {
-			print("Error ALJsonCategory:encode")
+			print("Error ALJsonData:encode")
 		}
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		guard let dictionary = aDecoder.decodeObject(forKey: "dictionary") else {
-			print("Error ALJsonCategory:init")
+			print("Error ALJsonData:init")
 			
 			return nil	
 		}
@@ -41,3 +37,4 @@ public class ALJsonCategory: NSObject, NSCoding {
 		self.json = JSON(dictionary)
 	}
 }
+

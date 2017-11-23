@@ -7,31 +7,20 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		case String(String)
 		case Array([SectionData])
 		case Dictionary([String: SectionData])
-		case Closure(() -> Void)
+		case Closure((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)
 	}
 	
 	internal var sections: [[String: SectionData]] {
 		return []
 	}
 	
-	override init(title: String, isTabContent: Bool) {
-		super.init(title: title, isTabContent: isTabContent)
-		
-		self.tableView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+	override init(title: String, isTabContent: Bool, isSloppySwipe: Bool) {
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
 		self.tableView.backgroundColor = .clear
 		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-		
-		if self.isTabContent == true {
-			self.tableView.contentInset.top = 64
-			self.tableView.scrollIndicatorInsets.top = 64
-			self.tableView.contentInset.bottom += 44
-			self.tableView.scrollIndicatorInsets.bottom += 44
-		}
-		
-		self.view.addSubview(self.tableView)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -44,6 +33,21 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		}
 		
 		super.viewDidLoad()
+		
+		self.tableView.frame = self.view.frame
+		
+		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+		
+		self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
+		self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+		
+		if self.isTabContent == true {
+			self.tableView.contentInset.top += 44.0
+			self.tableView.scrollIndicatorInsets.top += 44.0
+		}
+		
+		self.view.addSubview(self.tableView)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -117,7 +121,7 @@ extension ALMenuViewController: UITableViewDelegate {
 		if case let .Array(contents) = self.sections[indexPath.section]["contents"]! {
 			if case let .Dictionary(content) = contents[indexPath.row] {
 				if case let .Closure(method) = content["method"]! {
-					method()
+					method(tableView, indexPath)
 				}
 			}
 		}

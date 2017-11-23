@@ -3,8 +3,8 @@ import UIKit
 class ALNativeWebViewController: ALSwipeTabContentViewController {
 	private let webView = UIWebView()
 	
-	init(title: String, isTabContent: Bool, url: URL) {
-		super.init(title: title, isTabContent: isTabContent)
+	init(title: String, isTabContent: Bool, url: URL, isSloppySwipe: Bool) {
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.frame = self.view.frame
 		self.webView.delegate = self

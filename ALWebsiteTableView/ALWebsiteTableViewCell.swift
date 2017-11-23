@@ -11,7 +11,7 @@ public class ALWebsiteTableViewCellSetting {
 }
 
 class ALWebsiteTableViewCell: UITableViewCell {
-	init(website: ALJsonWebsite, setting: ALWebsiteTableViewCellSetting) {
+	init(website: ALWebsite, setting: ALWebsiteTableViewCellSetting) {
 		super.init(style: .default, reuseIdentifier: "ALWebsiteTableViewCell")
 		
 		self.imageView?.layer.masksToBounds = true

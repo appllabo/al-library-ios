@@ -34,7 +34,7 @@ class ALSloppySwipePageViewController: UIPageViewController {
 	internal var isBack: Bool = false
 	internal var index: Int = 0
 	
-	init(isSloppySwipe: Bool, contentViewController: UIViewController, transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, options: [String : Any]? = nil) {
+	init(contentViewController: UIViewController, transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, isSloppySwipe: Bool, options: [String : Any]? = nil) {
 		self.isSloppySwipe = isSloppySwipe
 		self.contentViewControllers = [contentViewController]
 		

@@ -1,11 +1,12 @@
 import WebKit
+import SwiftyJSON
 
 class ALWebPageViewController: ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
 	fileprivate let activityIndicator = UIActivityIndicatorView()
 	
-	init(title: String, url: String, isTabContent: Bool) {
-		super.init(title: title, isTabContent: isTabContent)
+	init(title: String, url: String, isTabContent: Bool, isSloppySwipe: Bool) {
+		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.navigationDelegate = self
 //		self.webView.UIDelegate = self
@@ -49,9 +50,22 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
+		if #available(iOS 11.0, *) {
+			self.webView.scrollView.contentInsetAdjustmentBehavior = .never
+		}
+		
 		super.viewDidLoad()
 		
-		self.automaticallyAdjustsScrollViewInsets = true
+		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+		
+		self.webView.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
+		self.webView.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+		
+		if self.isTabContent == true {
+			self.webView.scrollView.contentInset.top += 44.0
+			self.webView.scrollView.scrollIndicatorInsets.top += 44.0
+		}
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -61,6 +75,19 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 			self.navigationController?.navigationBar.shadowImage = nil
 			self.navigationController?.setToolbarHidden(true, animated: true)
 		}
+	}
+	
+	override func viewWillLayoutSubviews() {
+		self.webView.frame = self.view.bounds
+		
+		var heightSafeArea = CGFloat(0.0)
+		
+		if #available(iOS 11.0, *) {
+			heightSafeArea = self.view.safeAreaInsets.bottom
+		}
+		
+		self.webView.scrollView.contentInset.bottom = heightSafeArea
+		self.webView.scrollView.scrollIndicatorInsets.bottom = heightSafeArea
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
@@ -84,7 +111,7 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	func didFinish(_ navigation: WKNavigation!) {
 	}
 	
-	func evaluate(_ path: String) {
+	func evaluate(_ json: JSON) {
 	}
 }
 
@@ -98,16 +125,21 @@ extension ALWebPageViewController: WKNavigationDelegate {
 	}
 	
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (@escaping (WKNavigationActionPolicy) -> Void)) {
-		let urlRequest = navigationAction.request.url!.absoluteString
-		
-		if (urlRequest.hasPrefix("native://") == true) {
-			let path = urlRequest.components(separatedBy: "native://")
-			
-			if (path[1] != "") {
-				self.evaluate(path[1])
+		if let url = navigationAction.request.url {
+			if url.absoluteString.hasPrefix("native://") == true {
+				let path = url.absoluteString.components(separatedBy: "native://")
+				
+				if let param = path[1].removingPercentEncoding {
+					let json = JSON(parseJSON: param)
+					self.evaluate(json)
+				} else {
+					print(path[1])
+				}
+				
+				decisionHandler(.cancel)
+			} else {
+				decisionHandler(.allow)
 			}
-			
-			decisionHandler(.cancel)
 		} else {
 			decisionHandler(.allow)
 		}
