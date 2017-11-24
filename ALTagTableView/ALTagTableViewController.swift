@@ -78,10 +78,18 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 	func open(tag: ALTag) {
 	}
 	
+	func refresh() {
+		self.load(done: {})
+	}
+	
 	func pullToRefresh() {
 		self.load(done: {
-			self.tableView.ins_endPullToRefresh()
+			self.endPullToRefresh()
 		})
+	}
+	
+	func endPullToRefresh() {
+		self.tableView.ins_endPullToRefresh()
 	}
 	
 	func beginPullToRefresh() {

@@ -29,8 +29,39 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewWebsite = UIImageView()
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewImage = UIStackView()
+	private let stackViewTop = UIStackView()
 	
-	public var stackViewTop: UIStackView {
+	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
+		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
+	}
+	
+	required public init?(coder aDecoder: NSCoder) {
+		fatalError("init(coder:) has not been implemented")
+	}
+	
+	override public func initContentView() {
+		self.stackViewImage.layoutMargins = self.setting.paddingImage
+		self.stackViewImage.isLayoutMarginsRelativeArrangement = true
+		self.stackViewImage.addArrangedSubview(self.imageViewThumbnail)
+		
+		self.labelTitle.font = .boldSystemFont(ofSize: 20)
+		self.labelTitle.numberOfLines = 2
+		self.labelTitle.textAlignment = .left
+		self.labelTitle.textColor = self.setting.colorTitle
+		self.labelTitle.text = article.title
+		
+		self.initStackView(top: self.stackViewTop)
+		
+		self.contentView.addSubview(self.stackViewTop)
+		self.contentView.addSubview(self.stackViewImage)
+		self.contentView.addSubview(self.labelTitle)
+		
+		if self.article.isRead == true {
+			self.read()
+		}
+	}
+	
+	private func initStackView(top: UIStackView) {
 		let stackViewWebsiteRight = UIStackView()
 		stackViewWebsiteRight.axis = .vertical
 		stackViewWebsiteRight.alignment = .leading
@@ -52,54 +83,21 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
 		stackViewWebsiteRight.addArrangedSubview(labelDate)
 		
-		let stackView = UIStackView()
-		stackView.axis = .horizontal
-		stackView.alignment = .center
-		stackView.distribution = .fill
-		stackView.spacing = 8
-		stackView.layoutMargins = self.settingImage.paddingWebsite
-		stackView.isLayoutMarginsRelativeArrangement = true
+		top.axis = .horizontal
+		top.alignment = .center
+		top.distribution = .fill
+		top.spacing = 8
+		top.layoutMargins = self.settingImage.paddingWebsite
+		top.isLayoutMarginsRelativeArrangement = true
 		
-		stackView.addArrangedSubview(self.imageViewWebsite)
-		stackView.addArrangedSubview(stackViewWebsiteRight)
-		
-		stackView.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
-		
-		return stackView
-	}
-	
-	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
-	}
-	
-	required public init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
-	override public func initContentView() {
-		self.stackViewImage.layoutMargins = self.setting.paddingImage
-		self.stackViewImage.isLayoutMarginsRelativeArrangement = true
-		self.stackViewImage.addArrangedSubview(self.imageViewThumbnail)
-		
-		self.labelTitle.font = .boldSystemFont(ofSize: 20)
-		self.labelTitle.numberOfLines = 2
-		self.labelTitle.textAlignment = .left
-		self.labelTitle.textColor = self.setting.colorTitle
-		self.labelTitle.text = article.title
-		
-		self.contentView.addSubview(self.stackViewTop)
-		self.contentView.addSubview(self.stackViewImage)
-		self.contentView.addSubview(self.labelTitle)
-		
-		if self.article.isRead == true {
-			self.read()
-		}
+		top.addArrangedSubview(self.imageViewWebsite)
+		top.addArrangedSubview(stackViewWebsiteRight)
 	}
 	
 	override func layout() {
 		let heightThumbnail = (self.contentView.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
 		
-		//self.stackViewWebsite.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
+		self.stackViewTop.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
 		self.stackViewImage.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
 		
 		let imagePlaceholder = UIImage()
