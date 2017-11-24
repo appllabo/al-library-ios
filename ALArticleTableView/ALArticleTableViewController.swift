@@ -22,9 +22,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		self.tableView.estimatedRowHeight = self.cellSetting.height
 		
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
-			self.load(isRemove: true, done: {
-				self.tableView.ins_endPullToRefresh()
-			})
+			self.pullToRefresh()
 		})
 	}
 	
@@ -81,11 +79,13 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 	func open(article: ALArticle) {
 	}
 	
-	func refresh() {
-		self.load(isRemove: true, done: {})
+	func pullToRefresh() {
+		self.load(isRemove: true, done: {
+			self.tableView.ins_endPullToRefresh()
+		})
 	}
 	
-	func pullRefresh() {
+	func beginPullToRefresh() {
 		self.tableView.ins_beginPullToRefresh()
 	}
 }
