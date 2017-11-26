@@ -1,7 +1,7 @@
 import UIKit
 import AlamofireImage
 
-public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting {
+public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 	public var paddingInfo = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
@@ -12,7 +12,7 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 		
 		self.paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 		self.fontWebsite = UIFont.boldSystemFont(ofSize: 16)
-		self.fontDate = UIFont.systemFont(ofSize: 16)
+		self.fontDate = UIFont.systemFont(ofSize: 14)
 		self.colorBackground = UIColor.clear
 		self.colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
 		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
@@ -20,9 +20,9 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	}
 }
 
-public class ALImageArticleTableViewCell: ALArticleTableViewCell {
-	public var settingImage: ALImageArticleTableViewCellSetting {
-		return self.setting as! ALImageArticleTableViewCellSetting
+public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
+	public var settingImage: ALInstaArticleTableViewCellSetting {
+		return self.setting as! ALInstaArticleTableViewCellSetting
 	}
 	
 	private let labelTitle = UILabel()
@@ -57,19 +57,26 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	private func initStackView(info: UIStackView) {
+		let stackViewWebsiteRight = UIStackView()
+		stackViewWebsiteRight.axis = .vertical
+		stackViewWebsiteRight.alignment = .leading
+		stackViewWebsiteRight.distribution = .equalSpacing
+		stackViewWebsiteRight.spacing = 2
+		stackViewWebsiteRight.setContentHuggingPriority(0, for: .horizontal)
+		
 		let labelWebsite = UILabel()
-		labelWebsite.text = self.article.website
 		labelWebsite.font = self.setting.fontWebsite
 		labelWebsite.textAlignment = .left
 		labelWebsite.textColor = self.setting.colorWebsite
-		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		labelWebsite.text = article.website
 		
 		let labelDate = UILabel()
-		labelDate.text = self.article.date
 		labelDate.font = self.setting.fontDate
-		labelDate.textAlignment = .right
-		labelDate.textColor = self.setting.colorDate
+		labelDate.textColor = self.settingImage.colorBottom
+		labelDate.text = article.date
+		
+		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
+		stackViewWebsiteRight.addArrangedSubview(labelDate)
 		
 		info.axis = .horizontal
 		info.alignment = .center
@@ -77,8 +84,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		info.spacing = 8
 		
 		info.addArrangedSubview(self.imageViewWebsite)
-		info.addArrangedSubview(labelWebsite)
-		info.addArrangedSubview(labelDate)
+		info.addArrangedSubview(stackViewWebsiteRight)
 	}
 	
 	override func layout() {
