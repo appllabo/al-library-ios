@@ -25,6 +25,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 	public let setting: ALArticleTableViewCellSetting
 	public var isLayouted = false
 	
+	internal let view = UIView()
 	private let thumbnailView = UIImageView()
 	private let titleLabel = UILabel()
 	private let stackViewRight = UIStackView()
@@ -64,14 +65,15 @@ public class ALArticleTableViewCell: UITableViewCell {
 		
 		super.init(style: .default, reuseIdentifier: reuseIdentifier)
 		
-		self.initContentView()
+		self.initView()
+		self.contentView.addSubview(self.view)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	public func initContentView() {
+	public func initView() {
 		self.titleLabel.font = setting.fontTitle
 		self.titleLabel.numberOfLines = 2
 		self.titleLabel.textAlignment = .left
@@ -85,8 +87,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.stackViewRight.addArrangedSubview(self.titleLabel)
 		self.stackViewRight.addArrangedSubview(self.stackViewBottom)
 		
-		self.contentView.addSubview(self.thumbnailView)
-		self.contentView.addSubview(self.stackViewRight)
+		self.view.addSubview(self.thumbnailView)
+		self.view.addSubview(self.stackViewRight)
 		
 		if self.article.isRead == true {
 			self.read()
@@ -101,12 +103,13 @@ public class ALArticleTableViewCell: UITableViewCell {
 		}
 		
 		self.isLayouted = true
+		self.view.frame = self.contentView.frame
 		
 		self.layout()
 	}
 	
 	func layout() {
-		let heightImage = self.contentView.frame.height
+		let heightImage = self.view.frame.height
 		let widthImage = heightImage
 		
 		self.thumbnailView.frame = CGRect(x: 0, y: 0, width: widthImage, height: heightImage)
@@ -120,8 +123,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 		let url = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
 		self.thumbnailView.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filter)
 		
-		let widthRight = self.contentView.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
-		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
+		let widthRight = self.view.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
+		let heightRight = self.view.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
 		
 		self.stackViewRight.frame = CGRect(x: widthImage + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
 	}

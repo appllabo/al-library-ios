@@ -2,7 +2,7 @@ import UIKit
 import AlamofireImage
 
 public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting {
-	public var paddingWebsite = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+	public var paddingInfo = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
@@ -28,8 +28,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	private let labelTitle = UILabel()
 	private let imageViewWebsite = UIImageView()
 	private let imageViewThumbnail = UIImageView()
-	private let stackViewImage = UIStackView()
-	private let stackViewTop = UIStackView()
+	private let stackViewInfo = UIStackView()
 	
 	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
 		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
@@ -39,29 +38,25 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override public func initContentView() {
-		self.stackViewImage.layoutMargins = self.setting.paddingImage
-		self.stackViewImage.isLayoutMarginsRelativeArrangement = true
-		self.stackViewImage.addArrangedSubview(self.imageViewThumbnail)
-		
+	override public func initView() {
 		self.labelTitle.font = .boldSystemFont(ofSize: 20)
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.textAlignment = .left
 		self.labelTitle.textColor = self.setting.colorTitle
 		self.labelTitle.text = article.title
 		
-		self.initStackView(top: self.stackViewTop)
+		self.initStackView(info: self.stackViewInfo)
 		
-		self.contentView.addSubview(self.stackViewTop)
-		self.contentView.addSubview(self.stackViewImage)
-		self.contentView.addSubview(self.labelTitle)
+		self.view.addSubview(self.stackViewInfo)
+		self.view.addSubview(self.imageViewThumbnail)
+		self.view.addSubview(self.labelTitle)
 		
 		if self.article.isRead == true {
 			self.read()
 		}
 	}
 	
-	private func initStackView(top: UIStackView) {
+	private func initStackView(info: UIStackView) {
 		let stackViewWebsiteRight = UIStackView()
 		stackViewWebsiteRight.axis = .vertical
 		stackViewWebsiteRight.alignment = .leading
@@ -83,22 +78,23 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
 		stackViewWebsiteRight.addArrangedSubview(labelDate)
 		
-		top.axis = .horizontal
-		top.alignment = .center
-		top.distribution = .fill
-		top.spacing = 8
-		top.layoutMargins = self.settingImage.paddingWebsite
-		top.isLayoutMarginsRelativeArrangement = true
+		info.axis = .horizontal
+		info.alignment = .center
+		info.distribution = .fill
+		info.spacing = 8
 		
-		top.addArrangedSubview(self.imageViewWebsite)
-		top.addArrangedSubview(stackViewWebsiteRight)
+		info.addArrangedSubview(self.imageViewWebsite)
+		info.addArrangedSubview(stackViewWebsiteRight)
 	}
 	
 	override func layout() {
-		let heightThumbnail = (self.contentView.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
+		print("layout")
 		
-		self.stackViewTop.frame = CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54)
-		self.stackViewImage.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
+		let heightThumbnail = (self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
+		
+		self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
+		self.imageViewThumbnail.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail)
+		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
 		
 		let imagePlaceholder = UIImage()
 		
@@ -106,12 +102,10 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		let urlWebsiteImage = URL(string: self.article.websiteImage)!
 		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
 		
-		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.contentView.frame.width - 16, height: heightThumbnail), radius: 0.0)
+		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.view.frame.width, height: heightThumbnail), radius: 0.0)
 		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
 		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
 		
-		self.labelTitle.frame = CGRect(x: self.settingImage.paddingTitle.left, y: heightThumbnail + 54 + self.settingImage.paddingTitle.top, width: self.contentView.frame.width - self.settingImage.paddingTitle.left - self.settingImage.paddingTitle.right, height: 64 - self.settingImage.paddingTitle.top - self.settingImage.paddingTitle.bottom)
-		
-		self.setting.height = 54 + self.contentView.frame.width / 16 * 9 + 64
+		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
 	}
 }
