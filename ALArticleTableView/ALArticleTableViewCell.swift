@@ -32,6 +32,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 	
 	internal let article: ALArticle
 	
+	internal let isRead: () -> Bool
+	
 	public var stackViewBottom: UIStackView {
 		let labelDate = UILabel()
 		labelDate.text = self.article.date
@@ -59,9 +61,10 @@ public class ALArticleTableViewCell: UITableViewCell {
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting(), reuseIdentifier: String) {
+	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting(), reuseIdentifier: String, isRead: @escaping () -> Bool) {
 		self.article = article
 		self.setting = setting
+		self.isRead = isRead
 		
 		super.init(style: .default, reuseIdentifier: reuseIdentifier)
 		
@@ -89,10 +92,6 @@ public class ALArticleTableViewCell: UITableViewCell {
 		
 		self.view.addSubview(self.thumbnailView)
 		self.view.addSubview(self.stackViewRight)
-		
-		if self.article.isRead == true {
-			self.read()
-		}
 	}
 	
 	override public func layoutSubviews() {
@@ -104,6 +103,10 @@ public class ALArticleTableViewCell: UITableViewCell {
 		
 		self.isLayouted = true
 		self.view.frame = self.contentView.frame
+		
+		if self.isRead() == true {
+			self.read()
+		}
 		
 		self.layout()
 	}

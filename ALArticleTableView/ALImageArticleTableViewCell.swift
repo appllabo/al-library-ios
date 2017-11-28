@@ -30,8 +30,8 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
+	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
+		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell", isRead: isRead)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {

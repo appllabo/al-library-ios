@@ -44,8 +44,8 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting()) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALWebsiteArticleTableViewCell")
+	public init(article: ALArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting(), isRead: @escaping () -> Bool) {
+		super.init(article: article, setting: setting, reuseIdentifier: "ALWebsiteArticleTableViewCell", isRead: isRead)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
