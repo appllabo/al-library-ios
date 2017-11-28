@@ -116,17 +116,18 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 				self.stackViewWebsiteTitle.alpha = 1.0
 			}
 		} else {
-			if scrollView.contentOffset.y <= -scrollView.contentInset.top {
+			/*if scrollView.contentOffset.y <= -scrollView.contentInset.top {
 				self.labelTitle.alpha = 1.0
 				self.stackViewTitlePage.alpha = 0.0
 			} else if scrollView.contentOffset.y <= -scrollView.contentInset.top + 128 {
 				let alpha = (-scrollView.contentInset.top + 128 - scrollView.contentOffset.y) / 128.0
 				self.labelTitle.alpha = easeInCirc(position: alpha)
 				self.stackViewTitlePage.alpha = easeInCirc(position: 1.0 - alpha)
-			} else {
+			} else {*/
+				self.stackViewWebsiteTitle.alpha = 0.0
 				self.labelTitle.alpha = 0.0
 				self.stackViewTitlePage.alpha = 1.0
-			}
+			//}
 		}
 	}
 	
@@ -202,21 +203,22 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
         
         self.contentViewControllers.append(viewController)
 		
+		self.labelTitle.text = viewController.title
+		self.labelTitleTop.attributedText = viewController.attributedTitleMain
+		self.labelTitleBottom.attributedText = viewController.attributedTitleMain
+		self.labelWebsiteTop.attributedText = viewController.attributedTitleSub
+		
+		self.labelTitle.alpha = 0.0
+		self.stackViewWebsiteTitle.alpha = 0.0
+		self.stackViewTitlePage.alpha = 1.0
+		
 		self.setViewControllers([viewController], direction: .forward, animated: true) {bool -> Void in
 			self.index = indexNext
             self.isMoving = false
             self.scrollView?.isScrollEnabled = true
             self.pageControl.numberOfPages = self.contentViewControllers.count
 			self.pageControl.currentPage = self.index
-			self.labelTitle.text = viewController.title
-			self.labelTitleTop.attributedText = viewController.attributedTitleMain
-			self.labelTitleBottom.attributedText = viewController.attributedTitleMain
-			self.labelWebsiteTop.attributedText = viewController.attributedTitleSub
 			
-			self.stackViewWebsiteTitle.alpha = 0.0
-			self.stackViewTitlePage.alpha = 0.0
-			self.labelTitle.alpha = 1.0
-            
 			if self.index > 0 {
 				self.disableGesture = true
 			} else {
