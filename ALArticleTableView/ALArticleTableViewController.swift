@@ -5,21 +5,21 @@ import INSPullToRefresh
 class ALArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALArticleTableViewCellSetting
+//	internal let cellSetting: () -> ALArticleTableViewCellSetting
 	internal var articles = [ALArticle]()
 	internal var cells = [ALArticleTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALArticleTableViewCellSetting, isSloppySwipe: Bool) {
-		self.cellSetting = cellSetting
+	init(title: String, isTabContent: Bool, isSloppySwipe: Bool, cellSetting: ALArticleTableViewCellSetting) {
+//		self.cellSetting = cellSetting
 		
 		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
-		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingImage.left, 0, 0)
+		self.tableView.separatorInset = UIEdgeInsetsMake(0, cellSetting.paddingImage.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		self.tableView.estimatedRowHeight = self.cellSetting.height
+		self.tableView.estimatedRowHeight = cellSetting.height
 		
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
 			self.pullToRefresh()
