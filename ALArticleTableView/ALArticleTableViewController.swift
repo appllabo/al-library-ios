@@ -79,8 +79,12 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 	func open(article: ALArticle) {
 	}
 	
-	func refresh() {
-		self.load(isRemove: true, done: {})
+	func refresh(done: @escaping () -> Void) {
+		self.load(isRemove: true, done: {
+			self.endPullToRefresh()
+			
+			done()
+		})
 	}
 	
 	func pullToRefresh() {
