@@ -1,12 +1,12 @@
 import SwiftyJSON
 
 public class ALTag: ALData {
-	public var name: String? {
-		return nil
+	public var name: String {
+		return "name"
 	}
 	
-	public var id: String {
-		return "id"
+	public var id: Int {
+		return -1
 	}
 	
 	public var img: String {
