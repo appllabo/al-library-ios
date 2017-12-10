@@ -5,14 +5,11 @@ import INSPullToRefresh
 class ALArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-//	internal let cellSetting: () -> ALArticleTableViewCellSetting
 	internal var articles = [ALArticle]()
 	internal var cells = [ALArticleTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, isSloppySwipe: Bool, cellSetting: ALArticleTableViewCellSetting) {
-//		self.cellSetting = cellSetting
-		
-		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
+	init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool, cellSetting: ALArticleTableViewCellSetting) {
+		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
@@ -45,10 +42,8 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
 		self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
 		
-		if self.isTabContent == true {
-			self.tableView.contentInset.top += 44.0
-			self.tableView.scrollIndicatorInsets.top += 44.0
-		}
+        self.tableView.contentInset.top += self.contentInsetTop
+        self.tableView.scrollIndicatorInsets.top += self.contentInsetTop
 		
 		let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")!
 		svgCircleWhite.size = CGSize(width: 24, height: 24)
@@ -76,6 +71,13 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        self.tableView.contentInset.bottom = self.heightTabBar + self.contentInsetBottom
+        self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
+    }
+    
 	func open(article: ALArticle) {
 	}
 	

@@ -3,8 +3,8 @@ import UIKit
 class ALNativeWebViewController: ALSwipeTabContentViewController {
 	private let webView = UIWebView()
 	
-	init(title: String, isTabContent: Bool, url: URL, isSloppySwipe: Bool) {
-		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
+	init(title: String, isSwipeTab: Bool, url: URL, isSloppySwipe: Bool) {
+		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.frame = self.view.frame
 		self.webView.delegate = self
@@ -15,7 +15,7 @@ class ALNativeWebViewController: ALSwipeTabContentViewController {
 		self.webView.backgroundColor = .clear
 		self.webView.isOpaque = false
 		
-		if self.isTabContent == true {
+		if self.isSwipeTab == true {
 			self.webView.scrollView.contentInset.bottom += 44
 			self.webView.scrollView.scrollIndicatorInsets.bottom += 44
 		}
