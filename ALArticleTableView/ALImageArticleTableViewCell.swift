@@ -2,21 +2,23 @@ import UIKit
 import AlamofireImage
 
 public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting {
-	public var paddingInfo = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+	public var paddingInfo = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
-	public var radiusWebsiteImage = CGFloat(18)
+	public var radiusWebsiteImage = CGFloat(10)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
 	
 	public override init() {
 		super.init()
 		
-		self.paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-		self.fontWebsite = UIFont.boldSystemFont(ofSize: 16)
-		self.fontDate = UIFont.systemFont(ofSize: 16)
+        self.borderRadiusImage = CGFloat(4.0)
+		self.paddingImage = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+		self.fontWebsite = UIFont.systemFont(ofSize: 14)
+		self.fontDate = UIFont.systemFont(ofSize: 14)
 		self.colorBackground = UIColor.clear
 		self.colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
 		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
-		self.colorWebsite = UIColor(hex: 0x000000, alpha: 1.0)
+        self.colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+        self.colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
 	}
 }
 
@@ -74,7 +76,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		info.axis = .horizontal
 		info.alignment = .center
 		info.distribution = .fill
-		info.spacing = 8
+		info.spacing = 4
 		
 		info.addArrangedSubview(self.imageViewWebsite)
 		info.addArrangedSubview(labelWebsite)
@@ -84,11 +86,12 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	override func layout() {
 		print("layout")
 		
-		let heightThumbnail = (self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
+        let widthThumbnail = self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right
+		let heightThumbnail = widthThumbnail / 16 * 9
 		
 		self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
-		self.imageViewThumbnail.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail)
-		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
+		self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail), self.setting.paddingImage)
+		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 44), self.settingImage.paddingInfo)
 		
 		let imagePlaceholder = UIImage()
 		
@@ -96,10 +99,10 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		let urlWebsiteImage = URL(string: self.article.websiteImage)!
 		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
 		
-		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.view.frame.width, height: heightThumbnail), radius: 0.0)
+		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.settingImage.borderRadiusImage)
 		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
 		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
 		
-		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
+		self.setting.height = 64 + widthThumbnail / 16 * 9 + 44
 	}
 }
