@@ -27,7 +27,6 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		return self.setting as! ALImageArticleTableViewCellSetting
 	}
 	
-	private let labelTitle = UILabel()
 	private let imageViewWebsite = UIImageView()
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewInfo = UIStackView()
@@ -41,17 +40,17 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override public func initView() {
-		self.labelTitle.font = .boldSystemFont(ofSize: 20)
-		self.labelTitle.numberOfLines = 2
-		self.labelTitle.textAlignment = .left
-		self.labelTitle.textColor = self.setting.colorTitle
-		self.labelTitle.text = article.title
+		self.titleLabel.font = .boldSystemFont(ofSize: 20)
+		self.titleLabel.numberOfLines = 2
+		self.titleLabel.textAlignment = .left
+		self.titleLabel.textColor = self.setting.colorTitle
+		self.titleLabel.text = article.title
 		
 		self.initStackView(info: self.stackViewInfo)
 		
+        self.view.addSubview(self.titleLabel)
+        self.view.addSubview(self.imageViewThumbnail)
 		self.view.addSubview(self.stackViewInfo)
-		self.view.addSubview(self.imageViewThumbnail)
-		self.view.addSubview(self.labelTitle)
 		
 		if self.article.isRead == true {
 			self.read()
@@ -89,7 +88,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         let widthThumbnail = self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right
 		let heightThumbnail = widthThumbnail / 16 * 9
 		
-		self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
+		self.titleLabel.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
 		self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail), self.setting.paddingImage)
 		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 44), self.settingImage.paddingInfo)
 		

@@ -27,7 +27,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 	
 	internal let view = UIView()
 	private let thumbnailView = UIImageView()
-	private let titleLabel = UILabel()
+	internal let titleLabel = UILabel()
 	private let stackViewRight = UIStackView()
 	
 	internal let article: ALArticle
