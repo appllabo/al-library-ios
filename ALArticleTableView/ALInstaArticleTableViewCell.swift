@@ -81,8 +81,6 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
     }
     
 	override func layout() {
-		print("layout")
-		
 		let heightThumbnail = (self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
 		
         self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)

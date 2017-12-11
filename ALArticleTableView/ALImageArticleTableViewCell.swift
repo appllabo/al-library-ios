@@ -83,8 +83,6 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override func layout() {
-		print("layout")
-		
         let widthThumbnail = self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right
 		let heightThumbnail = widthThumbnail / 16 * 9
 		

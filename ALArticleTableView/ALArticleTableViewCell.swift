@@ -108,6 +108,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 			self.read()
 		}
 		
+		print(self.reuseIdentifier ?? "reuseIdentifier nil")
+		
 		self.layout()
 	}
 	

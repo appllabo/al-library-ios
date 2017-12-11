@@ -81,16 +81,16 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 	func open(article: ALArticle) {
 	}
 	
-	func refresh(done: @escaping () -> Void) {
-		self.load(isRemove: true, done: {
+	func refresh(done: @escaping (UITableView) -> Void) {
+		self.load(isRemove: true, done: {tableView in
 			self.endPullToRefresh()
 			
-			done()
+			done(self.tableView)
 		})
 	}
 	
 	func pullToRefresh() {
-		self.load(isRemove: true, done: {
+		self.load(isRemove: true, done: {tableView in
 			self.endPullToRefresh()
 		})
 	}
@@ -105,7 +105,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 }
 
 extension ALArticleTableViewController {
-	func load(isRemove: Bool, done: @escaping () -> Void) {
+	func load(isRemove: Bool, done: @escaping (UITableView) -> Void) {
 	}}
 
 extension ALArticleTableViewController: UITableViewDataSource {
