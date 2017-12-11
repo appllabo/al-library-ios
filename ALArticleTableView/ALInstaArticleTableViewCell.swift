@@ -2,7 +2,7 @@ import UIKit
 import AlamofireImage
 
 public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting {
-	public var paddingInfo = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+	public var paddingInfo = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
@@ -55,37 +55,31 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		}
 	}
 	
-	private func initStackView(info: UIStackView) {
-		let stackViewWebsiteRight = UIStackView()
-		stackViewWebsiteRight.axis = .vertical
-		stackViewWebsiteRight.alignment = .leading
-		stackViewWebsiteRight.distribution = .equalSpacing
-		stackViewWebsiteRight.spacing = 2
-		stackViewWebsiteRight.setContentHuggingPriority(0, for: .horizontal)
-		
-		let labelWebsite = UILabel()
-		labelWebsite.font = self.setting.fontWebsite
-		labelWebsite.textAlignment = .left
-		labelWebsite.textColor = self.setting.colorWebsite
-		labelWebsite.text = article.website
-		
-		let labelDate = UILabel()
-		labelDate.font = self.setting.fontDate
-		labelDate.textColor = self.settingImage.colorBottom
-		labelDate.text = article.date
-		
-		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
-		stackViewWebsiteRight.addArrangedSubview(labelDate)
-		
-		info.axis = .horizontal
-		info.alignment = .center
-		info.distribution = .fill
-		info.spacing = 8
-		
-		info.addArrangedSubview(self.imageViewWebsite)
-		info.addArrangedSubview(stackViewWebsiteRight)
-	}
-	
+    private func initStackView(info: UIStackView) {
+        let labelWebsite = UILabel()
+        labelWebsite.text = self.article.website
+        labelWebsite.font = self.setting.fontWebsite
+        labelWebsite.textAlignment = .left
+        labelWebsite.textColor = self.setting.colorWebsite
+        labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+        labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+        
+        let labelDate = UILabel()
+        labelDate.text = self.article.date
+        labelDate.font = self.setting.fontDate
+        labelDate.textAlignment = .right
+        labelDate.textColor = self.setting.colorDate
+        
+        info.axis = .horizontal
+        info.alignment = .center
+        info.distribution = .fill
+        info.spacing = 8
+        
+        info.addArrangedSubview(self.imageViewWebsite)
+        info.addArrangedSubview(labelWebsite)
+        info.addArrangedSubview(labelDate)
+    }
+    
 	override func layout() {
 		print("layout")
 		
