@@ -30,8 +30,8 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell", isRead: isRead)
+	public init(article: ALArticle, setting: ALInstaArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
+		super.init(article: article, setting: setting, reuseIdentifier: "ALInstaArticleTableViewCell", isRead: isRead)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -92,9 +92,9 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		
 		let heightThumbnail = (self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
 		
-		self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
-		self.imageViewThumbnail.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail)
-		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
+        self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
+		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.view.frame.width, height: heightThumbnail)
+        self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
 		
 		let imagePlaceholder = UIImage()
 		
