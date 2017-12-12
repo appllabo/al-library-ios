@@ -17,8 +17,8 @@ public class ALArticle: ALData {
 		return "tags"
 	}
 	
-	public var img: String {
-		return "img"
+	public var img: String? {
+		return nil
 	}
 	
 	public var date: String {

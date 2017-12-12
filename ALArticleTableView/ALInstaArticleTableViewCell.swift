@@ -94,8 +94,13 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
 		
 		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.view.frame.width, height: heightThumbnail), radius: 0.0)
-		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
-		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		var urlThumbnail = self.setting.urlThumbnail
+
+		if let string = self.article.img?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: string) {
+			urlThumbnail = url
+		}
+		
+		self.imageViewThumbnail.af_setImage(withURL: urlThumbnail, placeholderImage: imagePlaceholder, filter: filterArticleImage)
 		
 		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
 	}

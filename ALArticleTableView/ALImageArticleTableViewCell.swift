@@ -19,6 +19,10 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
         self.colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
         self.colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+		
+		if let path = Bundle.main.path(forResource: "Resource/Image/Thumbnail1024x576", ofType: "png") {
+			self.urlThumbnail = URL(fileURLWithPath: path)
+		}
 	}
 }
 
@@ -97,8 +101,13 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
 		
 		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.settingImage.borderRadiusImage)
-		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
-		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		var urlThumbnail = self.setting.urlThumbnail
+		
+		if let string = self.article.img?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: string) {
+			urlThumbnail = url
+		}
+		
+		self.imageViewThumbnail.af_setImage(withURL: urlThumbnail, placeholderImage: imagePlaceholder, filter: filterArticleImage)
 		
 		self.setting.height = 64 + widthThumbnail / 16 * 9 + 44
 	}

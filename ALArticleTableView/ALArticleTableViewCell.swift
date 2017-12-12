@@ -15,9 +15,9 @@ public class ALArticleTableViewCellSetting {
 	public var fontDate = UIFont.systemFont(ofSize: 12)
 	public var fontWebsite = UIFont.systemFont(ofSize: 12)
 	public var tintColor = UIColor.black
+	public var urlThumbnail = URL(string: "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png")!
 	
 	public init() {
-		
 	}
 }
 
@@ -125,8 +125,13 @@ public class ALArticleTableViewCell: UITableViewCell {
 		
 		let imagePlaceholder = UIImage()
 		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.borderRadiusImage)
-		let url = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
-		self.thumbnailView.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filter)
+		var urlThumbnail = self.setting.urlThumbnail
+		
+		if let string = self.article.img?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: string) {
+			urlThumbnail = url
+		}
+		
+		self.thumbnailView.af_setImage(withURL: urlThumbnail, placeholderImage: imagePlaceholder, filter: filter)
 		
 		let widthRight = self.view.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.view.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
