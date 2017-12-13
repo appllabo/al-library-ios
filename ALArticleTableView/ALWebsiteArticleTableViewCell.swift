@@ -3,6 +3,7 @@ import AlamofireImage
 
 public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 	public var radiusWebsiteImage = CGFloat(8.5)
+	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		
@@ -55,9 +56,16 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 	override func layout() {
 		super.layout()
 		
-		let imagePlaceholder = UIImage()
-		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2, height: self.settingWebsite.radiusWebsiteImage * 2), radius: self.settingWebsite.radiusWebsiteImage)
-		let urlWebsiteImage = URL(string: self.article.websiteImage)!
-		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
+		self.imageViewWebsite.contentMode = .scaleAspectFill
+		self.imageViewWebsite.clipsToBounds = true
+		self.imageViewWebsite.layer.cornerRadius = self.settingWebsite.radiusWebsiteImage
+		
+		if let string = self.article.websiteImage, let url = URL(string: string) {		
+			let imagePlaceholder = UIImage()
+			let filterWebsiteImage = AspectScaledToFillSizeFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2, height: self.settingWebsite.radiusWebsiteImage * 2))
+			self.imageViewWebsite.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
+		} else {
+			self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
+		}
 	}
 }

@@ -6,6 +6,7 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(10)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		super.init()
@@ -19,10 +20,6 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
         self.colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
         self.colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-		
-		if let path = Bundle.main.path(forResource: "Resource/Image/Thumbnail1024x576", ofType: "png") {
-			self.urlThumbnail = URL(fileURLWithPath: path)
-		}
 	}
 }
 
@@ -94,20 +91,29 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail), self.setting.paddingImage)
 		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 44), self.settingImage.paddingInfo)
 		
-		let imagePlaceholder = UIImage()
+		self.imageViewWebsite.contentMode = .scaleAspectFill
+		self.imageViewWebsite.clipsToBounds = true
+		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
 		
-		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2), radius: self.settingImage.radiusWebsiteImage)
-		let urlWebsiteImage = URL(string: self.article.websiteImage)!
-		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
-		
-		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.settingImage.borderRadiusImage)
-		var urlThumbnail = self.setting.urlThumbnail
-		
-		if let string = self.article.img?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: string) {
-			urlThumbnail = url
+		if let string = self.article.websiteImage, let url = URL(string: string) {		
+			let imagePlaceholder = UIImage()
+			let filterWebsiteImage = AspectScaledToFillSizeFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2))
+			self.imageViewWebsite.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
+		} else {
+			self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
 		}
 		
-		self.imageViewThumbnail.af_setImage(withURL: urlThumbnail, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		self.imageViewThumbnail.contentMode = .scaleAspectFill
+		self.imageViewThumbnail.clipsToBounds = true
+		self.imageViewThumbnail.layer.cornerRadius = self.settingImage.borderRadiusImage
+		
+		if let string = self.article.img, let url = URL(string: string) {
+			let imagePlaceholder = UIImage()
+			let filterArticleImage = AspectScaledToFillSizeFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail))
+			self.imageViewThumbnail.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		} else {
+			self.imageViewThumbnail.image = self.settingImage.thumbnail
+		}
 		
 		self.setting.height = 64 + widthThumbnail / 16 * 9 + 44
 	}

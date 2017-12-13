@@ -25,12 +25,12 @@ public class ALArticle: ALData {
 		return "date"
 	}
 	
-	public var websiteImage: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+	public var websiteImage: String? {
+		return nil
 	}
 	
-	public var tagImage: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+	public var tagImage: String? {
+		return nil
 	}
 	
 	public var isRead: Bool {

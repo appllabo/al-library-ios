@@ -6,6 +6,7 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		super.init()
@@ -81,26 +82,34 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
     }
     
 	override func layout() {
-		let heightThumbnail = (self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
+		let widthThumbnail = self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right
+		let heightThumbnail = widthThumbnail / 16 * 9
 		
         self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
 		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.view.frame.width, height: heightThumbnail)
         self.titleLabel.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
 		
-		let imagePlaceholder = UIImage()
+		self.imageViewWebsite.contentMode = .scaleAspectFill
+		self.imageViewWebsite.clipsToBounds = true
+		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
 		
-		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2), radius: self.settingImage.radiusWebsiteImage)
-		let urlWebsiteImage = URL(string: self.article.websiteImage)!
-		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
-		
-		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.view.frame.width, height: heightThumbnail), radius: 0.0)
-		var urlThumbnail = self.setting.urlThumbnail
-
-		if let string = self.article.img?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed), let url = URL(string: string) {
-			urlThumbnail = url
+		if let string = self.article.websiteImage, let url = URL(string: string) {		
+			let imagePlaceholder = UIImage()
+			let filterWebsiteImage = AspectScaledToFillSizeFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2))
+			self.imageViewWebsite.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
+		} else {
+			self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
 		}
 		
-		self.imageViewThumbnail.af_setImage(withURL: urlThumbnail, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		self.imageViewThumbnail.contentMode = .scaleAspectFill
+		
+		if let string = self.article.img, let url = URL(string: string) {
+			let imagePlaceholder = UIImage()
+			let filterArticleImage = AspectScaledToFillSizeFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail))
+			self.imageViewThumbnail.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		} else {
+			self.imageViewThumbnail.image = self.settingImage.thumbnail
+		}
 		
 		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
 	}
