@@ -5,7 +5,7 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
 	fileprivate let activityIndicator = UIActivityIndicatorView()
 	
-	init(title: String, url: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
+	init(title: String, stringUrl: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.navigationDelegate = self
@@ -22,8 +22,10 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		self.webView.addObserver(self, forKeyPath :"canGoBack", options: .new, context: nil)
 		self.webView.addObserver(self, forKeyPath :"canGoForward", options: .new, context: nil)
 		
-		let request: URLRequest = URLRequest(url: URL(string: url)!)
-		self.webView.load(request)
+		if let url = URL(string: stringUrl) {
+			let request = URLRequest(url: url)
+			self.webView.load(request)
+		}
 		
 		self.view.addSubview(self.webView)
 		
