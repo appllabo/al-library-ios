@@ -16,4 +16,8 @@ public class ALTag: ALData {
 	public var contentCount: Int {
 		return 0
 	}
+	
+	public var countMax: Int {
+		return 100
+	}
 }
