@@ -41,6 +41,8 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
 		self.isSwipeTab = isSwipeTab
 		
 		super.init(isSloppySwipe: isSloppySwipe)
+		
+		self.title = self.indicatorInfo.title
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -51,8 +53,6 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
 		self.automaticallyAdjustsScrollViewInsets = false
 		
 		super.viewDidLoad()
-		
-		self.title = self.indicatorInfo.title
 		
         self.view.frame = CGRect(x: self.view.frame.origin.x, y: self.view.frame.origin.y - self.contentInsetTop, width: self.view.frame.width, height: self.view.frame.height)
 	}
