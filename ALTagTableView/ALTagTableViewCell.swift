@@ -25,7 +25,7 @@ class ALTagTableViewCell: UITableViewCell {
 		self.detailTextLabel?.textAlignment = .right
 		
 		if tag.contentCount >= tag.countMax {
-			self.detailTextLabel?.text = String(tag.countMax) + "+"
+			self.detailTextLabel?.text = "\(tag.countMax)+"
 		}
 		
 		self.accessoryType = .disclosureIndicator
