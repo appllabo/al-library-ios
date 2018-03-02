@@ -48,8 +48,8 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALTagArticleTableViewCellSetting = ALTagArticleTableViewCellSetting()) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALTagArticleTableViewCell")
+	public init(article: ALArticle, setting: ALTagArticleTableViewCellSetting = ALTagArticleTableViewCellSetting(), isRead: @escaping () -> Bool) {
+		super.init(article: article, setting: setting, reuseIdentifier: "ALTagArticleTableViewCell", isRead: isRead)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {

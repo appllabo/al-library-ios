@@ -15,9 +15,9 @@ public class ALArticleTableViewCellSetting {
 	public var fontDate = UIFont.systemFont(ofSize: 12)
 	public var fontWebsite = UIFont.systemFont(ofSize: 12)
 	public var tintColor = UIColor.black
+	public var thumbnail = UIImage()
 	
 	public init() {
-		
 	}
 }
 
@@ -25,11 +25,14 @@ public class ALArticleTableViewCell: UITableViewCell {
 	public let setting: ALArticleTableViewCellSetting
 	public var isLayouted = false
 	
+	internal let view = UIView()
 	private let thumbnailView = UIImageView()
-	private let titleLabel = UILabel()
+	internal let titleLabel = UILabel()
 	private let stackViewRight = UIStackView()
 	
 	internal let article: ALArticle
+	
+	internal let isRead: () -> Bool
 	
 	public var stackViewBottom: UIStackView {
 		let labelDate = UILabel()
@@ -58,20 +61,22 @@ public class ALArticleTableViewCell: UITableViewCell {
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting(), reuseIdentifier: String) {
+	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting(), reuseIdentifier: String, isRead: @escaping () -> Bool) {
 		self.article = article
 		self.setting = setting
+		self.isRead = isRead
 		
 		super.init(style: .default, reuseIdentifier: reuseIdentifier)
 		
-		self.initContentView()
+		self.initView()
+		self.contentView.addSubview(self.view)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	public func initContentView() {
+	public func initView() {
 		self.titleLabel.font = setting.fontTitle
 		self.titleLabel.numberOfLines = 2
 		self.titleLabel.textAlignment = .left
@@ -85,12 +90,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.stackViewRight.addArrangedSubview(self.titleLabel)
 		self.stackViewRight.addArrangedSubview(self.stackViewBottom)
 		
-		self.contentView.addSubview(self.thumbnailView)
-		self.contentView.addSubview(self.stackViewRight)
-		
-		if self.article.isRead == true {
-			self.read()
-		}
+		self.view.addSubview(self.thumbnailView)
+		self.view.addSubview(self.stackViewRight)
 	}
 	
 	override public func layoutSubviews() {
@@ -101,27 +102,39 @@ public class ALArticleTableViewCell: UITableViewCell {
 		}
 		
 		self.isLayouted = true
+		self.view.frame = self.contentView.frame
+		
+		if self.isRead() == true {
+			self.read()
+		}
+		
+		print(self.reuseIdentifier ?? "reuseIdentifier nil")
 		
 		self.layout()
 	}
 	
 	func layout() {
-		let heightImage = self.contentView.frame.height
+		let heightImage = self.view.frame.height
 		let widthImage = heightImage
 		
-		self.thumbnailView.frame = CGRect(x: 0, y: 0, width: widthImage, height: heightImage)
-		self.thumbnailView.contentMode = .center
+		self.thumbnailView.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: widthImage, height: heightImage), self.setting.paddingImage)
+		self.thumbnailView.contentMode = .scaleAspectFill
+		self.thumbnailView.clipsToBounds = true
+		self.thumbnailView.layer.cornerRadius = self.setting.borderRadiusImage
 		
-		let heightThumbnail = heightImage - self.setting.paddingImage.top - self.setting.paddingImage.bottom
-		let widthThumbnail = heightThumbnail
+		if let string = self.article.img, let url = URL(string: string) {		
+			let heightThumbnail = heightImage - self.setting.paddingImage.top - self.setting.paddingImage.bottom
+			let widthThumbnail = heightImage - self.setting.paddingImage.left - self.setting.paddingImage.right
+			
+			let imagePlaceholder = UIImage()
+			let filter = AspectScaledToFillSizeFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail))
+			self.thumbnailView.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filter)
+		} else {
+			self.thumbnailView.image = self.setting.thumbnail
+		}
 		
-		let imagePlaceholder = UIImage()
-		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.borderRadiusImage)
-		let url = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
-		self.thumbnailView.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filter)
-		
-		let widthRight = self.contentView.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
-		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
+		let widthRight = self.view.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
+		let heightRight = self.view.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
 		
 		self.stackViewRight.frame = CGRect(x: widthImage + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
 	}

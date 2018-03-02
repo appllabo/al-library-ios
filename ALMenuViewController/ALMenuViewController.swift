@@ -14,8 +14,8 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		return []
 	}
 	
-	override init(title: String, isTabContent: Bool, isSloppySwipe: Bool) {
-		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
+	override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
+		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
@@ -42,10 +42,8 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
 		self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
 		
-		if self.isTabContent == true {
-			self.tableView.contentInset.top += 44.0
-			self.tableView.scrollIndicatorInsets.top += 44.0
-		}
+        self.tableView.contentInset.top += self.contentInsetTop
+        self.tableView.scrollIndicatorInsets.top += self.contentInsetTop
 		
 		self.view.addSubview(self.tableView)
 	}
@@ -61,6 +59,17 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 			self.tableView.deselectRow(at: indexPath, animated: true)
 		}
 	}
+    
+    override func viewWillLayoutSubviews() {
+        var heightTabBar = self.tabBarController?.tabBar.frame.size.height ?? 49
+        
+        if #available(iOS 11.0, *) {
+            heightTabBar = self.view.safeAreaInsets.bottom
+        }
+        
+        self.tableView.contentInset.bottom = heightTabBar + self.contentInsetBottom
+        self.tableView.scrollIndicatorInsets.bottom = heightTabBar + self.contentInsetBottom
+    }
 }
 
 extension ALMenuViewController {	
