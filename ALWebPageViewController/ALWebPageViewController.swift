@@ -5,8 +5,8 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
 	fileprivate let activityIndicator = UIActivityIndicatorView()
 	
-	init(title: String, url: String, isTabContent: Bool, isSloppySwipe: Bool) {
-		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
+	init(title: String, stringUrl: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
+		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.navigationDelegate = self
 //		self.webView.UIDelegate = self
@@ -22,8 +22,10 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		self.webView.addObserver(self, forKeyPath :"canGoBack", options: .new, context: nil)
 		self.webView.addObserver(self, forKeyPath :"canGoForward", options: .new, context: nil)
 		
-		let request: URLRequest = URLRequest(url: URL(string: url)!)
-		self.webView.load(request)
+		if let url = URL(string: stringUrl) {
+			let request = URLRequest(url: url)
+			self.webView.load(request)
+		}
 		
 		self.view.addSubview(self.webView)
 		
@@ -62,16 +64,14 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		self.webView.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
 		self.webView.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
 		
-		if self.isTabContent == true {
-			self.webView.scrollView.contentInset.top += 44.0
-			self.webView.scrollView.scrollIndicatorInsets.top += 44.0
-		}
+        self.webView.scrollView.contentInset.top += self.contentInsetTop
+        self.webView.scrollView.scrollIndicatorInsets.top += self.contentInsetTop
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
 		
-		if self.isTabContent == false {
+		if self.isSwipeTab == false {
 			self.navigationController?.navigationBar.shadowImage = nil
 			self.navigationController?.setToolbarHidden(true, animated: true)
 		}

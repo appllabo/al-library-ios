@@ -17,20 +17,20 @@ public class ALArticle: ALData {
 		return "tags"
 	}
 	
-	public var img: String {
-		return "img"
+	public var img: String? {
+		return nil
 	}
 	
 	public var date: String {
 		return "date"
 	}
 	
-	public var websiteImage: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+	public var websiteImage: String? {
+		return nil
 	}
 	
-	public var tagImage: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+	public var tagImage: String? {
+		return nil
 	}
 	
 	public var isRead: Bool {

@@ -135,6 +135,13 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		return -(CGFloat(sqrt(1.0 - position * position)) - 1.0)
 	}
 	
+	func updateTitle(viewController: ArticleViewController) {
+		self.labelTitle.text = viewController.title
+		self.labelTitleTop.attributedText = viewController.attributedTitleMain
+		self.labelWebsiteTop.attributedText = viewController.attributedTitleSub
+		self.labelTitleBottom.attributedText = viewController.attributedTitleMain
+	}
+	
     func goBack(_ sender: UIButton) {
         if self.index > 0 {
             let indexNext = self.index - 1

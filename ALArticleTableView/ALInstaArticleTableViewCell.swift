@@ -2,10 +2,11 @@ import UIKit
 import AlamofireImage
 
 public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting {
-	public var paddingInfo = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+	public var paddingInfo = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		super.init()
@@ -25,13 +26,12 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		return self.setting as! ALInstaArticleTableViewCellSetting
 	}
 	
-	private let labelTitle = UILabel()
 	private let imageViewWebsite = UIImageView()
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(article: ALArticle, setting: ALImageArticleTableViewCellSetting) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALImageArticleTableViewCell")
+	public init(article: ALArticle, setting: ALInstaArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
+		super.init(article: article, setting: setting, reuseIdentifier: "ALInstaArticleTableViewCell", isRead: isRead)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -39,72 +39,77 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override public func initView() {
-		self.labelTitle.font = .boldSystemFont(ofSize: 20)
-		self.labelTitle.numberOfLines = 2
-		self.labelTitle.textAlignment = .left
-		self.labelTitle.textColor = self.setting.colorTitle
-		self.labelTitle.text = article.title
+		self.titleLabel.font = .boldSystemFont(ofSize: 20)
+		self.titleLabel.numberOfLines = 2
+		self.titleLabel.textAlignment = .left
+		self.titleLabel.textColor = self.setting.colorTitle
+		self.titleLabel.text = article.title
 		
 		self.initStackView(info: self.stackViewInfo)
 		
 		self.view.addSubview(self.stackViewInfo)
 		self.view.addSubview(self.imageViewThumbnail)
-		self.view.addSubview(self.labelTitle)
+		self.view.addSubview(self.titleLabel)
 		
 		if self.article.isRead == true {
 			self.read()
 		}
 	}
 	
-	private func initStackView(info: UIStackView) {
-		let stackViewWebsiteRight = UIStackView()
-		stackViewWebsiteRight.axis = .vertical
-		stackViewWebsiteRight.alignment = .leading
-		stackViewWebsiteRight.distribution = .equalSpacing
-		stackViewWebsiteRight.spacing = 2
-		stackViewWebsiteRight.setContentHuggingPriority(0, for: .horizontal)
-		
-		let labelWebsite = UILabel()
-		labelWebsite.font = self.setting.fontWebsite
-		labelWebsite.textAlignment = .left
-		labelWebsite.textColor = self.setting.colorWebsite
-		labelWebsite.text = article.website
-		
-		let labelDate = UILabel()
-		labelDate.font = self.setting.fontDate
-		labelDate.textColor = self.settingImage.colorBottom
-		labelDate.text = article.date
-		
-		stackViewWebsiteRight.addArrangedSubview(labelWebsite)
-		stackViewWebsiteRight.addArrangedSubview(labelDate)
-		
-		info.axis = .horizontal
-		info.alignment = .center
-		info.distribution = .fill
-		info.spacing = 8
-		
-		info.addArrangedSubview(self.imageViewWebsite)
-		info.addArrangedSubview(stackViewWebsiteRight)
-	}
-	
+    private func initStackView(info: UIStackView) {
+        let labelWebsite = UILabel()
+        labelWebsite.text = self.article.website
+        labelWebsite.font = self.setting.fontWebsite
+        labelWebsite.textAlignment = .left
+        labelWebsite.textColor = self.setting.colorWebsite
+        labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+        labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+        
+        let labelDate = UILabel()
+        labelDate.text = self.article.date
+        labelDate.font = self.setting.fontDate
+        labelDate.textAlignment = .right
+        labelDate.textColor = self.setting.colorDate
+        
+        info.axis = .horizontal
+        info.alignment = .center
+        info.distribution = .fill
+        info.spacing = 8
+        
+        info.addArrangedSubview(self.imageViewWebsite)
+        info.addArrangedSubview(labelWebsite)
+        info.addArrangedSubview(labelDate)
+    }
+    
 	override func layout() {
-		print("layout")
+		let widthThumbnail = self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right
+		let heightThumbnail = widthThumbnail / 16 * 9
 		
-		let heightThumbnail = (self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right) / 16 * 9
+        self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
+		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.view.frame.width, height: heightThumbnail)
+        self.titleLabel.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
 		
-		self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
-		self.imageViewThumbnail.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail)
-		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
+		self.imageViewWebsite.contentMode = .scaleAspectFill
+		self.imageViewWebsite.clipsToBounds = true
+		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
 		
-		let imagePlaceholder = UIImage()
+		if let string = self.article.websiteImage, let url = URL(string: string) {		
+			let imagePlaceholder = UIImage()
+			let filterWebsiteImage = AspectScaledToFillSizeFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2))
+			self.imageViewWebsite.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
+		} else {
+			self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
+		}
 		
-		let filterWebsiteImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2), radius: self.settingImage.radiusWebsiteImage)
-		let urlWebsiteImage = URL(string: self.article.websiteImage)!
-		self.imageViewWebsite.af_setImage(withURL: urlWebsiteImage, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
+		self.imageViewThumbnail.contentMode = .scaleAspectFill
 		
-		let filterArticleImage = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.view.frame.width, height: heightThumbnail), radius: 0.0)
-		let urlArticleImage = URL(string: self.article.img.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) ?? URL(string: "https://avatars2.githubusercontent.com/u/0")!
-		self.imageViewThumbnail.af_setImage(withURL: urlArticleImage, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		if let string = self.article.img, let url = URL(string: string) {
+			let imagePlaceholder = UIImage()
+			let filterArticleImage = AspectScaledToFillSizeFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail))
+			self.imageViewThumbnail.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterArticleImage)
+		} else {
+			self.imageViewThumbnail.image = self.settingImage.thumbnail
+		}
 		
 		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
 	}

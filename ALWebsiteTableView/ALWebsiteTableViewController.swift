@@ -5,15 +5,13 @@ import INSPullToRefresh
 class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal let cellSetting: ALWebsiteTableViewCellSetting
-	
-	internal var websites = [ALWebsite]()
+	internal var websites: [ALWebsite]
 	internal var cells = [ALWebsiteTableViewCell]()
 	
-	init(title: String, isTabContent: Bool, cellSetting: ALWebsiteTableViewCellSetting, isSloppySwipe: Bool) {
-		self.cellSetting = cellSetting
+	init(title: String, websites: [ALWebsite], isSwipeTab: Bool, isSloppySwipe: Bool, cellSetting: ALWebsiteTableViewCellSetting) {
+		self.websites = websites
 		
-		super.init(title: title, isTabContent: isTabContent, isSloppySwipe: isSloppySwipe)
+		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
@@ -44,10 +42,8 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 		self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
 		self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
 		
-		if self.isTabContent == true {
-			self.tableView.contentInset.top += 44.0
-			self.tableView.scrollIndicatorInsets.top += 44.0
-		}
+        self.tableView.contentInset.top += self.contentInsetTop
+        self.tableView.scrollIndicatorInsets.top += self.contentInsetTop
 		
 		let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")!
 		svgCircleWhite.size = CGSize(width: 24, height: 24)
@@ -75,6 +71,13 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        
+        self.tableView.contentInset.bottom = self.heightTabBar
+        self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar
+    }
+    
 	func open(website: ALWebsite) {
 	}
 	

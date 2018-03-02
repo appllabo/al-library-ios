@@ -4,6 +4,7 @@ import AlamofireImage
 public class ALWebsiteTableViewCellSetting {
 	public var sizeImage = CGSize(width: 29, height: 29)
 	public var radiusImage = CGFloat(14.5)
+	public var urlThumbnail = URL(string: "https://storage.googleapis.com/site-assets/q1B0cpTgdFkwEG8UgUA054DZfKqpLe1mP3A1aA6_rjo_svisual-15b887f176c")!
 	
 	public init() {
 		
@@ -19,10 +20,15 @@ class ALWebsiteTableViewCell: UITableViewCell {
 		self.imageView?.layer.borderWidth = 0
 		self.imageView?.layer.cornerRadius = setting.radiusImage
 		
-		let url = NSURL(string: website.img)!
-		let placeholderImage = UIImage(named: "Resource/Library/User.gif")!.resize(size: setting.sizeImage)
+		var urlThumbnail = setting.urlThumbnail
+		
+		if let string = website.img, let url = URL(string: string) {
+			urlThumbnail = url
+		}
+		
+		let placeholderImage = UIImage()
 		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: setting.sizeImage, radius: setting.radiusImage)
-		self.imageView?.af_setImage(withURL: url as URL, placeholderImage: placeholderImage, filter: filter)
+		self.imageView?.af_setImage(withURL: urlThumbnail, placeholderImage: placeholderImage, filter: filter)
 		self.textLabel?.text = website.name
 		self.accessoryType = .disclosureIndicator
 	}

@@ -6,14 +6,14 @@ public class ALWebsite: ALData {
 	}
 	
 	public var url: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+		return "url"
 	}
 	
 	public var id: Int {
 		return -1
 	}
 	
-	public var img: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+	public var img: String? {
+		return nil
 	}
 }
