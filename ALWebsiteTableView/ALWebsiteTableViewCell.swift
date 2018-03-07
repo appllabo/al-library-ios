@@ -5,6 +5,7 @@ public class ALWebsiteTableViewCellSetting {
 	public var sizeImage = CGSize(width: 29, height: 29)
 	public var radiusImage = CGFloat(14.5)
 	public var urlThumbnail = URL(string: "https://storage.googleapis.com/site-assets/q1B0cpTgdFkwEG8UgUA054DZfKqpLe1mP3A1aA6_rjo_svisual-15b887f176c")!
+    public var font = UIFont.systemFont(ofSize: 17)
 	
 	public init() {
 		
@@ -30,6 +31,7 @@ class ALWebsiteTableViewCell: UITableViewCell {
 		let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: setting.sizeImage, radius: setting.radiusImage)
 		self.imageView?.af_setImage(withURL: urlThumbnail, placeholderImage: placeholderImage, filter: filter)
 		self.textLabel?.text = website.name
+        self.textLabel?.font = setting.font
 		self.accessoryType = .disclosureIndicator
 	}
 	
