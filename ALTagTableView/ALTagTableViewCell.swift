@@ -2,36 +2,39 @@ import UIKit
 import SVGKit
 
 public class ALTagTableViewCellSetting {
-	public var sizeImage = CGSize(width: 29, height: 29)
-	public var radiusImage = CGFloat(14.5)
-	public var tintColor = UIColor.black
-	
-	public init() {
-		
-	}
+    public var sizeImage = CGSize(width: 29, height: 29)
+    public var radiusImage = CGFloat(14.5)
+    public var tintColor = UIColor.black
+    public var font = UIFont.systemFont(ofSize: 17)
+    
+    public init() {
+        
+    }
 }
 
 class ALTagTableViewCell: UITableViewCell {
-	init(tag: ALTag, setting: ALTagTableViewCellSetting) {
-		super.init(style: .value1, reuseIdentifier: "ALTagTableViewCell")
-		
-		let image = SVGKImage(named: "Resource/Icon/tag.svg")!
-		image.size = CGSize(width: 20, height: 20)
-		self.imageView?.image = image.uiImage.withRenderingMode(.alwaysTemplate)
-		self.imageView?.tintColor = setting.tintColor
-		
-		self.textLabel?.text = tag.name
-		self.detailTextLabel?.text = String(tag.contentCount)
-		self.detailTextLabel?.textAlignment = .right
-		
-		if tag.contentCount >= tag.countMax {
-			self.detailTextLabel?.text = "\(tag.countMax)+"
-		}
-		
-		self.accessoryType = .disclosureIndicator
-	}
-	
-	required init?(coder aDecoder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
+    init(tag: ALTag, setting: ALTagTableViewCellSetting) {
+        super.init(style: .value1, reuseIdentifier: "ALTagTableViewCell")
+        
+        let image = SVGKImage(named: "Resource/Icon/tag.svg")!
+        image.size = CGSize(width: 20, height: 20)
+        self.imageView?.image = image.uiImage.withRenderingMode(.alwaysTemplate)
+        self.imageView?.tintColor = setting.tintColor
+        
+        self.textLabel?.text = tag.name
+        self.textLabel?.font = setting.font
+        self.detailTextLabel?.text = String(tag.contentCount)
+        self.detailTextLabel?.textAlignment = .right
+        self.detailTextLabel?.font = setting.font
+        
+        if tag.contentCount >= tag.countMax {
+            self.detailTextLabel?.text = "\(tag.countMax)+"
+        }
+        
+        self.accessoryType = .disclosureIndicator
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
