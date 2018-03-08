@@ -5,7 +5,8 @@ public class ALTagTableViewCellSetting {
     public var sizeImage = CGSize(width: 29, height: 29)
     public var radiusImage = CGFloat(14.5)
     public var tintColor = UIColor.black
-    public var font = UIFont.systemFont(ofSize: 17)
+    public var fontText = UIFont.systemFont(ofSize: 17)
+    public var fontDetailText = UIFont.systemFont(ofSize: 17)
     
     public init() {
         
@@ -22,14 +23,11 @@ class ALTagTableViewCell: UITableViewCell {
         self.imageView?.tintColor = setting.tintColor
         
         self.textLabel?.text = tag.name
-        self.textLabel?.font = setting.font
-        self.detailTextLabel?.text = String(tag.contentCount)
-        self.detailTextLabel?.textAlignment = .right
-        self.detailTextLabel?.font = setting.font
+        self.textLabel?.font = setting.fontText
         
-        if tag.contentCount >= tag.countMax {
-            self.detailTextLabel?.text = "\(tag.countMax)+"
-        }
+        self.detailTextLabel?.text = String(tag.contentUpdated)
+        self.detailTextLabel?.textAlignment = .right
+        self.detailTextLabel?.font = setting.fontDetailText
         
         self.accessoryType = .disclosureIndicator
     }
