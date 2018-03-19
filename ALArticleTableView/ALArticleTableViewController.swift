@@ -78,7 +78,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
         self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
     }
     
-	func open(article: ALArticle) {
+	func open(alArticle: ALArticle) {
 	}
 	
 	func refresh(done: @escaping (UITableView) -> Void) {
@@ -127,6 +127,6 @@ extension ALArticleTableViewController: UITableViewDelegate {
 		self.articles[indexPath.row].isRead = true
 		self.cells[indexPath.row].read()
 		
-		self.open(article: self.articles[indexPath.row])
+		self.open(alArticle: self.articles[indexPath.row])
 	}
 }

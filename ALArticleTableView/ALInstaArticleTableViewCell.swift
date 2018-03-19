@@ -12,9 +12,10 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 		super.init()
 		
 		self.paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-		self.fontWebsite = UIFont.boldSystemFont(ofSize: 16)
-		self.fontDate = UIFont.systemFont(ofSize: 14)
-		self.colorBackground = UIColor.clear
+        self.fontTitle = .boldSystemFont(ofSize: 20)
+		self.fontWebsite = .boldSystemFont(ofSize: 16)
+		self.fontDate = .systemFont(ofSize: 14)
+		self.colorBackground = .clear
 		self.colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
 		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
 		self.colorWebsite = UIColor(hex: 0x000000, alpha: 1.0)
@@ -39,7 +40,7 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override public func initView() {
-		self.titleLabel.font = .boldSystemFont(ofSize: 20)
+		self.titleLabel.font = self.setting.fontTitle
 		self.titleLabel.numberOfLines = 2
 		self.titleLabel.textAlignment = .left
 		self.titleLabel.textColor = self.setting.colorTitle

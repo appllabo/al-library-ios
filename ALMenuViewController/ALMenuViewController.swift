@@ -1,8 +1,18 @@
 import UIKit
 
+public class ALMenuTableViewCellSetting {
+    public var font = UIFont.systemFont(ofSize: 17)
+    
+    public init() {
+        
+    }
+}
+
 class ALMenuViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView(frame: CGRect.zero, style: .grouped)
 	
+    internal let setting: ALMenuTableViewCellSetting
+    
 	internal enum SectionData {
 		case String(String)
 		case Array([SectionData])
@@ -14,7 +24,9 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		return []
 	}
 	
-	override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
+	init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool, setting: ALMenuTableViewCellSetting) {
+        self.setting = setting
+        
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self
@@ -108,12 +120,14 @@ extension ALMenuViewController: UITableViewDataSource {
 			if case let .Dictionary(content) = contents[indexPath.row] {
 				if case let .String(label) = content["label"]! {
 					cell.textLabel?.text = label
+                    cell.textLabel?.font = self.setting.font
 				}
 				
 				if let detail = content["detail"] {
 					if case let .String(text) = detail {
 						cell.detailTextLabel?.text = text
 						cell.detailTextLabel?.textAlignment = .right
+                        cell.detailTextLabel?.font = self.setting.font
 					}
 				}
 			}
