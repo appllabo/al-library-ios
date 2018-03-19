@@ -13,8 +13,9 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 		
         self.borderRadiusImage = CGFloat(4.0)
 		self.paddingImage = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
-		self.fontWebsite = UIFont.systemFont(ofSize: 14)
-		self.fontDate = UIFont.systemFont(ofSize: 14)
+        self.fontTitle = .boldSystemFont(ofSize: 20)
+		self.fontWebsite = .systemFont(ofSize: 14)
+		self.fontDate = .systemFont(ofSize: 14)
 		self.colorBackground = UIColor.clear
 		self.colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
 		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
@@ -41,7 +42,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override public func initView() {
-		self.titleLabel.font = .boldSystemFont(ofSize: 20)
+		self.titleLabel.font = self.setting.fontTitle
 		self.titleLabel.numberOfLines = 2
 		self.titleLabel.textAlignment = .left
 		self.titleLabel.textColor = self.setting.colorTitle
