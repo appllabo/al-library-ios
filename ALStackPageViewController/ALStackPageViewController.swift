@@ -21,8 +21,12 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		return .init(hex: 0x808080, alpha: 1.0)
 	}
 	
-    internal var colorTitlePage: UIColor {
+    internal var pageIndicatorTintColor: UIColor {
         return .init(hex: 0xa0a0a0, alpha: 1.0)
+    }
+    
+    internal var currentPageIndicatorTintColor: UIColor {
+        return .init(hex: 0x007aff, alpha: 1.0)
     }
     
     internal var fontTitleMain: UIFont {
@@ -73,8 +77,8 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
         self.labelTitleMain.textColor = self.colorTitleMain
         self.labelTitleMain.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleMain
         
-        self.pageControl.pageIndicatorTintColor = self.colorTitlePage
-        self.pageControl.currentPageIndicatorTintColor = self.view.tintColor
+        self.pageControl.pageIndicatorTintColor = self.pageIndicatorTintColor
+        self.pageControl.currentPageIndicatorTintColor = self.currentPageIndicatorTintColor
         self.pageControl.backgroundColor = .clear
         self.pageControl.numberOfPages = 1
         self.pageControl.currentPage = self.index
