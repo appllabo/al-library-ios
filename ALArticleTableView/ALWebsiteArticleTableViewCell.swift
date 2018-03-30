@@ -11,36 +11,34 @@ public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSettin
 }
 
 public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
-	private let imageViewWebsite = UIImageView()
+	internal let imageViewWebsite = UIImageView()
 	
 	public var settingWebsite: ALWebsiteArticleTableViewCellSetting {
 		return self.setting as! ALWebsiteArticleTableViewCellSetting
 	}
 	
 	public override var stackViewBottom: UIStackView {
-		let labelWebsite = UILabel()
-		labelWebsite.text = self.article.website
-		labelWebsite.font = self.settingWebsite.fontWebsite
-		labelWebsite.textAlignment = .left
-		labelWebsite.textColor = self.settingWebsite.colorWebsite
-		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelWebsite.text = self.article.website
+		self.labelWebsite.font = self.settingWebsite.fontWebsite
+		self.labelWebsite.textAlignment = .left
+		self.labelWebsite.textColor = self.settingWebsite.colorWebsite
+		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
 		
-		let labelDate = UILabel()
-		labelDate.text = self.article.date
-		labelDate.font = self.settingWebsite.fontDate
-		labelDate.textAlignment = .right
-		labelDate.textColor = self.setting.colorDate
+		self.labelDate.text = self.article.date
+		self.labelDate.font = self.settingWebsite.fontDate
+		self.labelDate.textAlignment = .right
+		self.labelDate.textColor = self.setting.colorDate
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
-		stackView.alignment = .bottom
+		stackView.alignment = .center
 		stackView.distribution = .fill
 		stackView.spacing = 4
 		
 		stackView.addArrangedSubview(self.imageViewWebsite)
-		stackView.addArrangedSubview(labelWebsite)
-		stackView.addArrangedSubview(labelDate)
+		stackView.addArrangedSubview(self.labelWebsite)
+		stackView.addArrangedSubview(self.labelDate)
 		
 		return stackView
 	}

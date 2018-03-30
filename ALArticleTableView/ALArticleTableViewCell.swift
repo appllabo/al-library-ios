@@ -26,22 +26,22 @@ public class ALArticleTableViewCell: UITableViewCell {
 	public var isLayouted = false
 	
 	internal let view = UIView()
-	private let thumbnailView = UIImageView()
-	internal let titleLabel = UILabel()
-	private let stackViewRight = UIStackView()
+	internal let thumbnailView = UIImageView()
+	internal let labelTitle = UILabel()
+    internal let labelDate = UILabel()
+    internal let labelWebsite = UILabel()
+	internal let stackViewRight = UIStackView()
 	
 	internal let article: ALArticle
 	
 	internal let isRead: () -> Bool
 	
 	public var stackViewBottom: UIStackView {
-		let labelDate = UILabel()
 		labelDate.text = self.article.date
 		labelDate.font = self.setting.fontDate
 		labelDate.textAlignment = .left
 		labelDate.textColor = self.setting.colorDate
 		
-		let labelWebsite = UILabel()
 		labelWebsite.text = self.article.website
 		labelWebsite.font = self.setting.fontWebsite
 		labelWebsite.textAlignment = .right
@@ -77,17 +77,17 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	public func initView() {
-		self.titleLabel.font = setting.fontTitle
-		self.titleLabel.numberOfLines = 2
-		self.titleLabel.textAlignment = .left
-		self.titleLabel.textColor = self.setting.colorTitle
-		self.titleLabel.text = article.title
+		self.labelTitle.font = setting.fontTitle
+		self.labelTitle.numberOfLines = 2
+		self.labelTitle.textAlignment = .left
+		self.labelTitle.textColor = self.setting.colorTitle
+		self.labelTitle.text = article.title
 		
 		self.stackViewRight.axis = .vertical
 		self.stackViewRight.alignment = .fill
 		self.stackViewRight.distribution = .equalSpacing
 		
-		self.stackViewRight.addArrangedSubview(self.titleLabel)
+		self.stackViewRight.addArrangedSubview(self.labelTitle)
 		self.stackViewRight.addArrangedSubview(self.stackViewBottom)
 		
 		self.view.addSubview(self.thumbnailView)
@@ -140,6 +140,6 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	internal func read() {
-		self.titleLabel.textColor = self.setting.colorRead
+		self.labelTitle.textColor = self.setting.colorRead
 	}
 }
