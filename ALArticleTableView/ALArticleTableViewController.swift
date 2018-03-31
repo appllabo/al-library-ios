@@ -4,11 +4,17 @@ import INSPullToRefresh
 
 class ALArticleTableViewController: ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
-	
+
+    internal var cellSetting: ALArticleTableViewCellSetting {
+        return ALArticleTableViewCellSetting()
+    }
+    
 	internal var articles = [ALArticle]()
+    internal var articlesAdd = [ALArticle]()
+    internal var articleIds = [String:Int]()
 	internal var cells = [ALArticleTableViewCell]()
 	
-	init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool, cellSetting: ALArticleTableViewCellSetting) {
+    override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.tableView.delegate = self

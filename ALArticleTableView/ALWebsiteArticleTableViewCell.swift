@@ -54,16 +54,15 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 	override func layout() {
 		super.layout()
 		
+        self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
 		self.imageViewWebsite.contentMode = .scaleAspectFill
+        self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
+        self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
 		self.imageViewWebsite.clipsToBounds = true
 		self.imageViewWebsite.layer.cornerRadius = self.settingWebsite.radiusWebsiteImage
-		
-		if let string = self.article.websiteImage, let url = URL(string: string) {		
-			let imagePlaceholder = UIImage()
-			let filterWebsiteImage = AspectScaledToFillSizeFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2, height: self.settingWebsite.radiusWebsiteImage * 2))
-			self.imageViewWebsite.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
-		} else {
-			self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
-		}
+        
+        self.article.loadWebsiteImage(block: {image in
+            self.imageViewWebsite.image = image
+        })
 	}
 }

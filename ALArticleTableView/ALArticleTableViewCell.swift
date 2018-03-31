@@ -117,21 +117,15 @@ public class ALArticleTableViewCell: UITableViewCell {
 		let heightImage = self.view.frame.height
 		let widthImage = heightImage
 		
+        self.thumbnailView.image = self.setting.thumbnail
 		self.thumbnailView.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: widthImage, height: heightImage), self.setting.paddingImage)
 		self.thumbnailView.contentMode = .scaleAspectFill
 		self.thumbnailView.clipsToBounds = true
 		self.thumbnailView.layer.cornerRadius = self.setting.borderRadiusImage
 		
-		if let string = self.article.img, let url = URL(string: string) {		
-			let heightThumbnail = heightImage - self.setting.paddingImage.top - self.setting.paddingImage.bottom
-			let widthThumbnail = heightImage - self.setting.paddingImage.left - self.setting.paddingImage.right
-			
-			let imagePlaceholder = UIImage()
-			let filter = AspectScaledToFillSizeFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail))
-			self.thumbnailView.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filter)
-		} else {
-			self.thumbnailView.image = self.setting.thumbnail
-		}
+        self.article.loadImage(block: {image in
+            self.thumbnailView.image = image
+        })
 		
 		let widthRight = self.view.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.view.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
