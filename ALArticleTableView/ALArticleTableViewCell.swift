@@ -135,12 +135,18 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.labelDate.text = article.date
 		self.labelWebsite.text = article.website
 		
-		if let image = article.image {
+		if article.isRead == true {
+			self.read()
+		} else {
+			self.unread()
+		}
+		
+		if let image = article.imageThumbnail {
 			self.thumbnailView.image = image
 		} else {
 			self.thumbnailView.image = self.setting.thumbnail
 			
-			article.loadImage(block: {image in
+			article.loadThumbnailImage(block: {image in
 				self.thumbnailView.image = image
 				
 				let transition = CATransition()
@@ -149,13 +155,13 @@ public class ALArticleTableViewCell: UITableViewCell {
 				self.thumbnailView.layer.add(transition, forKey: kCATransition)
 			})
 		}
-		
-//		if article.isRead == true {
-//			self.read()
-//		}
 	}
 	
 	internal func read() {
 		self.labelTitle.textColor = self.setting.colorRead
+	}
+	
+	internal func unread() {
+		self.labelTitle.textColor = self.setting.colorTitle
 	}
 }

@@ -99,7 +99,7 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	internal override func set(article: ALArticle) {
 		super.set(article: article)
 		
-		article.loadImage(block: {image in
+		article.loadThumbnailImage(block: {image in
 			self.imageViewThumbnail.image = image
 			
 			let transition = CATransition()
