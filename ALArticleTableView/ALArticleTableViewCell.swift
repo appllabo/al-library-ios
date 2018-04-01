@@ -125,6 +125,11 @@ public class ALArticleTableViewCell: UITableViewCell {
 		
         self.article.loadImage(block: {image in
             self.thumbnailView.image = image
+			
+			let transition = CATransition()
+			transition.type = kCATransitionFade
+			
+			self.thumbnailView.layer.add(transition, forKey: kCATransition)
         })
 		
 		let widthRight = self.view.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
