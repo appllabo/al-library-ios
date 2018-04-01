@@ -23,6 +23,10 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 }
 
 public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
+	public override var reuseIdentifier: String {
+		return "ALInstaArticle"
+	}
+	
 	public var settingImage: ALInstaArticleTableViewCellSetting {
 		return self.setting as! ALInstaArticleTableViewCellSetting
 	}
@@ -31,8 +35,8 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewThumbnail = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(article: ALArticle, setting: ALInstaArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALInstaArticleTableViewCell", isRead: isRead)
+	public init(setting: ALInstaArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
+		super.init(setting: setting, isRead: isRead)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -44,28 +48,21 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.textAlignment = .left
 		self.labelTitle.textColor = self.setting.colorTitle
-		self.labelTitle.text = article.title
 		
 		self.initStackView(info: self.stackViewInfo)
 		
 		self.view.addSubview(self.stackViewInfo)
 		self.view.addSubview(self.imageViewThumbnail)
 		self.view.addSubview(self.labelTitle)
-		
-		if self.article.isRead == true {
-			self.read()
-		}
 	}
 	
     private func initStackView(info: UIStackView) {
-        self.labelWebsite.text = self.article.website
         self.labelWebsite.font = self.setting.fontWebsite
         self.labelWebsite.textAlignment = .left
         self.labelWebsite.textColor = self.setting.colorWebsite
         self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
         self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
         
-        self.labelDate.text = self.article.date
         self.labelDate.font = self.setting.fontDate
         self.labelDate.textAlignment = .right
         self.labelDate.textColor = self.setting.colorDate
@@ -88,28 +85,31 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.view.frame.width, height: heightThumbnail)
         self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
 		
+		self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
 		self.imageViewWebsite.contentMode = .scaleAspectFill
 		self.imageViewWebsite.clipsToBounds = true
 		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
 		
-		if let string = self.article.websiteImage, let url = URL(string: string) {		
-			let imagePlaceholder = UIImage()
-			let filterWebsiteImage = AspectScaledToFillSizeFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2, height: self.settingImage.radiusWebsiteImage * 2))
-			self.imageViewWebsite.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterWebsiteImage)
-		} else {
-			self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
-		}
-		
+		self.imageViewThumbnail.image = self.settingImage.thumbnail
 		self.imageViewThumbnail.contentMode = .scaleAspectFill
 		
-		if let string = self.article.img, let url = URL(string: string) {
-			let imagePlaceholder = UIImage()
-			let filterArticleImage = AspectScaledToFillSizeFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail))
-			self.imageViewThumbnail.af_setImage(withURL: url, placeholderImage: imagePlaceholder, filter: filterArticleImage)
-		} else {
-			self.imageViewThumbnail.image = self.settingImage.thumbnail
-		}
-		
 		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
+	}
+	
+	internal override func set(article: ALArticle) {
+		super.set(article: article)
+		
+		article.loadImage(block: {image in
+			self.imageViewThumbnail.image = image
+			
+			let transition = CATransition()
+			transition.type = kCATransitionFade
+			
+			self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+		})
+		
+		article.loadWebsiteImage(block: {image in
+			self.imageViewWebsite.image = image
+		})
 	}
 }

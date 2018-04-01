@@ -22,6 +22,10 @@ public class ALArticleTableViewCellSetting {
 }
 
 public class ALArticleTableViewCell: UITableViewCell {
+	public override var reuseIdentifier: String {
+		return "ALArticle"
+	}
+	
 	public let setting: ALArticleTableViewCellSetting
 	public var isLayouted = false
 	
@@ -32,22 +36,22 @@ public class ALArticleTableViewCell: UITableViewCell {
     internal let labelWebsite = UILabel()
 	internal let stackViewRight = UIStackView()
 	
-	internal let article: ALArticle
-	
 	internal let isRead: () -> Bool
 	
 	public var stackViewBottom: UIStackView {
-		labelDate.text = self.article.date
-		labelDate.font = self.setting.fontDate
-		labelDate.textAlignment = .left
-		labelDate.textColor = self.setting.colorDate
+		self.labelDate.font = self.setting.fontDate
+		self.labelDate.textAlignment = .left
+		self.labelDate.textColor = self.setting.colorDate
+		self.labelDate.backgroundColor = .white
+		self.labelDate.clipsToBounds = true
 		
-		labelWebsite.text = self.article.website
-		labelWebsite.font = self.setting.fontWebsite
-		labelWebsite.textAlignment = .right
-		labelWebsite.textColor = self.setting.colorWebsite
-		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelWebsite.font = self.setting.fontWebsite
+		self.labelWebsite.textAlignment = .right
+		self.labelWebsite.textColor = self.setting.colorWebsite
+		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelWebsite.backgroundColor = .white
+		self.labelWebsite.clipsToBounds = true
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
@@ -55,18 +59,17 @@ public class ALArticleTableViewCell: UITableViewCell {
 		stackView.distribution = .fill
 		stackView.spacing = 8
 		
-		stackView.addArrangedSubview(labelDate)
-		stackView.addArrangedSubview(labelWebsite)
+		stackView.addArrangedSubview(self.labelDate)
+		stackView.addArrangedSubview(self.labelWebsite)
 		
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting(), reuseIdentifier: String, isRead: @escaping () -> Bool) {
-		self.article = article
+	public init(setting: ALArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
 		self.setting = setting
 		self.isRead = isRead
 		
-		super.init(style: .default, reuseIdentifier: reuseIdentifier)
+		super.init(style: .default, reuseIdentifier: self.reuseIdentifier)
 		
 		self.initView()
 		self.contentView.addSubview(self.view)
@@ -81,7 +84,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.textAlignment = .left
 		self.labelTitle.textColor = self.setting.colorTitle
-		self.labelTitle.text = article.title
+		self.labelTitle.backgroundColor = .white
+		self.labelTitle.clipsToBounds = true
 		
 		self.stackViewRight.axis = .vertical
 		self.stackViewRight.alignment = .fill
@@ -108,8 +112,6 @@ public class ALArticleTableViewCell: UITableViewCell {
 			self.read()
 		}
 		
-		print(self.reuseIdentifier ?? "reuseIdentifier nil")
-		
 		self.layout()
 	}
 	
@@ -117,25 +119,40 @@ public class ALArticleTableViewCell: UITableViewCell {
 		let heightImage = self.view.frame.height
 		let widthImage = heightImage
 		
-        self.thumbnailView.image = self.setting.thumbnail
 		self.thumbnailView.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: widthImage, height: heightImage), self.setting.paddingImage)
 		self.thumbnailView.contentMode = .scaleAspectFill
 		self.thumbnailView.clipsToBounds = true
 		self.thumbnailView.layer.cornerRadius = self.setting.borderRadiusImage
 		
-        self.article.loadImage(block: {image in
-            self.thumbnailView.image = image
-			
-			let transition = CATransition()
-			transition.type = kCATransitionFade
-			
-			self.thumbnailView.layer.add(transition, forKey: kCATransition)
-        })
-		
 		let widthRight = self.view.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.view.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
 		
 		self.stackViewRight.frame = CGRect(x: widthImage + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
+	}
+	
+	internal func set(article: ALArticle) {
+		self.labelTitle.text = article.title
+		self.labelDate.text = article.date
+		self.labelWebsite.text = article.website
+		
+		if let image = article.image {
+			self.thumbnailView.image = image
+		} else {
+			self.thumbnailView.image = self.setting.thumbnail
+			
+			article.loadImage(block: {image in
+				self.thumbnailView.image = image
+				
+				let transition = CATransition()
+				transition.type = kCATransitionFade
+				
+				self.thumbnailView.layer.add(transition, forKey: kCATransition)
+			})
+		}
+		
+//		if article.isRead == true {
+//			self.read()
+//		}
 	}
 	
 	internal func read() {

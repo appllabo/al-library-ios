@@ -11,7 +11,6 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
     
 	internal var articles = [ALArticle]()
     internal var articlesAdd = [ALArticle]()
-	internal var cells = [ALArticleTableViewCell]()
 	
     override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
@@ -111,26 +110,33 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 
 extension ALArticleTableViewController {
 	func load(isRemove: Bool, done: @escaping (UITableView) -> Void) {
-	}}
+	}
+}
 
 extension ALArticleTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.cells.count
+		return self.articles.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		return self.cells[indexPath.row]
+		if let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell {
+			return cell
+		}
+		
+		return ALArticleTableViewCell(setting: self.cellSetting, isRead: {
+			return false
+		})
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cells[indexPath.row].setting.height
+		return self.cellSetting.height
 	}
 }
 
 extension ALArticleTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		self.articles[indexPath.row].isRead = true
-		self.cells[indexPath.row].read()
+//		self.cells[indexPath.row].read()
 		
 		self.open(alArticle: self.articles[indexPath.row])
 	}

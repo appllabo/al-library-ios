@@ -21,11 +21,13 @@ public class ALArticle: ALData {
 	}
 	
     public func loadImage(block: @escaping (UIImage) -> Void) {
-        if let img = self.img, let url = URL(string: img) {
+        if let urlImage = self.urlImage, let url = URL(string: urlImage) {
             let urlRequest = URLRequest(url: url)
             
             ImageDownloader.default.download(urlRequest) {response in
                 if let image = response.result.value {
+					self.image = image
+					
                     block(image)
                 }
             }
@@ -48,7 +50,7 @@ public class ALArticle: ALData {
         return "date"
     }
     
-	public var img: String? {
+	public var urlImage: String? {
 		return nil
 	}
 	
@@ -59,4 +61,6 @@ public class ALArticle: ALData {
 	public var tagImage: String? {
 		return nil
 	}
+	
+	public var image: UIImage?
 }
