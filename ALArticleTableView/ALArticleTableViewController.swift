@@ -11,7 +11,6 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
     
 	internal var articles = [ALArticle]()
     internal var articlesAdd = [ALArticle]()
-    internal var articleIds = [String:Int]()
 	internal var cells = [ALArticleTableViewCell]()
 	
     override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
