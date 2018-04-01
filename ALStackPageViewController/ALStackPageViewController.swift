@@ -3,26 +3,40 @@ import UIKit
 class ALStackPageViewController: ALSloppySwipePageViewController {
 	private let titleView = UIView()
 	
-	internal let labelTitle = UILabel()
-	
-    private let stackViewTitlePage = UIStackView()
-    internal let labelTitleTop = UILabel()
+	private let stackViewTitle = UIStackView()
+    
+    internal let labelTitle = UILabel()
+	internal let labelTitleMain = UILabel()
+    internal let labelTitleSub = UILabel()
+    
     internal let pageControl = UIPageControl()
     
-	private let stackViewWebsiteTitle = UIStackView()
-	internal let labelWebsiteTop = UILabel()
-	internal let labelTitleBottom = UILabel()
-	
 	internal var isEnableForward: Bool = false
     
-	internal var colorLabelTitleTop: UIColor {
+	internal var colorTitleMain: UIColor {
 		return .init(hex: 0x000000, alpha: 1.0)
 	}
 	
-	internal var colorLabelWebsiteTop: UIColor {
+	internal var colorTitleSub: UIColor {
 		return .init(hex: 0x808080, alpha: 1.0)
 	}
 	
+    internal var pageIndicatorTintColor: UIColor {
+        return .init(hex: 0xa0a0a0, alpha: 1.0)
+    }
+    
+    internal var currentPageIndicatorTintColor: UIColor {
+        return .init(hex: 0x007aff, alpha: 1.0)
+    }
+    
+    internal var fontTitleMain: UIFont {
+        return .boldSystemFont(ofSize: 16)
+    }
+    
+    internal var fontTitleSub: UIFont {
+        return .systemFont(ofSize: 11)
+    }
+    
 	internal var titleViewFrame: CGRect {
 		return .init(x: 0, y: 0, width: self.view.frame.width - 96, height: 44)
 	}
@@ -45,51 +59,38 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		self.labelTitle.text = self.contentViewControllers[0].title
 		self.labelTitle.frame = self.titleView.frame
 		self.labelTitle.numberOfLines = 2
-		self.labelTitle.font = .boldSystemFont(ofSize: 16)
-		self.labelTitle.textColor = self.colorLabelTitleTop
+		self.labelTitle.font = self.fontTitleMain
+		self.labelTitle.textColor = self.colorTitleMain
 		self.labelTitle.textAlignment = .center
 		
-		self.stackViewTitlePage.axis = .vertical
-		self.stackViewTitlePage.alignment = .center
-		self.stackViewTitlePage.distribution = .fill
-		self.stackViewTitlePage.frame = CGRect(x: 0, y: 4, width: self.titleView.frame.width, height: 36)
-		self.stackViewTitlePage.alpha = 0.0
-		
-		self.labelTitleTop.font = .boldSystemFont(ofSize: 16)
-		self.labelTitleTop.textColor = self.colorLabelTitleTop
-		self.labelTitleTop.numberOfLines = 1
-		
-		self.pageControl.pageIndicatorTintColor = self.colorLabelWebsiteTop
-		self.pageControl.currentPageIndicatorTintColor = self.view.tintColor
-		self.pageControl.backgroundColor = .clear
-		self.pageControl.numberOfPages = 1
-		self.pageControl.currentPage = self.index
-		self.pageControl.isUserInteractionEnabled = false
-		self.pageControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
-		
-		self.stackViewTitlePage.addArrangedSubview(self.labelTitleTop)
-		self.stackViewTitlePage.addArrangedSubview(self.pageControl)
-		
-		self.stackViewWebsiteTitle.axis = .vertical
-		self.stackViewWebsiteTitle.alignment = .center
-		self.stackViewWebsiteTitle.distribution = .fillEqually
-		self.stackViewWebsiteTitle.frame = CGRect(x: 0, y: 0, width: self.titleView.frame.width, height: 40)
-		self.stackViewWebsiteTitle.alpha = 0.0
-		
-		self.labelWebsiteTop.font = .systemFont(ofSize: 11)
-		self.labelWebsiteTop.textColor = self.colorLabelWebsiteTop
-		self.labelWebsiteTop.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleSub
-		
-		self.labelTitleBottom.font = .boldSystemFont(ofSize: 16)
-		self.labelTitleBottom.textColor = self.colorLabelTitleTop
-		self.labelTitleBottom.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleMain
-		
-		self.stackViewWebsiteTitle.addArrangedSubview(self.labelWebsiteTop)
-		self.stackViewWebsiteTitle.addArrangedSubview(self.labelTitleBottom)
-		
+        self.stackViewTitle.axis = .vertical
+        self.stackViewTitle.alignment = .center
+        self.stackViewTitle.distribution = .fillEqually
+        self.stackViewTitle.frame = CGRect(x: 0, y: 0, width: self.titleView.frame.width, height: 40)
+        self.stackViewTitle.alpha = 0.0
+        
+        self.labelTitleSub.font = self.fontTitleSub
+        self.labelTitleSub.textColor = self.colorTitleSub
+        self.labelTitleSub.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleSub
+        
+        self.labelTitleMain.font = self.fontTitleMain
+        self.labelTitleMain.textColor = self.colorTitleMain
+        self.labelTitleMain.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleMain
+        
+        self.pageControl.pageIndicatorTintColor = self.pageIndicatorTintColor
+        self.pageControl.currentPageIndicatorTintColor = self.currentPageIndicatorTintColor
+        self.pageControl.backgroundColor = .clear
+        self.pageControl.numberOfPages = 1
+        self.pageControl.currentPage = self.index
+        self.pageControl.isUserInteractionEnabled = false
+        self.pageControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+        
+        self.stackViewTitle.addArrangedSubview(self.labelTitleSub)
+        self.stackViewTitle.addArrangedSubview(self.labelTitleMain)
+        
 		self.titleView.addSubview(self.labelTitle)
-		self.titleView.addSubview(self.stackViewWebsiteTitle)
-		self.titleView.addSubview(self.stackViewTitlePage)
+		self.titleView.addSubview(self.stackViewTitle)
+//        self.titleView.addSubview(self.stackViewNext)
 		
 		self.navigationItem.titleView = self.titleView
     }
@@ -106,14 +107,14 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		if self.contentViewControllers.count == 1 {
 			if scrollView.contentOffset.y <= -scrollView.contentInset.top {
 				self.labelTitle.alpha = 1.0
-				self.stackViewWebsiteTitle.alpha = 0.0
+				self.stackViewTitle.alpha = 0.0
 			} else if scrollView.contentOffset.y <= -scrollView.contentInset.top + 128 {
 				let alpha = (-scrollView.contentInset.top + 128 - scrollView.contentOffset.y) / 128.0
 				self.labelTitle.alpha = easeInCirc(position: alpha)
-				self.stackViewWebsiteTitle.alpha = easeInCirc(position: 1.0 - alpha)
+				self.stackViewTitle.alpha = easeInCirc(position: 1.0 - alpha)
 			} else {
 				self.labelTitle.alpha = 0.0
-				self.stackViewWebsiteTitle.alpha = 1.0
+				self.stackViewTitle.alpha = 1.0
 			}
 		} else {
 			/*if scrollView.contentOffset.y <= -scrollView.contentInset.top {
@@ -124,9 +125,9 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 				self.labelTitle.alpha = easeInCirc(position: alpha)
 				self.stackViewTitlePage.alpha = easeInCirc(position: 1.0 - alpha)
 			} else {*/
-				self.stackViewWebsiteTitle.alpha = 0.0
+				self.stackViewTitle.alpha = 1.0
 				self.labelTitle.alpha = 0.0
-				self.stackViewTitlePage.alpha = 1.0
+//                self.stackViewNext.alpha = 1.0
 			//}
 		}
 	}
@@ -137,9 +138,8 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 	
 	func updateTitle(viewController: ArticleViewController) {
 		self.labelTitle.text = viewController.title
-		self.labelTitleTop.attributedText = viewController.attributedTitleMain
-		self.labelWebsiteTop.attributedText = viewController.attributedTitleSub
-		self.labelTitleBottom.attributedText = viewController.attributedTitleMain
+        self.labelTitleMain.attributedText = viewController.attributedTitleMain
+		self.labelTitleSub.attributedText = viewController.attributedTitleSub
 	}
 	
     func goBack(_ sender: UIButton) {
@@ -202,6 +202,18 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		self.isEnableForward = false
         self.scrollView?.isScrollEnabled = false
         
+        if self.index == 0 {
+            self.stackViewTitle.axis = .vertical
+            self.stackViewTitle.alignment = .center
+            self.stackViewTitle.distribution = .fill
+            self.stackViewTitle.frame = CGRect(x: 0, y: 4, width: self.titleView.frame.width, height: 36)
+            self.stackViewTitle.alpha = 0.0
+            
+            self.labelTitleSub.removeFromSuperview()
+            self.stackViewTitle.addArrangedSubview(self.labelTitleMain)
+            self.stackViewTitle.addArrangedSubview(self.pageControl)
+        }
+        
         let indexNext = self.index + 1
         
         if self.index < self.contentViewControllers.count - 1 {
@@ -211,14 +223,13 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
         self.contentViewControllers.append(viewController)
 		
 		self.labelTitle.text = viewController.title
-		self.labelTitleTop.attributedText = viewController.attributedTitleMain
-		self.labelTitleBottom.attributedText = viewController.attributedTitleMain
-		self.labelWebsiteTop.attributedText = viewController.attributedTitleSub
+		self.labelTitleMain.attributedText = viewController.attributedTitleMain
+		self.labelTitleSub.attributedText = viewController.attributedTitleSub
 		
 		self.labelTitle.alpha = 0.0
-		self.stackViewWebsiteTitle.alpha = 0.0
-		self.stackViewTitlePage.alpha = 1.0
-		
+//        self.stackViewTitle.alpha = 0.0
+//        self.stackViewNext.alpha = 1.0
+
 		self.setViewControllers([viewController], direction: .forward, animated: true) {bool -> Void in
 			self.index = indexNext
             self.isMoving = false
@@ -242,9 +253,8 @@ extension ALStackPageViewController {
 		self.pageControl.currentPage = self.index
 		
 		if let contentViewController = self.contentViewControllers[self.index] as? ALStackPageContentViewController {
-			self.labelTitleTop.attributedText = contentViewController.attributedTitleMain
-			self.labelTitleBottom.attributedText = contentViewController.attributedTitleMain
-			self.labelWebsiteTop.attributedText = contentViewController.attributedTitleSub
+			self.labelTitleMain.attributedText = contentViewController.attributedTitleMain
+			self.labelTitleSub.attributedText = contentViewController.attributedTitleSub
 		}
 		
 		if self.index == self.contentViewControllers.count - 1 {

@@ -40,17 +40,17 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override public func initView() {
-		self.titleLabel.font = self.setting.fontTitle
-		self.titleLabel.numberOfLines = 2
-		self.titleLabel.textAlignment = .left
-		self.titleLabel.textColor = self.setting.colorTitle
-		self.titleLabel.text = article.title
+		self.labelTitle.font = self.setting.fontTitle
+		self.labelTitle.numberOfLines = 2
+		self.labelTitle.textAlignment = .left
+		self.labelTitle.textColor = self.setting.colorTitle
+		self.labelTitle.text = article.title
 		
 		self.initStackView(info: self.stackViewInfo)
 		
 		self.view.addSubview(self.stackViewInfo)
 		self.view.addSubview(self.imageViewThumbnail)
-		self.view.addSubview(self.titleLabel)
+		self.view.addSubview(self.labelTitle)
 		
 		if self.article.isRead == true {
 			self.read()
@@ -58,19 +58,17 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     private func initStackView(info: UIStackView) {
-        let labelWebsite = UILabel()
-        labelWebsite.text = self.article.website
-        labelWebsite.font = self.setting.fontWebsite
-        labelWebsite.textAlignment = .left
-        labelWebsite.textColor = self.setting.colorWebsite
-        labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-        labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+        self.labelWebsite.text = self.article.website
+        self.labelWebsite.font = self.setting.fontWebsite
+        self.labelWebsite.textAlignment = .left
+        self.labelWebsite.textColor = self.setting.colorWebsite
+        self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+        self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
         
-        let labelDate = UILabel()
-        labelDate.text = self.article.date
-        labelDate.font = self.setting.fontDate
-        labelDate.textAlignment = .right
-        labelDate.textColor = self.setting.colorDate
+        self.labelDate.text = self.article.date
+        self.labelDate.font = self.setting.fontDate
+        self.labelDate.textAlignment = .right
+        self.labelDate.textColor = self.setting.colorDate
         
         info.axis = .horizontal
         info.alignment = .center
@@ -78,8 +76,8 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
         info.spacing = 8
         
         info.addArrangedSubview(self.imageViewWebsite)
-        info.addArrangedSubview(labelWebsite)
-        info.addArrangedSubview(labelDate)
+        info.addArrangedSubview(self.labelWebsite)
+        info.addArrangedSubview(self.labelDate)
     }
     
 	override func layout() {
@@ -88,7 +86,7 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		
         self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
 		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.view.frame.width, height: heightThumbnail)
-        self.titleLabel.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
+        self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
 		
 		self.imageViewWebsite.contentMode = .scaleAspectFill
 		self.imageViewWebsite.clipsToBounds = true
