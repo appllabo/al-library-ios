@@ -11,21 +11,23 @@ public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSettin
 }
 
 public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
-	internal let imageViewWebsite = UIImageView()
+	public override var reuseIdentifier: String {
+		return "ALWebsiteArticle"
+	}
 	
 	public var settingWebsite: ALWebsiteArticleTableViewCellSetting {
 		return self.setting as! ALWebsiteArticleTableViewCellSetting
 	}
 	
+	internal let imageViewWebsite = UIImageView()
+	
 	public override var stackViewBottom: UIStackView {
-		self.labelWebsite.text = self.article.website
 		self.labelWebsite.font = self.settingWebsite.fontWebsite
 		self.labelWebsite.textAlignment = .left
 		self.labelWebsite.textColor = self.settingWebsite.colorWebsite
 		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
 		
-		self.labelDate.text = self.article.date
 		self.labelDate.font = self.settingWebsite.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.setting.colorDate
@@ -43,8 +45,8 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALWebsiteArticleTableViewCellSetting = ALWebsiteArticleTableViewCellSetting(), isRead: @escaping () -> Bool) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALWebsiteArticleTableViewCell", isRead: isRead)
+	public init(setting: ALWebsiteArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
+		super.init(setting: setting, isRead: isRead)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -61,8 +63,13 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		self.imageViewWebsite.clipsToBounds = true
 		self.imageViewWebsite.layer.cornerRadius = self.settingWebsite.radiusWebsiteImage
         
-        self.article.loadWebsiteImage(block: {image in
-            self.imageViewWebsite.image = image
-        })
+	}
+	
+	internal override func set(article: ALArticle) {
+		super.set(article: article)
+		
+		article.loadWebsiteImage(block: {image in
+			self.imageViewWebsite.image = image
+		})
 	}
 }
