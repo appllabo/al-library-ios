@@ -73,14 +73,10 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 	}
     
     override func viewWillLayoutSubviews() {
-        var heightTabBar = self.tabBarController?.tabBar.frame.size.height ?? 49
+		super.viewWillLayoutSubviews()
         
-        if #available(iOS 11.0, *) {
-            heightTabBar = self.view.safeAreaInsets.bottom
-        }
-        
-        self.tableView.contentInset.bottom = heightTabBar + self.contentInsetBottom
-        self.tableView.scrollIndicatorInsets.bottom = heightTabBar + self.contentInsetBottom
+        self.tableView.contentInset.bottom = self.heightTabBar + self.contentInsetBottom
+        self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
     }
 }
 

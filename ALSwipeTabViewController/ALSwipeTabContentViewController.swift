@@ -4,36 +4,12 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
 	internal let indicatorInfo: IndicatorInfo
 	internal let isSwipeTab: Bool
 	
-    internal var contentInsetTop: CGFloat {
+    override internal var contentInsetTop: CGFloat {
         if self.isSwipeTab == true {
-            return 44.0
+            return 44.0 + super.contentInsetTop
         } else {
-            return 0.0
+            return super.contentInsetTop
         }
-    }
-    
-    internal var contentInsetBottom: CGFloat {
-        return 0.0
-    }
-    
-    internal var heightTabBar: CGFloat {
-        var height = self.tabBarController?.tabBar.frame.size.height ?? 0
-        
-        if #available(iOS 11.0, *) {
-            height = self.view.safeAreaInsets.bottom
-        }
-        
-        return height
-    }
-    
-    internal var safeAreaInsetsBottom: CGFloat {
-        var bottom = CGFloat(0.0)
-        
-        if #available(iOS 11.0, *) {
-            bottom = self.view.safeAreaInsets.bottom
-        }
-        
-        return bottom
     }
     
 	init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {

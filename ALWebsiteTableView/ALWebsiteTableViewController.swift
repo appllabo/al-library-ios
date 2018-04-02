@@ -71,13 +71,13 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 		}
 	}
 	
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        self.tableView.contentInset.bottom = self.heightTabBar
-        self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar
-    }
-    
+	override func viewWillLayoutSubviews() {
+		super.viewWillLayoutSubviews()
+		
+		self.tableView.contentInset.bottom = self.heightTabBar + self.contentInsetBottom
+		self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
+	}
+	
 	func open(website: ALWebsite) {
 	}
 	
