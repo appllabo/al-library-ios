@@ -82,9 +82,23 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
         self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
     }
     
-	func open(alArticle: ALArticle) {
+    func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting, isRead: {
+            return false
+        })
+        
+        cell.set(alArticle: alArticle)
+        
+        return cell
+    }
+    
+	func didSelectRow(at indexPath: IndexPath) {
+        self.open(alArticle: self.articles[indexPath.row])
 	}
 	
+    func open(alArticle: ALArticle) {
+    }
+    
 	func refresh(done: @escaping (UITableView) -> Void) {
 		self.load(isRemove: true, done: {tableView in
 			self.endPullToRefresh()
@@ -119,13 +133,7 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell {
-			return cell
-		}
-		
-		return ALArticleTableViewCell(setting: self.cellSetting, isRead: {
-			return false
-		})
+        return self.cell(alArticle: self.articles[indexPath.row])
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -135,9 +143,10 @@ extension ALArticleTableViewController: UITableViewDataSource {
 
 extension ALArticleTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.articles[indexPath.row].isRead = true
-//		self.cells[indexPath.row].read()
-		
-		self.open(alArticle: self.articles[indexPath.row])
+        if let cell = tableView.cellForRow(at: indexPath) as? ALArticleTableViewCell {
+            cell.read()
+        }
+        
+		self.didSelectRow(at: indexPath)
 	}
 }

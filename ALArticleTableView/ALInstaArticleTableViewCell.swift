@@ -96,8 +96,8 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
 	}
 	
-	internal override func set(article: ALArticle) {
-		super.set(article: article)
+	internal func set(article: Article) {
+		super.set(alArticle: article)
 		
 		article.loadThumbnailImage(block: {image in
 			self.imageViewThumbnail.image = image

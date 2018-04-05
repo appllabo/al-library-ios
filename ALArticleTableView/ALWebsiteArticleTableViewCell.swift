@@ -62,11 +62,10 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
         self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
 		self.imageViewWebsite.clipsToBounds = true
 		self.imageViewWebsite.layer.cornerRadius = self.settingWebsite.radiusWebsiteImage
-        
 	}
 	
-	internal override func set(article: ALArticle) {
-		super.set(article: article)
+	internal func set(article: Article) {
+		super.set(alArticle: article)
 		
 		article.loadWebsiteImage(block: {image in
 			self.imageViewWebsite.image = image

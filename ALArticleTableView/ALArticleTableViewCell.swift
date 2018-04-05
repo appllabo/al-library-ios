@@ -130,23 +130,23 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.stackViewRight.frame = CGRect(x: widthImage + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
 	}
 	
-	internal func set(article: ALArticle) {
-		self.labelTitle.text = article.title
-		self.labelDate.text = article.date
-		self.labelWebsite.text = article.website
+	internal func set(alArticle: ALArticle) {
+		self.labelTitle.text = alArticle.title
+		self.labelDate.text = alArticle.date
+		self.labelWebsite.text = alArticle.website
 		
-		if article.isRead == true {
+		if alArticle.isRead == true {
 			self.read()
 		} else {
 			self.unread()
 		}
 		
-		if let image = article.imageThumbnail {
+		if let image = alArticle.imageThumbnail {
 			self.thumbnailView.image = image
 		} else {
 			self.thumbnailView.image = self.setting.thumbnail
 			
-			article.loadThumbnailImage(block: {image in
+			alArticle.loadThumbnailImage(block: {image in
 				self.thumbnailView.image = image
 				
 				let transition = CATransition()

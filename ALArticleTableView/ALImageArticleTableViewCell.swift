@@ -104,8 +104,8 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.setting.height = 64 + widthThumbnail / 16 * 9 + 44
 	}
 	
-	internal override func set(article: ALArticle) {
-		super.set(article: article)
+	internal func set(article: Article) {
+		super.set(alArticle: article)
 		
 		article.loadThumbnailImage(block: {image in
 			self.imageViewThumbnail.image = image
