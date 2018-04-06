@@ -22,11 +22,11 @@ public class ALArticle: ALData {
 		return "tags"
 	}
 	
-    public func loadThumbnailImage(block: @escaping (UIImage) -> Void) {
+    public func loadThumbnailImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
         if let urlImage = self.urlImageThumbnail, let url = URL(string: urlImage) {
             let urlRequest = URLRequest(url: url)
             
-            ImageDownloader.default.download(urlRequest) {response in
+            ImageDownloader.default.download(urlRequest, filter: filter) {response in
                 if let image = response.result.value {
 					self.imageThumbnail = image
 					
@@ -36,11 +36,11 @@ public class ALArticle: ALData {
         }
     }
     
-    public func loadWebsiteImage(block: @escaping (UIImage) -> Void) {
+    public func loadWebsiteImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
         if let urlImageWebsite = self.urlImageWebsite, let url = URL(string: urlImageWebsite) {
             let urlRequest = URLRequest(url: url)
             
-            ImageDownloader.default.download(urlRequest) {response in
+            ImageDownloader.default.download(urlRequest, filter: filter) {response in
                 if let image = response.result.value {
 					self.imageWebsite = image
 					

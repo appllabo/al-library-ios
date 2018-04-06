@@ -50,6 +50,8 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.textAlignment = .left
 		self.labelTitle.textColor = self.setting.colorTitle
+        self.labelTitle.backgroundColor = .white
+        self.labelTitle.clipsToBounds = true
 		
 		self.initStackView(info: self.stackViewInfo)
 		
@@ -67,11 +69,15 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.labelWebsite.textColor = self.setting.colorWebsite
 		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
-		
+        self.labelWebsite.backgroundColor = .white
+        self.labelWebsite.clipsToBounds = true
+        
 		self.labelDate.font = self.setting.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.setting.colorDate
         self.labelDate.setContentHuggingPriority(1, for: .horizontal)
+        self.labelDate.backgroundColor = .white
+        self.labelDate.clipsToBounds = true
 		
 		info.axis = .horizontal
 		info.alignment = .center
@@ -92,22 +98,25 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 44), self.settingImage.paddingInfo)
 		
 		self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
-		self.imageViewWebsite.contentMode = .scaleAspectFill
+		self.imageViewWebsite.contentMode = .center
 		self.imageViewWebsite.clipsToBounds = true
-		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
 		
 		self.imageViewThumbnail.image = self.settingImage.thumbnail
-		self.imageViewThumbnail.contentMode = .scaleAspectFill
+		self.imageViewThumbnail.contentMode = .center
 		self.imageViewThumbnail.clipsToBounds = true
-		self.imageViewThumbnail.layer.cornerRadius = self.settingImage.borderRadiusImage
 		
 		self.setting.height = 64 + widthThumbnail / 16 * 9 + 44
 	}
 	
 	internal func set(article: Article) {
 		super.set(alArticle: article)
+        
+        let widthThumbnail = 320
+        let heightThumbnail = widthThumbnail / 16 * 9
+        
+        let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.borderRadiusImage)
 		
-		article.loadThumbnailImage(block: {image in
+        article.loadThumbnailImage(filter: filterThumbnail, block: {image in
 			self.imageViewThumbnail.image = image
 			
 			let transition = CATransition()
@@ -116,7 +125,9 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 			self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
 		})
 		
-		article.loadWebsiteImage(block: {image in
+        let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2.0, height: self.settingImage.radiusWebsiteImage * 2.0))
+        
+        article.loadWebsiteImage(filter: filterWebsite, block: {image in
 			self.imageViewWebsite.image = image
 		})
 	}

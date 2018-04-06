@@ -48,7 +48,9 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.textAlignment = .left
 		self.labelTitle.textColor = self.setting.colorTitle
-		
+        self.labelTitle.backgroundColor = .white
+        self.labelTitle.clipsToBounds = true
+        
 		self.initStackView(info: self.stackViewInfo)
 		
 		self.view.addSubview(self.stackViewInfo)
@@ -62,10 +64,14 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
         self.labelWebsite.textColor = self.setting.colorWebsite
         self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
         self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+        self.labelWebsite.backgroundColor = .white
+        self.labelWebsite.clipsToBounds = true
         
         self.labelDate.font = self.setting.fontDate
         self.labelDate.textAlignment = .right
         self.labelDate.textColor = self.setting.colorDate
+        self.labelDate.backgroundColor = .white
+        self.labelDate.clipsToBounds = true
         
         info.axis = .horizontal
         info.alignment = .center
@@ -98,8 +104,9 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	
 	internal func set(article: Article) {
 		super.set(alArticle: article)
+        let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
 		
-		article.loadThumbnailImage(block: {image in
+        article.loadThumbnailImage(filter: filter, block: {image in
 			self.imageViewThumbnail.image = image
 			
 			let transition = CATransition()
@@ -108,7 +115,7 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 			self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
 		})
 		
-		article.loadWebsiteImage(block: {image in
+		article.loadWebsiteImage(filter: filter, block: {image in
 			self.imageViewWebsite.image = image
 		})
 	}

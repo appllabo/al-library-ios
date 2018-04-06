@@ -27,10 +27,14 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		self.labelWebsite.textColor = self.settingWebsite.colorWebsite
 		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+        self.labelWebsite.backgroundColor = .white
+        self.labelWebsite.clipsToBounds = true
 		
 		self.labelDate.font = self.settingWebsite.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.setting.colorDate
+        self.labelDate.backgroundColor = .white
+        self.labelDate.clipsToBounds = true
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
@@ -57,18 +61,21 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		super.layout()
 		
         self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
-		self.imageViewWebsite.contentMode = .scaleAspectFill
+        self.imageViewWebsite.contentMode = .center
         self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
         self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
 		self.imageViewWebsite.clipsToBounds = true
-		self.imageViewWebsite.layer.cornerRadius = self.settingWebsite.radiusWebsiteImage
 	}
 	
 	internal func set(article: Article) {
-		super.set(alArticle: article)
+        super.set(alArticle: article)
 		
-		article.loadWebsiteImage(block: {image in
-			self.imageViewWebsite.image = image
-		})
+        self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
+
+        let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2.0, height: self.settingWebsite.radiusWebsiteImage * 2.0))
+        
+        article.loadWebsiteImage(filter: filter, block: {image in
+            self.imageViewWebsite.image = image
+        })
 	}
 }

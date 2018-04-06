@@ -33,10 +33,14 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 		self.labelTag.textColor = self.settingTag.colorWebsite
 		self.labelTag.setContentHuggingPriority(0, for: .horizontal)
 		self.labelTag.setContentCompressionResistancePriority(0, for: .horizontal)
+        self.labelTag.backgroundColor = .white
+        self.labelTag.clipsToBounds = true
 		
 		self.labelDate.font = self.settingTag.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.settingTag.colorDate
+        self.labelDate.backgroundColor = .white
+        self.labelDate.clipsToBounds = true
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
