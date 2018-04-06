@@ -17,10 +17,10 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
-		self.tableView.separatorInset = UIEdgeInsetsMake(0, cellSetting.paddingImage.left, 0, 0)
+		self.tableView.separatorInset = UIEdgeInsetsMake(0, cellSetting.paddingThumbnail.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		self.tableView.estimatedRowHeight = cellSetting.height
+		self.tableView.estimatedRowHeight = cellSetting.sizeThumbnail.height
 		
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
 			self.pullToRefresh()
@@ -137,7 +137,7 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cellSetting.height
+        return self.cellSetting.height(width: tableView.frame.width)
 	}
 }
 

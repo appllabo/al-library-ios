@@ -22,6 +22,11 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 	internal let imageViewWebsite = UIImageView()
 	
 	public override var stackViewBottom: UIStackView {
+        self.imageViewWebsite.contentMode = .center
+        self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
+        self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
+        self.imageViewWebsite.clipsToBounds = true
+        
 		self.labelWebsite.font = self.settingWebsite.fontWebsite
 		self.labelWebsite.textAlignment = .left
 		self.labelWebsite.textColor = self.settingWebsite.colorWebsite
@@ -57,25 +62,27 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+    override public func initView() {
+        super.initView()
+    }
+    
 	override func layout() {
 		super.layout()
-		
-        self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
-        self.imageViewWebsite.contentMode = .center
-        self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
-        self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
-		self.imageViewWebsite.clipsToBounds = true
 	}
 	
 	internal func set(article: Article) {
         super.set(alArticle: article)
 		
-        self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
-
         let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2.0, height: self.settingWebsite.radiusWebsiteImage * 2.0))
         
-        article.loadWebsiteImage(filter: filter, block: {image in
+        if let image = article.imageWebsite {
             self.imageViewWebsite.image = image
-        })
+        } else {
+            self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
+            
+            article.loadWebsiteImage(filter: filter, block: {image in
+                self.imageViewWebsite.image = image
+            })
+        }
 	}
 }

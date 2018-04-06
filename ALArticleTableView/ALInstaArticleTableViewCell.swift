@@ -11,15 +11,19 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public override init() {
 		super.init()
 		
-		self.paddingImage = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+		self.paddingThumbnail = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         self.fontTitle = .boldSystemFont(ofSize: 20)
 		self.fontWebsite = .boldSystemFont(ofSize: 16)
 		self.fontDate = .systemFont(ofSize: 14)
-		self.colorBackground = .clear
+		self.backgroundColor = .clear
 		self.colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
-		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
+		self.colorTitleRead = UIColor(hex: 0x707070, alpha: 1.0)
 		self.colorWebsite = UIColor(hex: 0x000000, alpha: 1.0)
 	}
+    
+    override func height(width: CGFloat) -> CGFloat {
+        return 54 + width / 16 * 9 + 64
+    }
 }
 
 public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
@@ -53,9 +57,9 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
         
 		self.initStackView(info: self.stackViewInfo)
 		
-		self.view.addSubview(self.stackViewInfo)
-		self.view.addSubview(self.imageViewThumbnail)
-		self.view.addSubview(self.labelTitle)
+		self.contentView.addSubview(self.stackViewInfo)
+		self.contentView.addSubview(self.imageViewThumbnail)
+		self.contentView.addSubview(self.labelTitle)
 	}
 	
     private func initStackView(info: UIStackView) {
@@ -84,25 +88,23 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
     }
     
 	override func layout() {
-		let widthThumbnail = self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right
+		let widthThumbnail = self.contentView.frame.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
 		let heightThumbnail = widthThumbnail / 16 * 9
 		
-        self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 54), self.settingImage.paddingInfo)
-		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.view.frame.width, height: heightThumbnail)
-        self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
+        self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54), self.settingImage.paddingInfo)
+		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
+        self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.contentView.frame.width, height: 64), self.settingImage.paddingTitle)
 		
 		self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
 		self.imageViewWebsite.contentMode = .scaleAspectFill
 		self.imageViewWebsite.clipsToBounds = true
 		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
 		
-		self.imageViewThumbnail.image = self.settingImage.thumbnail
+		self.imageViewThumbnail.image = self.settingImage.imageThumbnailDefault
 		self.imageViewThumbnail.contentMode = .scaleAspectFill
-		
-		self.setting.height = 54 + self.view.frame.width / 16 * 9 + 64
 	}
-	
-	internal func set(article: Article) {
+    
+	internal func set(article: Article, width: CGFloat) {
 		super.set(alArticle: article)
         let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
 		
