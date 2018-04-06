@@ -67,10 +67,10 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 		super.layout()
 	}
 	
-	internal override func set(alArticle: ALArticle) {
-		super.set(alArticle: alArticle)
+	internal func set(article: ALArticle) {
+		super.set(alArticle: article)
 		
-		self.labelTag.text = alArticle.stringTags
-		self.labelDate.text = alArticle.date
+		self.labelTag.text = article.stringTags
+		self.labelDate.text = article.date
 	}
 }

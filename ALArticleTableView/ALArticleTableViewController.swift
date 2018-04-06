@@ -17,10 +17,9 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
-		self.tableView.separatorInset = UIEdgeInsetsMake(0, cellSetting.paddingThumbnail.left, 0, 0)
+		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingThumbnail.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		self.tableView.estimatedRowHeight = cellSetting.sizeThumbnail.height
 		
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
 			self.pullToRefresh()
@@ -39,6 +38,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		super.viewDidLoad()
 		
 		self.tableView.frame = self.view.frame
+        self.tableView.estimatedRowHeight = self.cellSetting.height(width: self.tableView.frame.width)
 		
 		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
 		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
