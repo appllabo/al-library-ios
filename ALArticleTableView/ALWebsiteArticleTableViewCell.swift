@@ -21,6 +21,7 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 	internal let imageViewWebsite = UIImageView()
 	
 	public override var stackViewBottom: UIStackView {
+        self.imageViewWebsite.tintColor = self.setting.tintColor
         self.imageViewWebsite.contentMode = .center
         self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
         self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true

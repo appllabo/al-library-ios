@@ -22,7 +22,7 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 	private let labelTag = UILabel()
 	
 	public override var stackViewBottom: UIStackView {
-		self.imageViewTag.tintColor = self.settingTag.tintColor
+		self.imageViewTag.tintColor = self.setting.tintColor
         self.imageViewTag.heightAnchor.constraint(equalToConstant: self.settingTag.radiusTagImage * 2.0).isActive = true
         self.imageViewTag.widthAnchor.constraint(equalToConstant: self.settingTag.radiusTagImage * 2.0).isActive = true
         self.imageViewTag.clipsToBounds = true

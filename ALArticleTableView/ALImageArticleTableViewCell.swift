@@ -75,6 +75,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	private func initStackView(info: UIStackView) {
+        self.imageViewWebsite.tintColor = self.setting.tintColor
         self.imageViewWebsite.setContentHuggingPriority(1, for: .horizontal)
         self.imageViewWebsite.setContentCompressionResistancePriority(1, for: .horizontal)
         self.imageViewWebsite.contentMode = .center
