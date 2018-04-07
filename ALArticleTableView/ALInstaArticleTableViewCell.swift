@@ -35,7 +35,6 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	private let imageViewWebsite = UIImageView()
-	private let imageViewThumbnail = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
 	public init(setting: ALInstaArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
@@ -106,12 +105,11 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
         let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
 		
         article.loadThumbnailImage(filter: filter, block: {image in
-			self.imageViewThumbnail.image = image
-			
 			let transition = CATransition()
 			transition.type = kCATransitionFade
 			
 			self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+            self.imageViewThumbnail.image = image
 		})
 		
 		article.loadWebsiteImage(filter: filter, block: {image in

@@ -65,10 +65,6 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
         super.initView()
     }
     
-	override func layout() {
-		super.layout()
-	}
-	
 	internal func set(article: Article) {
         super.set(alArticle: article)
 		

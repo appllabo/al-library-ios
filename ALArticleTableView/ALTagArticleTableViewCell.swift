@@ -1,5 +1,5 @@
 import UIKit
-import SVGKit
+import AlamofireImage
 
 public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 	public var radiusTagImage = CGFloat(8.5)
@@ -22,11 +22,10 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 	private let labelTag = UILabel()
 	
 	public override var stackViewBottom: UIStackView {
-		let image = SVGKImage(named: "Resource/Icon/tag-filled.svg")!
-		image.size = CGSize(width: self.settingTag.radiusTagImage * 2, height: self.settingTag.radiusTagImage * 2)
-		
-		self.imageViewTag.image = image.uiImage.withRenderingMode(.alwaysTemplate)
 		self.imageViewTag.tintColor = self.settingTag.tintColor
+        self.imageViewTag.heightAnchor.constraint(equalToConstant: self.settingTag.radiusTagImage * 2.0).isActive = true
+        self.imageViewTag.widthAnchor.constraint(equalToConstant: self.settingTag.radiusTagImage * 2.0).isActive = true
+        self.imageViewTag.clipsToBounds = true
 		
 		self.labelTag.font = self.settingTag.fontWebsite
 		self.labelTag.textAlignment = .left
@@ -63,14 +62,22 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func layout() {
-		super.layout()
-	}
-	
 	internal func set(article: ALArticle) {
 		super.set(alArticle: article)
 		
 		self.labelTag.text = article.stringTags
 		self.labelDate.text = article.date
+        
+        let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingTag.radiusTagImage * 2.0, height: self.settingTag.radiusTagImage * 2.0), radius: 0.0)
+        
+        if let image = article.imageWebsite {
+            self.imageViewTag.image = image
+        } else {
+            self.imageViewTag.image = nil
+            
+            article.loadTagImage(filter: filter, block: {image in
+                self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
+            })
+        }
 	}
 }

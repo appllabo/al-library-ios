@@ -10,7 +10,7 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public override init() {
 		super.init()
 		
-        self.borderRadiusThumbnail = CGFloat(4.0)
+        self.radiusThumbnail = CGFloat(4.0)
 		self.paddingThumbnail = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         self.fontTitle = .boldSystemFont(ofSize: 20)
 		self.fontWebsite = .systemFont(ofSize: 14)
@@ -49,7 +49,6 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	internal let imageViewWebsite = UIImageView()
-	internal let imageViewThumbnail = UIImageView()
 	internal let stackViewInfo = UIStackView()
 	
 	public init(setting: ALImageArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
@@ -81,10 +80,6 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         self.imageViewWebsite.contentMode = .center
         self.imageViewWebsite.clipsToBounds = true
         
-        let transition = CATransition()
-        transition.type = kCATransitionFade
-        
-        self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
         self.imageViewThumbnail.contentMode = .center
         self.imageViewThumbnail.clipsToBounds = true
         
@@ -125,9 +120,13 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
         let heightThumbnail = widthThumbnail / 16 * 9
         
-        let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.borderRadiusThumbnail)
+        let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
 		
         article.loadThumbnailImage(filter: filterThumbnail, block: {image in
+            let transition = CATransition()
+            transition.type = kCATransitionFade
+            
+            self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
             self.imageViewThumbnail.image = image
         })
 		

@@ -5,7 +5,7 @@ public class ALArticleTableViewCellSetting {
     public var sizeThumbnail = CGSize(width: 102.0, height: 102.0)
 	public var paddingThumbnail = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 	public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
-    public var borderRadiusThumbnail = CGFloat(4.0)
+    public var radiusThumbnail = CGFloat(4.0)
     public var backgroundColor = UIColor.white
     public var fontTitle = UIFont.boldSystemFont(ofSize: 17)
     public var fontDate = UIFont.systemFont(ofSize: 12)
@@ -30,10 +30,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	public let setting: ALArticleTableViewCellSetting
-	public var isLayouted = false
 	
-//    internal let contentView = UIView()
-	internal let thumbnailView = UIImageView()
+	internal let imageViewThumbnail = UIImageView()
 	internal let labelTitle = UILabel()
     internal let labelDate = UILabel()
     internal let labelWebsite = UILabel()
@@ -82,14 +80,10 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	public func initView() {
-        let transition = CATransition()
-        transition.type = kCATransitionFade
-        
-        self.thumbnailView.layer.add(transition, forKey: kCATransition)
-        self.thumbnailView.contentMode = .center
-        self.thumbnailView.backgroundColor = .white
-        self.thumbnailView.clipsToBounds = false
-        self.thumbnailView.isOpaque = true
+        self.imageViewThumbnail.contentMode = .center
+        self.imageViewThumbnail.backgroundColor = .white
+        self.imageViewThumbnail.clipsToBounds = false
+        self.imageViewThumbnail.isOpaque = true
         
 		self.labelTitle.font = setting.fontTitle
 		self.labelTitle.numberOfLines = 2
@@ -105,19 +99,12 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.stackViewRight.addArrangedSubview(self.labelTitle)
 		self.stackViewRight.addArrangedSubview(self.stackViewBottom)
 		
-		self.contentView.addSubview(self.thumbnailView)
+		self.contentView.addSubview(self.imageViewThumbnail)
 		self.contentView.addSubview(self.stackViewRight)
 	}
 	
 	override public func layoutSubviews() {
 		super.layoutSubviews()
-		
-//        if self.isLayouted == true {
-//            return
-//        }
-//
-//        self.isLayouted = true
-//        self.view.frame = self.contentView.frame
 		
 		if self.isRead() == true {
 			self.read()
@@ -129,7 +116,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	func layout() {
-		self.thumbnailView.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
+		self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
 		
 		let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
@@ -143,14 +130,18 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.labelWebsite.text = alArticle.website
 		
 		if let image = alArticle.imageThumbnail {
-			self.thumbnailView.image = image
+			self.imageViewThumbnail.image = image
 		} else {
-			self.thumbnailView.image = nil
+			self.imageViewThumbnail.image = nil
             
-            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingContent.top - self.setting.paddingContent.top, height: self.setting.sizeThumbnail.height - self.setting.paddingContent.top - self.setting.paddingContent.top), radius: self.setting.borderRadiusThumbnail)
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
 			
             alArticle.loadThumbnailImage(filter: filter, block: {image in
-				self.thumbnailView.image = image
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+				self.imageViewThumbnail.image = image
 			})
 		}
 	}
