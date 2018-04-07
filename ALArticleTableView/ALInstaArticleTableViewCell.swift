@@ -6,7 +6,6 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		super.init()
@@ -63,6 +62,12 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     private func initStackView(info: UIStackView) {
+        self.imageViewWebsite.contentMode = .center
+        self.imageViewWebsite.clipsToBounds = true
+        
+        self.imageViewThumbnail.contentMode = .center
+        self.imageViewThumbnail.clipsToBounds = true
+        
         self.labelWebsite.font = self.setting.fontWebsite
         self.labelWebsite.textAlignment = .left
         self.labelWebsite.textColor = self.setting.colorWebsite
@@ -94,15 +99,7 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
         self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54), self.settingImage.paddingInfo)
 		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
         self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.contentView.frame.width, height: 64), self.settingImage.paddingTitle)
-		
-		self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
-		self.imageViewWebsite.contentMode = .scaleAspectFill
-		self.imageViewWebsite.clipsToBounds = true
-		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
-		
-		self.imageViewThumbnail.image = self.settingImage.imageThumbnailDefault
-		self.imageViewThumbnail.contentMode = .scaleAspectFill
-	}
+    }
     
 	internal func set(article: Article, width: CGFloat) {
 		super.set(alArticle: article)

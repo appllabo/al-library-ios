@@ -15,7 +15,6 @@ public class ALArticleTableViewCellSetting {
 	public var colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
 	public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
     public var tintColor = UIColor.black
-	public var imageThumbnailDefault = UIImage()
 	
 	public init() {
 	}
@@ -146,7 +145,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 		if let image = alArticle.imageThumbnail {
 			self.thumbnailView.image = image
 		} else {
-			self.thumbnailView.image = self.setting.imageThumbnailDefault
+			self.thumbnailView.image = nil
+            
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingContent.top - self.setting.paddingContent.top, height: self.setting.sizeThumbnail.height - self.setting.paddingContent.top - self.setting.paddingContent.top), radius: self.setting.borderRadiusThumbnail)
 			
             alArticle.loadThumbnailImage(filter: filter, block: {image in

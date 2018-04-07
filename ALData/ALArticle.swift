@@ -23,7 +23,7 @@ public class ALArticle: ALData {
 	}
 	
     public func loadThumbnailImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
-        if let urlImage = self.urlImageThumbnail, let url = URL(string: urlImage) {
+        if let url = self.urlImageThumbnail {
             let urlRequest = URLRequest(url: url)
             
             ImageDownloader.default.download(urlRequest, filter: filter) {response in
@@ -37,7 +37,7 @@ public class ALArticle: ALData {
     }
     
     public func loadWebsiteImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
-        if let urlImageWebsite = self.urlImageWebsite, let url = URL(string: urlImageWebsite) {
+        if let url = self.urlImageWebsite {
             let urlRequest = URLRequest(url: url)
             
             ImageDownloader.default.download(urlRequest, filter: filter) {response in
@@ -54,15 +54,15 @@ public class ALArticle: ALData {
         return "date"
     }
     
-	public var urlImageThumbnail: String? {
+	public var urlImageThumbnail: URL? {
 		return nil
 	}
 	
-	public var urlImageWebsite: String? {
+	public var urlImageWebsite: URL? {
 		return nil
 	}
 	
-	public var urlImageTag: String? {
+	public var urlImageTag: URL? {
 		return nil
 	}
 }

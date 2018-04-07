@@ -6,7 +6,6 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(10)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		super.init()
@@ -77,7 +76,6 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	private func initStackView(info: UIStackView) {
-        self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
         self.imageViewWebsite.setContentHuggingPriority(1, for: .horizontal)
         self.imageViewWebsite.setContentCompressionResistancePriority(1, for: .horizontal)
         self.imageViewWebsite.contentMode = .center

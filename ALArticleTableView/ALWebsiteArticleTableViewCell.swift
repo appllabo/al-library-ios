@@ -3,7 +3,6 @@ import AlamofireImage
 
 public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 	public var radiusWebsiteImage = CGFloat(8.5)
-	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		
@@ -78,7 +77,7 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
         if let image = article.imageWebsite {
             self.imageViewWebsite.image = image
         } else {
-            self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
+            self.imageViewWebsite.image = nil
             
             article.loadWebsiteImage(filter: filter, block: {image in
                 self.imageViewWebsite.image = image
