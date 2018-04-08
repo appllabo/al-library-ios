@@ -2,52 +2,57 @@ import UIKit
 import AlamofireImage
 
 public class ALArticleTableViewCellSetting {
-	public var height = CGFloat(102.0)
-	public var borderRadiusImage = CGFloat(4.0)
-	public var paddingImage = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+    public var sizeThumbnail = CGSize(width: 102.0, height: 102.0)
+	public var paddingThumbnail = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 	public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
-	public var colorBackground = UIColor.clear
+    public var radiusThumbnail = CGFloat(4.0)
+    public var backgroundColor = UIColor.white
+    public var fontTitle = UIFont.boldSystemFont(ofSize: 17)
+    public var fontDate = UIFont.systemFont(ofSize: 12)
+    public var fontWebsite = UIFont.systemFont(ofSize: 12)
 	public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
-	public var colorRead = UIColor(hex: 0x707070, alpha: 1.0)
+	public var colorTitleRead = UIColor(hex: 0x707070, alpha: 1.0)
 	public var colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
 	public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-	public var fontTitle = UIFont.boldSystemFont(ofSize: 17)
-	public var fontDate = UIFont.systemFont(ofSize: 12)
-	public var fontWebsite = UIFont.systemFont(ofSize: 12)
-	public var tintColor = UIColor.black
-	public var thumbnail = UIImage()
+    public var tintColor = UIColor.black
 	
 	public init() {
 	}
+    
+    func height(width: CGFloat) -> CGFloat {
+        return self.sizeThumbnail.height
+    }
 }
 
 public class ALArticleTableViewCell: UITableViewCell {
-	public let setting: ALArticleTableViewCellSetting
-	public var isLayouted = false
+	public override var reuseIdentifier: String {
+		return "ALArticle"
+	}
 	
-	internal let view = UIView()
-	internal let thumbnailView = UIImageView()
+	public let setting: ALArticleTableViewCellSetting
+	
+	internal let imageViewThumbnail = UIImageView()
 	internal let labelTitle = UILabel()
     internal let labelDate = UILabel()
     internal let labelWebsite = UILabel()
 	internal let stackViewRight = UIStackView()
 	
-	internal let article: ALArticle
-	
-	internal let isRead: () -> Bool
+    internal var alArticle: ALArticle?
 	
 	public var stackViewBottom: UIStackView {
-		labelDate.text = self.article.date
-		labelDate.font = self.setting.fontDate
-		labelDate.textAlignment = .left
-		labelDate.textColor = self.setting.colorDate
+		self.labelDate.font = self.setting.fontDate
+		self.labelDate.textAlignment = .left
+		self.labelDate.textColor = self.setting.colorDate
+		self.labelDate.backgroundColor = .white
+		self.labelDate.clipsToBounds = true
 		
-		labelWebsite.text = self.article.website
-		labelWebsite.font = self.setting.fontWebsite
-		labelWebsite.textAlignment = .right
-		labelWebsite.textColor = self.setting.colorWebsite
-		labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-		labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelWebsite.font = self.setting.fontWebsite
+		self.labelWebsite.textAlignment = .right
+		self.labelWebsite.textColor = self.setting.colorWebsite
+		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
+		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelWebsite.backgroundColor = .white
+		self.labelWebsite.clipsToBounds = true
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
@@ -55,21 +60,18 @@ public class ALArticleTableViewCell: UITableViewCell {
 		stackView.distribution = .fill
 		stackView.spacing = 8
 		
-		stackView.addArrangedSubview(labelDate)
-		stackView.addArrangedSubview(labelWebsite)
+		stackView.addArrangedSubview(self.labelDate)
+		stackView.addArrangedSubview(self.labelWebsite)
 		
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALArticleTableViewCellSetting = ALArticleTableViewCellSetting(), reuseIdentifier: String, isRead: @escaping () -> Bool) {
-		self.article = article
+    public init(setting: ALArticleTableViewCellSetting) {
 		self.setting = setting
-		self.isRead = isRead
 		
-		super.init(style: .default, reuseIdentifier: reuseIdentifier)
+		super.init(style: .default, reuseIdentifier: self.reuseIdentifier)
 		
 		self.initView()
-		self.contentView.addSubview(self.view)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -77,11 +79,16 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	public func initView() {
+        self.imageViewThumbnail.contentMode = .center
+        self.imageViewThumbnail.backgroundColor = .white
+        self.imageViewThumbnail.clipsToBounds = true
+        
 		self.labelTitle.font = setting.fontTitle
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.textAlignment = .left
 		self.labelTitle.textColor = self.setting.colorTitle
-		self.labelTitle.text = article.title
+		self.labelTitle.backgroundColor = .white
+		self.labelTitle.clipsToBounds = true
 		
 		self.stackViewRight.axis = .vertical
 		self.stackViewRight.alignment = .fill
@@ -90,50 +97,60 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.stackViewRight.addArrangedSubview(self.labelTitle)
 		self.stackViewRight.addArrangedSubview(self.stackViewBottom)
 		
-		self.view.addSubview(self.thumbnailView)
-		self.view.addSubview(self.stackViewRight)
+		self.contentView.addSubview(self.imageViewThumbnail)
+		self.contentView.addSubview(self.stackViewRight)
 	}
 	
 	override public func layoutSubviews() {
 		super.layoutSubviews()
 		
-		if self.isLayouted == true {
-			return
-		}
-		
-		self.isLayouted = true
-		self.view.frame = self.contentView.frame
-		
-		if self.isRead() == true {
+		if self.alArticle?.isRead == true {
 			self.read()
-		}
-		
-		print(self.reuseIdentifier ?? "reuseIdentifier nil")
+        } else {
+            self.unread()
+        }
 		
 		self.layout()
 	}
 	
 	func layout() {
-		let heightImage = self.view.frame.height
-		let widthImage = heightImage
+		self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
 		
-        self.thumbnailView.image = self.setting.thumbnail
-		self.thumbnailView.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: widthImage, height: heightImage), self.setting.paddingImage)
-		self.thumbnailView.contentMode = .scaleAspectFill
-		self.thumbnailView.clipsToBounds = true
-		self.thumbnailView.layer.cornerRadius = self.setting.borderRadiusImage
+		let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
+		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
 		
-        self.article.loadImage(block: {image in
-            self.thumbnailView.image = image
-        })
+		self.stackViewRight.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
+	}
+	
+	internal func set(alArticle: ALArticle) {
+        self.alArticle = alArticle
+        
+		self.labelTitle.text = alArticle.title
+		self.labelDate.text = alArticle.date
+		self.labelWebsite.text = alArticle.website
 		
-		let widthRight = self.view.frame.width - widthImage - self.setting.paddingContent.left - self.setting.paddingContent.right
-		let heightRight = self.view.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
-		
-		self.stackViewRight.frame = CGRect(x: widthImage + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
+        self.imageViewThumbnail.image = nil
+        
+		if let image = alArticle.imageThumbnail {
+			self.imageViewThumbnail.image = image
+		} else {
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
+			
+            alArticle.loadThumbnailImage(filter: filter, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+				self.imageViewThumbnail.image = image
+			})
+		}
 	}
 	
 	internal func read() {
-		self.labelTitle.textColor = self.setting.colorRead
+		self.labelTitle.textColor = self.setting.colorTitleRead
+	}
+	
+	internal func unread() {
+		self.labelTitle.textColor = self.setting.colorTitle
 	}
 }

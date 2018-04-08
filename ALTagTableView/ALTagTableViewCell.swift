@@ -2,9 +2,9 @@ import UIKit
 import SVGKit
 
 public class ALTagTableViewCellSetting {
+    public var tintColor = UIColor.black
     public var sizeImage = CGSize(width: 29, height: 29)
     public var radiusImage = CGFloat(14.5)
-    public var tintColor = UIColor.black
     public var fontText = UIFont.systemFont(ofSize: 17)
     public var fontDetailText = UIFont.systemFont(ofSize: 17)
     public var colorText = UIColor.black

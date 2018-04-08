@@ -3,7 +3,10 @@ import AlamofireImage
 
 public class ALArticle: ALData {
     public var isRead = false
-    
+	public var imageThumbnail: UIImage?
+	public var imageWebsite: UIImage?
+    public var imageTag: UIImage?
+	
 	public var title: String {
 		return "title"
 	}
@@ -20,24 +23,42 @@ public class ALArticle: ALData {
 		return "tags"
 	}
 	
-    public func loadImage(block: @escaping (UIImage) -> Void) {
-        if let img = self.img, let url = URL(string: img) {
+    public func loadThumbnailImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
+        if let url = self.urlImageThumbnail {
             let urlRequest = URLRequest(url: url)
             
-            ImageDownloader.default.download(urlRequest) {response in
+            ImageDownloader.default.download(urlRequest, filter: filter) {response in
                 if let image = response.result.value {
+					self.imageThumbnail = image
+					
                     block(image)
                 }
             }
         }
     }
     
-    public func loadWebsiteImage(block: @escaping (UIImage) -> Void) {
-        if let websiteImage = self.websiteImage, let url = URL(string: websiteImage) {
+    public func loadWebsiteImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
+        if let url = self.urlImageWebsite {
             let urlRequest = URLRequest(url: url)
             
-            ImageDownloader.default.download(urlRequest) {response in
+            ImageDownloader.default.download(urlRequest, filter: filter) {response in
                 if let image = response.result.value {
+					self.imageWebsite = image
+					
+                    block(image)
+                }
+            }
+        }
+    }
+    
+    public func loadTagImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
+        if let url = self.urlImageTag {
+            let urlRequest = URLRequest(url: url)
+            
+            ImageDownloader.default.download(urlRequest, filter: filter) {response in
+                if let image = response.result.value {
+                    self.imageTag = image
+                    
                     block(image)
                 }
             }
@@ -48,15 +69,15 @@ public class ALArticle: ALData {
         return "date"
     }
     
-	public var img: String? {
+	public var urlImageThumbnail: URL? {
 		return nil
 	}
 	
-	public var websiteImage: String? {
+	public var urlImageWebsite: URL? {
 		return nil
 	}
 	
-	public var tagImage: String? {
+	public var urlImageTag: URL? {
 		return nil
 	}
 }

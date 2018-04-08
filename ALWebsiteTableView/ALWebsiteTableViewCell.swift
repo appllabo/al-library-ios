@@ -2,6 +2,7 @@ import UIKit
 import AlamofireImage
 
 public class ALWebsiteTableViewCellSetting {
+    public var tintColor = UIColor.black
 	public var sizeImage = CGSize(width: 29, height: 29)
 	public var radiusImage = CGFloat(14.5)
 	public var urlThumbnail = URL(string: "https://storage.googleapis.com/site-assets/q1B0cpTgdFkwEG8UgUA054DZfKqpLe1mP3A1aA6_rjo_svisual-15b887f176c")!

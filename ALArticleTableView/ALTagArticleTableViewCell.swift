@@ -1,5 +1,5 @@
 import UIKit
-import SVGKit
+import AlamofireImage
 
 public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 	public var radiusTagImage = CGFloat(8.5)
@@ -10,30 +10,36 @@ public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 }
 
 public class ALTagArticleTableViewCell: ALArticleTableViewCell {
+	public override var reuseIdentifier: String {
+		return "ALTagArticle"
+	}
+	
 	public var settingTag: ALTagArticleTableViewCellSetting {
 		return self.setting as! ALTagArticleTableViewCellSetting
 	}
 	
+	private let imageViewTag = UIImageView()
+	private let labelTag = UILabel()
+	
 	public override var stackViewBottom: UIStackView {
-		let imageViewTag = UIImageView()
-		let image = SVGKImage(named: "Resource/Icon/tag-filled.svg")!
-		image.size = CGSize(width: self.settingTag.radiusTagImage * 2, height: self.settingTag.radiusTagImage * 2)
-		imageViewTag.image = image.uiImage.withRenderingMode(.alwaysTemplate)
-		imageViewTag.tintColor = self.settingTag.tintColor
+		self.imageViewTag.tintColor = self.setting.tintColor
+        self.imageViewTag.heightAnchor.constraint(equalToConstant: self.settingTag.radiusTagImage * 2.0).isActive = true
+        self.imageViewTag.widthAnchor.constraint(equalToConstant: self.settingTag.radiusTagImage * 2.0).isActive = true
+        self.imageViewTag.clipsToBounds = true
 		
-		let labelTag = UILabel()
-		labelTag.text = self.article.stringTags
-		labelTag.font = self.settingTag.fontWebsite
-		labelTag.textAlignment = .left
-		labelTag.textColor = self.settingTag.colorWebsite
-		labelTag.setContentHuggingPriority(0, for: .horizontal)
-		labelTag.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelTag.font = self.settingTag.fontWebsite
+		self.labelTag.textAlignment = .left
+		self.labelTag.textColor = self.settingTag.colorWebsite
+		self.labelTag.setContentHuggingPriority(0, for: .horizontal)
+		self.labelTag.setContentCompressionResistancePriority(0, for: .horizontal)
+        self.labelTag.backgroundColor = .white
+        self.labelTag.clipsToBounds = true
 		
-		let labelDate = UILabel()
-		labelDate.text = self.article.date
-		labelDate.font = self.settingTag.fontDate
-		labelDate.textAlignment = .right
-		labelDate.textColor = self.settingTag.colorDate
+		self.labelDate.font = self.settingTag.fontDate
+		self.labelDate.textAlignment = .right
+		self.labelDate.textColor = self.settingTag.colorDate
+        self.labelDate.backgroundColor = .white
+        self.labelDate.clipsToBounds = true
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
@@ -41,22 +47,37 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 		stackView.distribution = .fill
 		stackView.spacing = 4
 		
-		stackView.addArrangedSubview(imageViewTag)
-		stackView.addArrangedSubview(labelTag)
-		stackView.addArrangedSubview(labelDate)
+		stackView.addArrangedSubview(self.imageViewTag)
+		stackView.addArrangedSubview(self.labelTag)
+		stackView.addArrangedSubview(self.labelDate)
 		
 		return stackView
 	}
 	
-	public init(article: ALArticle, setting: ALTagArticleTableViewCellSetting = ALTagArticleTableViewCellSetting(), isRead: @escaping () -> Bool) {
-		super.init(article: article, setting: setting, reuseIdentifier: "ALTagArticleTableViewCell", isRead: isRead)
+	public init(setting: ALTagArticleTableViewCellSetting) {
+		super.init(setting: setting)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func layout() {
-		super.layout()
+	internal func set(article: ALArticle) {
+		super.set(alArticle: article)
+		
+		self.labelTag.text = article.stringTags
+		self.labelDate.text = article.date
+        
+        let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingTag.radiusTagImage * 2.0, height: self.settingTag.radiusTagImage * 2.0), radius: 0.0)
+        
+        if let image = article.imageWebsite {
+            self.imageViewTag.image = image
+        } else {
+            self.imageViewTag.image = nil
+            
+            article.loadTagImage(filter: filter, block: {image in
+                self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
+            })
+        }
 	}
 }

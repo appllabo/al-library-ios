@@ -2,6 +2,7 @@ import UIKit
 
 public class ALMenuTableViewCellSetting {
     public var font = UIFont.systemFont(ofSize: 17)
+    public var color = UIColor.black
     
     public init() {
         
@@ -73,14 +74,10 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 	}
     
     override func viewWillLayoutSubviews() {
-        var heightTabBar = self.tabBarController?.tabBar.frame.size.height ?? 49
+		super.viewWillLayoutSubviews()
         
-        if #available(iOS 11.0, *) {
-            heightTabBar = self.view.safeAreaInsets.bottom
-        }
-        
-        self.tableView.contentInset.bottom = heightTabBar + self.contentInsetBottom
-        self.tableView.scrollIndicatorInsets.bottom = heightTabBar + self.contentInsetBottom
+        self.tableView.contentInset.bottom = self.heightTabBar + self.contentInsetBottom
+        self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
     }
 }
 
@@ -121,6 +118,7 @@ extension ALMenuViewController: UITableViewDataSource {
 				if case let .String(label) = content["label"]! {
 					cell.textLabel?.text = label
                     cell.textLabel?.font = self.setting.font
+                    cell.textLabel?.textColor = self.setting.color
 				}
 				
 				if let detail = content["detail"] {
