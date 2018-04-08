@@ -6,22 +6,37 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(10)
 	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		super.init()
 		
-        self.borderRadiusImage = CGFloat(4.0)
-		self.paddingImage = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
+        self.radiusThumbnail = CGFloat(4.0)
+		self.paddingThumbnail = UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12)
         self.fontTitle = .boldSystemFont(ofSize: 20)
 		self.fontWebsite = .systemFont(ofSize: 14)
 		self.fontDate = .systemFont(ofSize: 14)
-		self.colorBackground = UIColor.clear
+		self.backgroundColor = UIColor.clear
 		self.colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
-		self.colorRead = UIColor(hex: 0x707070, alpha: 1.0)
+		self.colorTitleRead = UIColor(hex: 0x707070, alpha: 1.0)
         self.colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
         self.colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
 	}
+    
+    override func height(width: CGFloat) -> CGFloat {
+        return 64 + width / 16 * 9 + 44
+    }
+    
+    func rectTitle(width: CGFloat) -> CGRect {
+        return UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: width, height: 64), self.paddingTitle)
+    }
+    
+    func rectThumbnail(width: CGFloat) -> CGRect {
+        return UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64, width: width, height: width / 16 * 9), self.paddingThumbnail)
+    }
+    
+    func rectStack(width: CGFloat) -> CGRect {
+        return UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + width / 16 * 9, width: width, height: 44), self.paddingInfo)
+    }
 }
 
 public class ALImageArticleTableViewCell: ALArticleTableViewCell {
@@ -34,11 +49,10 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	internal let imageViewWebsite = UIImageView()
-	internal let imageViewThumbnail = UIImageView()
 	internal let stackViewInfo = UIStackView()
 	
-	public init(setting: ALImageArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
-		super.init(setting: setting, isRead: isRead)
+	public init(setting: ALImageArticleTableViewCellSetting) {
+		super.init(setting: setting)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -50,28 +64,41 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.labelTitle.numberOfLines = 2
 		self.labelTitle.textAlignment = .left
 		self.labelTitle.textColor = self.setting.colorTitle
+        self.labelTitle.backgroundColor = .white
+        self.labelTitle.clipsToBounds = true
 		
+        self.imageViewThumbnail.contentMode = .center
+        self.imageViewThumbnail.backgroundColor = .white
+        self.imageViewThumbnail.clipsToBounds = true
+        
 		self.initStackView(info: self.stackViewInfo)
 		
-        self.view.addSubview(self.labelTitle)
-        self.view.addSubview(self.imageViewThumbnail)
-		self.view.addSubview(self.stackViewInfo)
+        self.contentView.addSubview(self.labelTitle)
+        self.contentView.addSubview(self.imageViewThumbnail)
+		self.contentView.addSubview(self.stackViewInfo)
 	}
 	
-	private func initStackView(info: UIStackView) {
+	internal func initStackView(info: UIStackView) {
+        self.imageViewWebsite.tintColor = self.setting.tintColor
         self.imageViewWebsite.setContentHuggingPriority(1, for: .horizontal)
         self.imageViewWebsite.setContentCompressionResistancePriority(1, for: .horizontal)
+        self.imageViewWebsite.contentMode = .center
+        self.imageViewWebsite.clipsToBounds = true
         
 		self.labelWebsite.font = self.setting.fontWebsite
 		self.labelWebsite.textAlignment = .left
 		self.labelWebsite.textColor = self.setting.colorWebsite
 		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
-		
+        self.labelWebsite.backgroundColor = .white
+        self.labelWebsite.clipsToBounds = true
+        
 		self.labelDate.font = self.setting.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.setting.colorDate
         self.labelDate.setContentHuggingPriority(1, for: .horizontal)
+        self.labelDate.backgroundColor = .white
+        self.labelDate.clipsToBounds = true
 		
 		info.axis = .horizontal
 		info.alignment = .center
@@ -84,40 +111,51 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override func layout() {
-        let widthThumbnail = self.view.frame.width - self.setting.paddingImage.left - self.setting.paddingImage.right
-		let heightThumbnail = widthThumbnail / 16 * 9
-		
-		self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.view.frame.width, height: 64), self.settingImage.paddingTitle)
-		self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64, width: self.view.frame.width, height: heightThumbnail), self.setting.paddingImage)
-		self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + heightThumbnail, width: self.view.frame.width, height: 44), self.settingImage.paddingInfo)
-		
-		self.imageViewWebsite.image = self.settingImage.thumbnailWebsite
-		self.imageViewWebsite.contentMode = .scaleAspectFill
-		self.imageViewWebsite.clipsToBounds = true
-		self.imageViewWebsite.layer.cornerRadius = self.settingImage.radiusWebsiteImage
-		
-		self.imageViewThumbnail.image = self.settingImage.thumbnail
-		self.imageViewThumbnail.contentMode = .scaleAspectFill
-		self.imageViewThumbnail.clipsToBounds = true
-		self.imageViewThumbnail.layer.cornerRadius = self.settingImage.borderRadiusImage
-		
-		self.setting.height = 64 + widthThumbnail / 16 * 9 + 44
+		self.labelTitle.frame = self.settingImage.rectTitle(width: self.contentView.frame.width)
+        self.imageViewThumbnail.frame = self.settingImage.rectThumbnail(width: self.contentView.frame.width)
+		self.stackViewInfo.frame = self.settingImage.rectStack(width: self.contentView.frame.width)
 	}
 	
-	internal override func set(article: ALArticle) {
-		super.set(article: article)
-		
-		article.loadThumbnailImage(block: {image in
-			self.imageViewThumbnail.image = image
-			
-			let transition = CATransition()
-			transition.type = kCATransitionFade
-			
-			self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-		})
-		
-		article.loadWebsiteImage(block: {image in
-			self.imageViewWebsite.image = image
-		})
+    internal func set(article: Article, width: CGFloat) {
+        self.alArticle = article
+        
+        self.labelTitle.text = article.title
+        self.labelDate.text = article.date
+        self.labelWebsite.text = article.website
+        
+        let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
+        let heightThumbnail = widthThumbnail / 16 * 9
+        
+        self.imageViewThumbnail.image = nil
+        
+        if let image = article.imageThumbnail {
+            self.imageViewThumbnail.image = image
+        } else {
+            let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
+            
+            article.loadThumbnailImage(filter: filterThumbnail, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                self.imageViewThumbnail.image = image
+            })
+        }
+        
+        self.imageViewWebsite.image = nil
+        
+        if let image = article.imageWebsite {
+            self.imageViewWebsite.image = image
+        } else {
+            let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2.0, height: self.settingImage.radiusWebsiteImage * 2.0))
+            
+            article.loadWebsiteImage(filter: filterWebsite, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
+                self.imageViewWebsite.image = image
+            })
+        }
 	}
 }

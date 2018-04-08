@@ -3,7 +3,6 @@ import AlamofireImage
 
 public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSetting {
 	public var radiusWebsiteImage = CGFloat(8.5)
-	public var thumbnailWebsite = UIImage()
 	
 	public override init() {
 		
@@ -22,15 +21,25 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 	internal let imageViewWebsite = UIImageView()
 	
 	public override var stackViewBottom: UIStackView {
+        self.imageViewWebsite.tintColor = self.setting.tintColor
+        self.imageViewWebsite.contentMode = .center
+        self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
+        self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
+        self.imageViewWebsite.clipsToBounds = true
+        
 		self.labelWebsite.font = self.settingWebsite.fontWebsite
 		self.labelWebsite.textAlignment = .left
 		self.labelWebsite.textColor = self.settingWebsite.colorWebsite
 		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
 		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+        self.labelWebsite.backgroundColor = .white
+        self.labelWebsite.clipsToBounds = true
 		
 		self.labelDate.font = self.settingWebsite.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.setting.colorDate
+        self.labelDate.backgroundColor = .white
+        self.labelDate.clipsToBounds = true
 		
 		let stackView = UIStackView()
 		stackView.axis = .horizontal
@@ -45,31 +54,35 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		return stackView
 	}
 	
-	public init(setting: ALWebsiteArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
-		super.init(setting: setting, isRead: isRead)
+	public init(setting: ALWebsiteArticleTableViewCellSetting) {
+		super.init(setting: setting)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	override func layout() {
-		super.layout()
+    override public func initView() {
+        super.initView()
+    }
+    
+	internal func set(article: Article) {
+        super.set(alArticle: article)
 		
-        self.imageViewWebsite.image = self.settingWebsite.thumbnailWebsite
-		self.imageViewWebsite.contentMode = .scaleAspectFill
-        self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
-        self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.settingWebsite.radiusWebsiteImage * 2.0).isActive = true
-		self.imageViewWebsite.clipsToBounds = true
-		self.imageViewWebsite.layer.cornerRadius = self.settingWebsite.radiusWebsiteImage
+        self.imageViewWebsite.image = nil
         
-	}
-	
-	internal override func set(article: ALArticle) {
-		super.set(article: article)
-		
-		article.loadWebsiteImage(block: {image in
-			self.imageViewWebsite.image = image
-		})
+        if let image = article.imageWebsite {
+            self.imageViewWebsite.image = image
+        } else {
+            let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2.0, height: self.settingWebsite.radiusWebsiteImage * 2.0))
+            
+            article.loadWebsiteImage(filter: filter, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
+                self.imageViewWebsite.image = image
+            })
+        }
 	}
 }

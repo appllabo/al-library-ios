@@ -2,6 +2,7 @@ import UIKit
 
 public class ALMenuTableViewCellSetting {
     public var font = UIFont.systemFont(ofSize: 17)
+    public var color = UIColor.black
     
     public init() {
         
@@ -117,6 +118,7 @@ extension ALMenuViewController: UITableViewDataSource {
 				if case let .String(label) = content["label"]! {
 					cell.textLabel?.text = label
                     cell.textLabel?.font = self.setting.font
+                    cell.textLabel?.textColor = self.setting.color
 				}
 				
 				if let detail = content["detail"] {

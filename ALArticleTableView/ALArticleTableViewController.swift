@@ -17,10 +17,9 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		
 		self.tableView.delegate = self
 		self.tableView.dataSource = self
-		self.tableView.separatorInset = UIEdgeInsetsMake(0, cellSetting.paddingImage.left, 0, 0)
+		self.tableView.separatorInset = UIEdgeInsetsMake(0, self.cellSetting.paddingThumbnail.left, 0, 0)
 		self.tableView.cellLayoutMarginsFollowReadableWidth = false
 		self.tableView.backgroundColor = .clear
-		self.tableView.estimatedRowHeight = cellSetting.height
 		
 		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
 			self.pullToRefresh()
@@ -39,6 +38,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 		super.viewDidLoad()
 		
 		self.tableView.frame = self.view.frame
+        self.tableView.estimatedRowHeight = self.cellSetting.height(width: self.tableView.frame.width)
 		
 		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
 		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
@@ -82,9 +82,21 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
         self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
     }
     
-	func open(alArticle: ALArticle) {
+    func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)
+        
+        cell.set(alArticle: alArticle)
+        
+        return cell
+    }
+    
+	func didSelectRow(at indexPath: IndexPath) {
+        self.open(alArticle: self.articles[indexPath.row])
 	}
 	
+    func open(alArticle: ALArticle) {
+    }
+    
 	func refresh(done: @escaping (UITableView) -> Void) {
 		self.load(isRemove: true, done: {tableView in
 			self.endPullToRefresh()
@@ -119,25 +131,20 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		if let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell {
-			return cell
-		}
-		
-		return ALArticleTableViewCell(setting: self.cellSetting, isRead: {
-			return false
-		})
+        return self.cell(alArticle: self.articles[indexPath.row])
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return self.cellSetting.height
+        return self.cellSetting.height(width: tableView.frame.width)
 	}
 }
 
 extension ALArticleTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.articles[indexPath.row].isRead = true
-//		self.cells[indexPath.row].read()
-		
-		self.open(alArticle: self.articles[indexPath.row])
+		self.didSelectRow(at: indexPath)
+        
+        if let cell = tableView.cellForRow(at: indexPath) as? ALArticleTableViewCell {
+            cell.read()
+        }
 	}
 }
