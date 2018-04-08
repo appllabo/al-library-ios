@@ -67,6 +67,10 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         self.labelTitle.backgroundColor = .white
         self.labelTitle.clipsToBounds = true
 		
+        self.imageViewThumbnail.contentMode = .center
+        self.imageViewThumbnail.backgroundColor = .white
+        self.imageViewThumbnail.clipsToBounds = true
+        
 		self.initStackView(info: self.stackViewInfo)
 		
         self.contentView.addSubview(self.labelTitle)
@@ -74,15 +78,12 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		self.contentView.addSubview(self.stackViewInfo)
 	}
 	
-	private func initStackView(info: UIStackView) {
+	internal func initStackView(info: UIStackView) {
         self.imageViewWebsite.tintColor = self.setting.tintColor
         self.imageViewWebsite.setContentHuggingPriority(1, for: .horizontal)
         self.imageViewWebsite.setContentCompressionResistancePriority(1, for: .horizontal)
         self.imageViewWebsite.contentMode = .center
         self.imageViewWebsite.clipsToBounds = true
-        
-        self.imageViewThumbnail.contentMode = .center
-        self.imageViewThumbnail.clipsToBounds = true
         
 		self.labelWebsite.font = self.setting.fontWebsite
 		self.labelWebsite.textAlignment = .left
@@ -116,25 +117,43 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     internal func set(article: Article, width: CGFloat) {
-		super.set(alArticle: article)
+        self.labelTitle.text = article.title
+        self.labelDate.text = article.date
+        self.labelWebsite.text = article.website
         
         let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
         let heightThumbnail = widthThumbnail / 16 * 9
         
-        let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
-		
-        article.loadThumbnailImage(filter: filterThumbnail, block: {image in
-            let transition = CATransition()
-            transition.type = kCATransitionFade
-            
-            self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-            self.imageViewThumbnail.image = image
-        })
-		
-        let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2.0, height: self.settingImage.radiusWebsiteImage * 2.0))
+        self.imageViewThumbnail.image = nil
         
-        article.loadWebsiteImage(filter: filterWebsite, block: {image in
-			self.imageViewWebsite.image = image
-		})
+        if let image = article.imageThumbnail {
+            self.imageViewThumbnail.image = image
+        } else {
+            let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
+            
+            article.loadThumbnailImage(filter: filterThumbnail, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                self.imageViewThumbnail.image = image
+            })
+        }
+        
+        self.imageViewWebsite.image = nil
+        
+        if let image = article.imageWebsite {
+            self.imageViewWebsite.image = image
+        } else {
+            let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2.0, height: self.settingImage.radiusWebsiteImage * 2.0))
+            
+            article.loadWebsiteImage(filter: filterWebsite, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
+                self.imageViewWebsite.image = image
+            })
+        }
 	}
 }

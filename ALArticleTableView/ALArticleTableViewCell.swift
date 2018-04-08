@@ -82,8 +82,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 	public func initView() {
         self.imageViewThumbnail.contentMode = .center
         self.imageViewThumbnail.backgroundColor = .white
-        self.imageViewThumbnail.clipsToBounds = false
-        self.imageViewThumbnail.isOpaque = true
+        self.imageViewThumbnail.clipsToBounds = true
         
 		self.labelTitle.font = setting.fontTitle
 		self.labelTitle.numberOfLines = 2
@@ -129,11 +128,11 @@ public class ALArticleTableViewCell: UITableViewCell {
 		self.labelDate.text = alArticle.date
 		self.labelWebsite.text = alArticle.website
 		
+        self.imageViewThumbnail.image = nil
+        
 		if let image = alArticle.imageThumbnail {
 			self.imageViewThumbnail.image = image
 		} else {
-			self.imageViewThumbnail.image = nil
-            
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
 			
             alArticle.loadThumbnailImage(filter: filter, block: {image in
