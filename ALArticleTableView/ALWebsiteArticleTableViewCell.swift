@@ -69,12 +69,12 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 	internal func set(article: Article) {
         super.set(alArticle: article)
 		
-        let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2.0, height: self.settingWebsite.radiusWebsiteImage * 2.0))
+        self.imageViewWebsite.image = nil
         
         if let image = article.imageWebsite {
             self.imageViewWebsite.image = image
         } else {
-            self.imageViewWebsite.image = nil
+            let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2.0, height: self.settingWebsite.radiusWebsiteImage * 2.0))
             
             article.loadWebsiteImage(filter: filter, block: {image in
                 self.imageViewWebsite.image = image
