@@ -54,8 +54,8 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
 		return stackView
 	}
 	
-	public init(setting: ALWebsiteArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
-		super.init(setting: setting, isRead: isRead)
+	public init(setting: ALWebsiteArticleTableViewCellSetting) {
+		super.init(setting: setting)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -77,6 +77,10 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2.0, height: self.settingWebsite.radiusWebsiteImage * 2.0))
             
             article.loadWebsiteImage(filter: filter, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
                 self.imageViewWebsite.image = image
             })
         }

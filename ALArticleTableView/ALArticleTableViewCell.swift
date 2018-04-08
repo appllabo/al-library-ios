@@ -37,7 +37,7 @@ public class ALArticleTableViewCell: UITableViewCell {
     internal let labelWebsite = UILabel()
 	internal let stackViewRight = UIStackView()
 	
-	internal let isRead: () -> Bool
+    internal var alArticle: ALArticle?
 	
 	public var stackViewBottom: UIStackView {
 		self.labelDate.font = self.setting.fontDate
@@ -66,9 +66,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 		return stackView
 	}
 	
-	public init(setting: ALArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
+    public init(setting: ALArticleTableViewCellSetting) {
 		self.setting = setting
-		self.isRead = isRead
 		
 		super.init(style: .default, reuseIdentifier: self.reuseIdentifier)
 		
@@ -105,7 +104,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 	override public func layoutSubviews() {
 		super.layoutSubviews()
 		
-		if self.isRead() == true {
+		if self.alArticle?.isRead == true {
 			self.read()
         } else {
             self.unread()
@@ -124,6 +123,8 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	internal func set(alArticle: ALArticle) {
+        self.alArticle = alArticle
+        
 		self.labelTitle.text = alArticle.title
 		self.labelDate.text = alArticle.date
 		self.labelWebsite.text = alArticle.website

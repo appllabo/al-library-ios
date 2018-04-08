@@ -51,8 +51,8 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	internal let imageViewWebsite = UIImageView()
 	internal let stackViewInfo = UIStackView()
 	
-	public init(setting: ALImageArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
-		super.init(setting: setting, isRead: isRead)
+	public init(setting: ALImageArticleTableViewCellSetting) {
+		super.init(setting: setting)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -117,6 +117,8 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     internal func set(article: Article, width: CGFloat) {
+        self.alArticle = article
+        
         self.labelTitle.text = article.title
         self.labelDate.text = article.date
         self.labelWebsite.text = article.website

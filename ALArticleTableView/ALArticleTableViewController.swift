@@ -83,9 +83,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
     }
     
     func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting, isRead: {
-            return false
-        })
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)
         
         cell.set(alArticle: alArticle)
         
@@ -143,10 +141,10 @@ extension ALArticleTableViewController: UITableViewDataSource {
 
 extension ALArticleTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		self.didSelectRow(at: indexPath)
+        
         if let cell = tableView.cellForRow(at: indexPath) as? ALArticleTableViewCell {
             cell.read()
         }
-        
-		self.didSelectRow(at: indexPath)
 	}
 }

@@ -37,8 +37,8 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewWebsite = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(setting: ALInstaArticleTableViewCellSetting, isRead: @escaping () -> Bool) {
-		super.init(setting: setting, isRead: isRead)
+	public init(setting: ALInstaArticleTableViewCellSetting) {
+		super.init(setting: setting)
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
@@ -101,19 +101,47 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
     }
     
 	internal func set(article: Article, width: CGFloat) {
-		super.set(alArticle: article)
-        let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
-		
-        article.loadThumbnailImage(filter: filter, block: {image in
-			let transition = CATransition()
-			transition.type = kCATransitionFade
-			
-			self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+        self.alArticle = article
+        
+        self.labelTitle.text = article.title
+        self.labelDate.text = article.date
+        self.labelWebsite.text = article.website
+        
+        let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
+        let heightThumbnail = widthThumbnail / 16 * 9
+        
+        self.imageViewThumbnail.image = nil
+        
+        self.imageViewThumbnail.image = nil
+        
+        if let image = article.imageThumbnail {
             self.imageViewThumbnail.image = image
-		})
-		
-		article.loadWebsiteImage(filter: filter, block: {image in
-			self.imageViewWebsite.image = image
-		})
+        } else {
+            let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
+            
+            article.loadThumbnailImage(filter: filterThumbnail, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                self.imageViewThumbnail.image = image
+            })
+        }
+        
+        self.imageViewWebsite.image = nil
+        
+        if let image = article.imageThumbnail {
+            self.imageViewThumbnail.image = image
+        } else {
+            let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
+
+            article.loadThumbnailImage(filter: filter, block: {image in
+                let transition = CATransition()
+                transition.type = kCATransitionFade
+                
+                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                self.imageViewThumbnail.image = image
+            })
+        }
 	}
 }
