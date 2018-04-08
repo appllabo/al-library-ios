@@ -59,10 +59,10 @@ extension ALNativeWebViewController: UIWebViewDelegate {
 		
 		print(urlRequest)
 		
-		if (urlRequest.hasPrefix("native://") == true) {
+		if urlRequest.hasPrefix("native://") == true {
 			let path = urlRequest.components(separatedBy: "native://")
 			
-			if (path[1] != "") {
+			if path[1] != "" {
 				self.evaluate(path[1])
 			}
 			
