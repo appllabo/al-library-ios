@@ -9,7 +9,7 @@ public class ALTag: ALData {
 		return nil
 	}
 	
-	public var img: String? {
+	public var urlImage: URL? {
 		return nil
 	}
 	
