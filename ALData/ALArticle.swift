@@ -11,10 +11,6 @@ public class ALArticle: ALData {
 		return "title"
 	}
 	
-	public var url: String {
-		return "url"
-	}
-	
 	public var website: String {
 		return "website"
 	}
@@ -69,6 +65,10 @@ public class ALArticle: ALData {
         return "date"
     }
     
+	public var url: URL? {
+		return nil
+	}
+	
 	public var urlImageThumbnail: URL? {
 		return nil
 	}
