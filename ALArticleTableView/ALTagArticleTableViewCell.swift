@@ -76,7 +76,9 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
             self.imageViewTag.image = nil
             
             article.loadTagImage(filter: filter, block: {image in
-                self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
+                if self.alArticle == article {
+                    self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
+                }
             })
         }
 	}

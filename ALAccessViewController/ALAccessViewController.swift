@@ -3,14 +3,13 @@ import UIKit
 class ALAccessViewController: UIViewController {
 	private let webView = UIWebView()
 	
-	init(url: String, referer: String) {
+	init(url: URL, referer: String) {
 		print("ALAccessViewController:init")
 		
 		super.init(nibName: nil, bundle: nil)
 		
 		self.webView.delegate = self
 		
-		let url = URL(string: url)!
 		let request = NSMutableURLRequest(url: url)
 		request.setValue(referer, forHTTPHeaderField: "Referer")
 		self.webView.loadRequest(request as URLRequest)

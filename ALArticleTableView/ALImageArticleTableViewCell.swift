@@ -134,11 +134,13 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
             article.loadThumbnailImage(filter: filterThumbnail, block: {image in
-                let transition = CATransition()
-                transition.type = kCATransitionFade
-                
-                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                self.imageViewThumbnail.image = image
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                    self.imageViewThumbnail.image = image
+                }
             })
         }
         
@@ -150,11 +152,13 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
             let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2.0, height: self.settingImage.radiusWebsiteImage * 2.0))
             
             article.loadWebsiteImage(filter: filterWebsite, block: {image in
-                let transition = CATransition()
-                transition.type = kCATransitionFade
-                
-                self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
-                self.imageViewWebsite.image = image
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
+                    self.imageViewWebsite.image = image
+                }
             })
         }
 	}

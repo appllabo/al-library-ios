@@ -77,11 +77,13 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingWebsite.radiusWebsiteImage * 2.0, height: self.settingWebsite.radiusWebsiteImage * 2.0))
             
             article.loadWebsiteImage(filter: filter, block: {image in
-                let transition = CATransition()
-                transition.type = kCATransitionFade
-                
-                self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
-                self.imageViewWebsite.image = image
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
+                    self.imageViewWebsite.image = image
+                }
             })
         }
 	}

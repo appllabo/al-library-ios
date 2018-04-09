@@ -120,11 +120,13 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
             article.loadThumbnailImage(filter: filterThumbnail, block: {image in
-                let transition = CATransition()
-                transition.type = kCATransitionFade
-                
-                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                self.imageViewThumbnail.image = image
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                    self.imageViewThumbnail.image = image
+                }
             })
         }
         
@@ -136,11 +138,13 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
 
             article.loadThumbnailImage(filter: filter, block: {image in
-                let transition = CATransition()
-                transition.type = kCATransitionFade
-                
-                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                self.imageViewThumbnail.image = image
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                    self.imageViewThumbnail.image = image
+                }
             })
         }
 	}
