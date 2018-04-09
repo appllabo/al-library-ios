@@ -1,19 +1,19 @@
 import SwiftyJSON
 
 public class ALWebsite: ALData {
-	public var name: String {
-		return "name"
+	public var name: String? {
+		return nil
 	}
 	
-	public var url: String {
-		return "url"
+	public var url: URL? {
+		return nil
 	}
 	
-	public var id: Int {
-		return -1
+	public var id: Int? {
+		return nil
 	}
 	
-	public var img: String? {
+	public var urlImage: URL? {
 		return nil
 	}
 }
