@@ -19,7 +19,7 @@ public class ALArticle: ALData {
 		return "tags"
 	}
 	
-    public func loadThumbnailImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
+    public func loadThumbnailImage(filter: ImageFilter, block: @escaping (UIImage) -> Void) {
         if let url = self.urlImageThumbnail {
             let urlRequest = URLRequest(url: url)
             
@@ -33,7 +33,7 @@ public class ALArticle: ALData {
         }
     }
     
-    public func loadWebsiteImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
+    public func loadWebsiteImage(filter: ImageFilter, block: @escaping (UIImage) -> Void) {
         if let url = self.urlImageWebsite {
             let urlRequest = URLRequest(url: url)
             

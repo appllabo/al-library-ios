@@ -62,11 +62,21 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	internal func set(article: ALArticle) {
-		super.set(alArticle: article)
-		
-		self.labelTag.text = article.stringTags
-		self.labelDate.text = article.date
+    override func layout() {
+        guard let article = self.alArticle else {
+            return
+        }
+        
+        if article == self.alArticleLayouted {
+            return
+        }
+        
+        super.layout()
+        
+        self.alArticleLayouted = article
+        
+        self.labelTag.text = article.stringTags
+        self.labelDate.text = article.date
         
         let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingTag.radiusTagImage * 2.0, height: self.settingTag.radiusTagImage * 2.0), radius: 0.0)
         
@@ -76,8 +86,10 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
             self.imageViewTag.image = nil
             
             article.loadTagImage(filter: filter, block: {image in
-                self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
+                if self.alArticle == article {
+                    self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
+                }
             })
         }
-	}
+    }
 }

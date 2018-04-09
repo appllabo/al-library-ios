@@ -85,7 +85,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
     func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)
         
-        cell.set(alArticle: alArticle)
+        cell.alArticle = alArticle
         
         return cell
     }

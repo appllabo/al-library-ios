@@ -38,6 +38,7 @@ public class ALArticleTableViewCell: UITableViewCell {
 	internal let stackViewRight = UIStackView()
 	
     internal var alArticle: ALArticle?
+    internal var alArticleLayouted: ALArticle?
 	
 	public var stackViewBottom: UIStackView {
 		self.labelDate.font = self.setting.fontDate
@@ -114,38 +115,44 @@ public class ALArticleTableViewCell: UITableViewCell {
 	}
 	
 	func layout() {
+        guard let article = self.alArticle else {
+            return
+        }
+        
+        if article == self.alArticleLayouted {
+            return
+        }
+        
 		self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
 		
 		let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
 		
 		self.stackViewRight.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
-	}
-	
-	internal func set(alArticle: ALArticle) {
-        self.alArticle = alArticle
         
-		self.labelTitle.text = alArticle.title
-		self.labelDate.text = alArticle.date
-		self.labelWebsite.text = alArticle.website
-		
+        self.alArticleLayouted = article
+        
+        self.labelTitle.text = article.title
+        self.labelDate.text = article.date
+        self.labelWebsite.text = article.website
+        
         self.imageViewThumbnail.image = nil
         
-		if let image = alArticle.imageThumbnail {
-			self.imageViewThumbnail.image = image
-		} else {
+        if let image = article.imageThumbnail {
+            self.imageViewThumbnail.image = image
+        } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
-			
-            alArticle.loadThumbnailImage(filter: filter, block: {image in
-				if self.alArticle == alArticle {
-					let transition = CATransition()
-					transition.type = kCATransitionFade
-					
-					self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-					self.imageViewThumbnail.image = image
-				}
-			})
-		}
+            
+            article.loadThumbnailImage(filter: filter, block: {image in
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                    self.imageViewThumbnail.image = image
+                }
+            })
+        }
 	}
 	
 	internal func read() {
