@@ -120,32 +120,34 @@ public class ALArticleTableViewCell: UITableViewCell {
 		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
 		
 		self.stackViewRight.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
+        
+        let article = self.alArticle
+        
+        self.labelTitle.text = article?.title
+        self.labelDate.text = article?.date
+        self.labelWebsite.text = article?.website
+        
+        self.imageViewThumbnail.image = nil
+        
+        if let image = article?.imageThumbnail {
+            self.imageViewThumbnail.image = image
+        } else {
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
+            
+            article?.loadThumbnailImage(filter: filter, block: {image in
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                    self.imageViewThumbnail.image = image
+                }
+            })
+        }
 	}
 	
 	internal func set(alArticle: ALArticle) {
         self.alArticle = alArticle
-        
-		self.labelTitle.text = alArticle.title
-		self.labelDate.text = alArticle.date
-		self.labelWebsite.text = alArticle.website
-		
-        self.imageViewThumbnail.image = nil
-        
-		if let image = alArticle.imageThumbnail {
-			self.imageViewThumbnail.image = image
-		} else {
-            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
-			
-            alArticle.loadThumbnailImage(filter: filter, block: {image in
-				if self.alArticle == alArticle {
-					let transition = CATransition()
-					transition.type = kCATransitionFade
-					
-					self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-					self.imageViewThumbnail.image = image
-				}
-			})
-		}
 	}
 	
 	internal func read() {

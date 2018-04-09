@@ -92,34 +92,28 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
     }
     
 	override func layout() {
-		let widthThumbnail = self.contentView.frame.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
+        let width = self.contentView.frame.width
+		let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
 		let heightThumbnail = widthThumbnail / 16 * 9
 		
-        self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.contentView.frame.width, height: 54), self.settingImage.paddingInfo)
-		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: self.contentView.frame.width, height: heightThumbnail)
-        self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: self.contentView.frame.width, height: 64), self.settingImage.paddingTitle)
-    }
-    
-	internal func set(article: Article, width: CGFloat) {
-        self.alArticle = article
+        self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: width, height: 54), self.settingImage.paddingInfo)
+		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: width, height: heightThumbnail)
+        self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: width, height: 64), self.settingImage.paddingTitle)
         
-        self.labelTitle.text = article.title
-        self.labelDate.text = article.date
-        self.labelWebsite.text = article.website
+        let article = self.alArticle
         
-        let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
-        let heightThumbnail = widthThumbnail / 16 * 9
+        self.labelTitle.text = article?.title
+        self.labelDate.text = article?.date
+        self.labelWebsite.text = article?.website
         
         self.imageViewThumbnail.image = nil
         
-        self.imageViewThumbnail.image = nil
-        
-        if let image = article.imageThumbnail {
+        if let image = article?.imageThumbnail {
             self.imageViewThumbnail.image = image
         } else {
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
-            article.loadThumbnailImage(filter: filterThumbnail, block: {image in
+            article?.loadThumbnailImage(filter: filterThumbnail, block: {image in
                 if self.alArticle == article {
                     let transition = CATransition()
                     transition.type = kCATransitionFade
@@ -132,12 +126,12 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
         
         self.imageViewWebsite.image = nil
         
-        if let image = article.imageThumbnail {
+        if let image = article?.imageThumbnail {
             self.imageViewThumbnail.image = image
         } else {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
-
-            article.loadThumbnailImage(filter: filter, block: {image in
+            
+            article?.loadThumbnailImage(filter: filter, block: {image in
                 if self.alArticle == article {
                     let transition = CATransition()
                     transition.type = kCATransitionFade
@@ -147,5 +141,9 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
                 }
             })
         }
+    }
+    
+	internal func set(article: Article) {
+        self.alArticle = article
 	}
 }
