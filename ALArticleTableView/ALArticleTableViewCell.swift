@@ -137,11 +137,13 @@ public class ALArticleTableViewCell: UITableViewCell {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
 			
             alArticle.loadThumbnailImage(filter: filter, block: {image in
-                let transition = CATransition()
-                transition.type = kCATransitionFade
-                
-                self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-				self.imageViewThumbnail.image = image
+				if self.alArticle == alArticle {
+					let transition = CATransition()
+					transition.type = kCATransitionFade
+					
+					self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+					self.imageViewThumbnail.image = image
+				}
 			})
 		}
 	}
