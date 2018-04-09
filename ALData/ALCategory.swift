@@ -1,15 +1,15 @@
 import SwiftyJSON
 
 public class ALCategory: ALData {
-	public var name: String {
-		return "name"
+	public var name: String? {
+		return nil
 	}
 	
-	public var id: String {
-		return "id"
+	public var id: String? {
+		return nil
 	}
 	
-	public var img: String {
-		return "img"
+	public var urlImage: URL? {
+		return nil
 	}
 }
