@@ -121,7 +121,7 @@ class ALArticleTableViewController: ALSwipeTabContentViewController {
 }
 
 extension ALArticleTableViewController {
-	func load(isRemove: Bool, done: @escaping (UITableView) -> Void) {
+	func load(isRemove: Bool, done: ((UITableView) -> Void)?) {
 	}
 }
 
