@@ -111,28 +111,36 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
 	override func layout() {
+        guard let article = self.alArticle else {
+            return
+        }
+        
+        if article == self.alArticleLayouted {
+            return
+        }
+        
         let width = self.contentView.frame.width
             
 		self.labelTitle.frame = self.settingImage.rectTitle(width: width)
         self.imageViewThumbnail.frame = self.settingImage.rectThumbnail(width: width)
 		self.stackViewInfo.frame = self.settingImage.rectStack(width: width)
         
-        let article = self.alArticle
+        self.alArticleLayouted = article
         
-        self.labelTitle.text = article?.title
-        self.labelDate.text = article?.date
-        self.labelWebsite.text = article?.website
+        self.labelTitle.text = article.title
+        self.labelDate.text = article.date
+        self.labelWebsite.text = article.website
         
         self.imageViewThumbnail.image = nil
         
-        if let image = article?.imageThumbnail {
+        if let image = article.imageThumbnail {
             self.imageViewThumbnail.image = image
         } else {
             let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
             let heightThumbnail = widthThumbnail / 16 * 9
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
-            article?.loadThumbnailImage(filter: filterThumbnail, block: {image in
+            article.loadThumbnailImage(filter: filterThumbnail, block: {image in
                 if self.alArticle == article {
                     let transition = CATransition()
                     transition.type = kCATransitionFade
@@ -145,12 +153,12 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         
         self.imageViewWebsite.image = nil
         
-        if let image = article?.imageWebsite {
+        if let image = article.imageWebsite {
             self.imageViewWebsite.image = image
         } else {
             let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.settingImage.radiusWebsiteImage * 2.0, height: self.settingImage.radiusWebsiteImage * 2.0))
             
-            article?.loadWebsiteImage(filter: filterWebsite, block: {image in
+            article.loadWebsiteImage(filter: filterWebsite, block: {image in
                 if self.alArticle == article {
                     let transition = CATransition()
                     transition.type = kCATransitionFade
@@ -160,9 +168,5 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
                 }
             })
         }
-	}
-	
-    internal func set(article: Article) {
-        self.alArticle = article
 	}
 }

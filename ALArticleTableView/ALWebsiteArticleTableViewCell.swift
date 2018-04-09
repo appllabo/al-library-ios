@@ -67,9 +67,44 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
     }
     
     override func layout() {
-        super.layout()
+        guard let article = self.alArticle else {
+            return
+        }
         
-        let article = self.alArticle
+        if article == self.alArticleLayouted {
+            return
+        }
+        
+        self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
+        
+        let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
+        let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
+        
+        self.stackViewRight.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
+        
+        self.alArticleLayouted = article
+        
+        self.labelTitle.text = article.title
+        self.labelDate.text = article.date
+        self.labelWebsite.text = article.website
+        
+        self.imageViewThumbnail.image = nil
+        
+        if let image = article.imageThumbnail {
+            self.imageViewThumbnail.image = image
+        } else {
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
+            
+            article.loadThumbnailImage(filter: filter, block: {image in
+                if self.alArticle == article {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                    self.imageViewThumbnail.image = image
+                }
+            })
+        }
         
         self.imageViewWebsite.image = nil
         
@@ -89,8 +124,4 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
             })
         }
     }
-    
-	internal func set(article: Article) {
-        super.set(alArticle: article)
-	}
 }

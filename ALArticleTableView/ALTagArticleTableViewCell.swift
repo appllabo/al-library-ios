@@ -63,29 +63,33 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     override func layout() {
+        guard let article = self.alArticle else {
+            return
+        }
+        
+        if article == self.alArticleLayouted {
+            return
+        }
+        
         super.layout()
         
-        let article = self.alArticle
+        self.alArticleLayouted = article
         
-        self.labelTag.text = article?.stringTags
-        self.labelDate.text = article?.date
+        self.labelTag.text = article.stringTags
+        self.labelDate.text = article.date
         
         let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.settingTag.radiusTagImage * 2.0, height: self.settingTag.radiusTagImage * 2.0), radius: 0.0)
         
-        if let image = article?.imageWebsite {
+        if let image = article.imageWebsite {
             self.imageViewTag.image = image
         } else {
             self.imageViewTag.image = nil
             
-            article?.loadTagImage(filter: filter, block: {image in
+            article.loadTagImage(filter: filter, block: {image in
                 if self.alArticle == article {
                     self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
                 }
             })
         }
     }
-    
-	internal func set(article: ALArticle) {
-		super.set(alArticle: article)
-	}
 }
