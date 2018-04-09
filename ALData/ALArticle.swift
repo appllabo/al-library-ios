@@ -7,16 +7,16 @@ public class ALArticle: ALData {
 	public var imageWebsite: UIImage?
     public var imageTag: UIImage?
 	
-	public var title: String {
-		return "title"
+	public var title: String? {
+		return nil
 	}
 	
-	public var website: String {
-		return "website"
+	public var website: String? {
+		return nil
 	}
 	
-	public var stringTags: String {
-		return "tags"
+	public var stringTags: String? {
+		return nil
 	}
 	
     public func loadThumbnailImage(filter: ImageFilter, block: @escaping (UIImage) -> Void) {
@@ -61,8 +61,8 @@ public class ALArticle: ALData {
         }
     }
     
-    public var date: String {
-        return "date"
+    public var date: String? {
+        return nil
     }
     
 	public var url: URL? {

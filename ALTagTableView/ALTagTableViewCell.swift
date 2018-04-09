@@ -1,5 +1,5 @@
 import UIKit
-import SVGKit
+import AlamofireImage
 
 public class ALTagTableViewCellSetting {
     public var tintColor = UIColor.black
@@ -17,11 +17,19 @@ public class ALTagTableViewCellSetting {
 
 class ALTagTableViewCell: UITableViewCell {
     init(tag: ALTag, setting: ALTagTableViewCellSetting) {
-        super.init(style: .value1, reuseIdentifier: "ALTagTableViewCell")
+        super.init(style: .value1, reuseIdentifier: "ALTag")
         
-        let image = SVGKImage(named: "Resource/Icon/tag.svg")!
-        image.size = CGSize(width: 20, height: 20)
-        self.imageView?.image = image.uiImage.withRenderingMode(.alwaysTemplate)
+        if let url = tag.urlImage {
+            let urlRequest = URLRequest(url: url)
+            let filter = AspectScaledToFillSizeFilter(size: CGSize(width:20, height: 20))
+            
+            ImageDownloader.default.download(urlRequest, filter: filter) {[weak self] response in
+                if let image = response.result.value {
+                    self?.imageView?.image = image.withRenderingMode(.alwaysTemplate)
+                }
+            }
+        }
+        
         self.imageView?.tintColor = setting.tintColor
         
         self.textLabel?.text = tag.name
