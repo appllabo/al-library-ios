@@ -1,16 +1,16 @@
 import SwiftyJSON
 
 public class ALTag: ALData {
-	public var name: String {
-		return "name"
+	public var name: String? {
+		return nil
 	}
 	
-	public var id: Int {
-		return -1
+	public var id: Int? {
+		return nil
 	}
 	
-	public var img: String {
-		return "http://blog.livedoor.com/blog_portal/common/img/noimg/bg_Default.png"
+	public var img: String? {
+		return nil
 	}
 	
 	public var contentCount: Int {
