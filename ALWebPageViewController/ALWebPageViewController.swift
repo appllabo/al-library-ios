@@ -5,7 +5,7 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
 	fileprivate let activityIndicator = UIActivityIndicatorView()
 	
-	init(title: String, stringUrl: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
+	init(title: String, url: URL, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.navigationDelegate = self
@@ -22,10 +22,9 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		self.webView.addObserver(self, forKeyPath :"canGoBack", options: .new, context: nil)
 		self.webView.addObserver(self, forKeyPath :"canGoForward", options: .new, context: nil)
 		
-		if let url = URL(string: stringUrl) {
-			let request = URLRequest(url: url)
-			self.webView.load(request)
-		}
+        let request = URLRequest(url: url)
+        
+        self.webView.load(request)
 		
 		self.view.addSubview(self.webView)
 		
@@ -125,21 +124,17 @@ extension ALWebPageViewController: WKNavigationDelegate {
 	}
 	
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (@escaping (WKNavigationActionPolicy) -> Void)) {
-		if let url = navigationAction.request.url {
-			if url.absoluteString.hasPrefix("native://") == true {
-				let path = url.absoluteString.components(separatedBy: "native://")
-				
-				if let param = path[1].removingPercentEncoding {
-					let json = JSON(parseJSON: param)
-					self.evaluate(json)
-				} else {
-					print(path[1])
-				}
-				
-				decisionHandler(.cancel)
-			} else {
-				decisionHandler(.allow)
-			}
+		if let url = navigationAction.request.url, url.absoluteString.hasPrefix("native://") == true {
+            let path = url.absoluteString.components(separatedBy: "native://")
+            
+            if let param = path[1].removingPercentEncoding {
+                let json = JSON(parseJSON: param)
+                self.evaluate(json)
+            } else {
+                print(path[1])
+            }
+            
+            decisionHandler(.cancel)
 		} else {
 			decisionHandler(.allow)
 		}
