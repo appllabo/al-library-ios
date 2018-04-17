@@ -24,6 +24,10 @@ public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
     public var tintColor = UIColor.black
 	public var radiusTagImage = CGFloat(8.5)
+    
+    override func height(width: CGFloat) -> CGFloat {
+        return sizeThumbnail.height
+    }
 }
 
 public class ALTagArticleTableViewCell: ALArticleTableViewCell {
@@ -101,15 +105,41 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     override func layout(alArticle: ALArticle) {
+        self.labelTitle.text = alArticle.title
         self.labelTag.text = alArticle.stringTags
         self.labelDate.text = alArticle.date
         
-        let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusTagImage * 2.0, height: self.setting.radiusTagImage * 2.0), radius: 0.0)
+        self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
+        
+        let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
+        let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
+        
+        self.stackViewRight.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
+        
+        self.imageViewThumbnail.image = nil
+        
+        if let image = alArticle.imageThumbnail {
+            self.imageViewThumbnail.image = image
+        } else {
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
+            
+            alArticle.loadThumbnailImage(filter: filter, block: {image in
+                if self.alArticle == alArticle {
+                    let transition = CATransition()
+                    transition.type = kCATransitionFade
+                    
+                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+                    self.imageViewThumbnail.image = image
+                }
+            })
+        }
+        
+        self.imageViewTag.image = nil
         
         if let image = alArticle.imageWebsite {
             self.imageViewTag.image = image
         } else {
-            self.imageViewTag.image = nil
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusTagImage * 2.0, height: self.setting.radiusTagImage * 2.0), radius: 0.0)
             
             alArticle.loadTagImage(filter: filter, block: {image in
                 if self.alArticle == alArticle {
