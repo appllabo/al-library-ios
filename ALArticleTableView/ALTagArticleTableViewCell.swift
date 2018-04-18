@@ -148,4 +148,12 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
             })
         }
     }
+    
+    override func read() {
+        self.labelTitle.textColor = self.setting.colorTitleRead
+    }
+    
+    override func unread() {
+        self.labelTitle.textColor = self.setting.colorTitle
+    }
 }
