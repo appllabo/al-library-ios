@@ -1,10 +1,7 @@
 import XLPagerTabStrip
 
 class ALSwipeTabContentViewController: ALSloppySwipeViewController {
-	internal let indicatorInfo: IndicatorInfo
-	internal let isSwipeTab: Bool
-	
-    override internal var contentInsetTop: CGFloat {
+    override var contentInsetTop: CGFloat {
         if self.isSwipeTab == true {
             return 44.0 + super.contentInsetTop
         } else {
@@ -12,6 +9,9 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
         }
     }
     
+	internal let indicatorInfo: IndicatorInfo
+	internal let isSwipeTab: Bool
+	
 	init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		self.indicatorInfo = IndicatorInfo(title: title)
 		self.isSwipeTab = isSwipeTab
