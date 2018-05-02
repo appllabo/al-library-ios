@@ -2,13 +2,15 @@ import UIKit
 import AlamofireImage
 
 public class ALTagTableViewCellSetting {
+    public var reuseIdentifier: String {
+        return "ALTag"
+    }
+    
     public var tintColor = UIColor.black
     public var sizeImage = CGSize(width: 29, height: 29)
     public var radiusImage = CGFloat(14.5)
     public var fontText = UIFont.systemFont(ofSize: 17)
-    public var fontDetailText = UIFont.systemFont(ofSize: 17)
     public var colorText = UIColor.black
-    public var colorTextDetail = UIColor.black
     
     public init() {
         
@@ -16,35 +18,51 @@ public class ALTagTableViewCellSetting {
 }
 
 class ALTagTableViewCell: UITableViewCell {
+    private let data: ALTag
+    private let setting: ALTagTableViewCellSetting
+    
     init(tag: ALTag, setting: ALTagTableViewCellSetting) {
+        self.data = tag
+        self.setting = setting
+        
         super.init(style: .value1, reuseIdentifier: "ALTag")
         
-        if let url = tag.urlImage {
-            let urlRequest = URLRequest(url: url)
-            let filter = AspectScaledToFillSizeFilter(size: CGSize(width:20, height: 20))
-            
-            ImageDownloader.default.download(urlRequest, filter: filter) {[weak self] response in
-                if let image = response.result.value {
-                    self?.imageView?.image = image.withRenderingMode(.alwaysTemplate)
-                }
-            }
-        }
-        
-        self.imageView?.tintColor = setting.tintColor
-        
-        self.textLabel?.text = tag.name
-        self.textLabel?.font = setting.fontText
-        self.textLabel?.textColor = setting.colorText
-        
-        self.detailTextLabel?.text = String(tag.contentUpdated)
-        self.detailTextLabel?.textAlignment = .right
-        self.detailTextLabel?.font = setting.fontDetailText
-        self.detailTextLabel?.textColor = setting.colorTextDetail
-        
-        self.accessoryType = .disclosureIndicator
+        self.initView()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.layout()
+    }
+    
+    public func initView() {
+        self.imageView?.tintColor = setting.tintColor
+        
+        if let url = self.data.urlImage, self.imageView?.image == nil {
+            let urlRequest = URLRequest(url: url)
+            let filter = AspectScaledToFillSizeFilter(size: CGSize(width: 20, height: 20))
+
+            ImageDownloader.default.download(urlRequest, filter: filter) {[weak self] response in
+                if let image = response.result.value {
+                    self?.imageView?.image = image.withRenderingMode(.alwaysTemplate)
+                    
+                    self?.setNeedsLayout()
+                }
+            }
+        }
+        
+        self.textLabel?.text = self.data.name
+        self.textLabel?.font = setting.fontText
+        self.textLabel?.textColor = setting.colorText
+        
+        self.accessoryType = .disclosureIndicator
+    }
+    
+    public func layout() {
     }
 }

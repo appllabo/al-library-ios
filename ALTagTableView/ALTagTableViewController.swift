@@ -5,14 +5,10 @@ import INSPullToRefresh
 class ALTagTableViewController: ALSwipeTabContentViewController {
     internal let tableView = UITableView()
     
-    internal let cellSetting: ALTagTableViewCellSetting
-    
     internal var tags = [ALTag]()
     internal var cells = [ALTagTableViewCell]()
     
-    init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool, cellSetting: ALTagTableViewCellSetting) {
-        self.cellSetting = cellSetting
-        
+    override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
         super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
         
         self.tableView.delegate = self
