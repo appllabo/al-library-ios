@@ -48,6 +48,7 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
         
         label.numberOfLines = 2
         label.textAlignment = .left
+        label.lineBreakMode = .byCharWrapping
         label.backgroundColor = .white
         label.clipsToBounds = true
         
