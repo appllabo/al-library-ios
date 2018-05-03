@@ -15,7 +15,13 @@ public class ALWebsiteTableViewCellSetting {
 }
 
 class ALWebsiteTableViewCell: UITableViewCell {
+    private let website: ALWebsite
+    private let setting: ALWebsiteTableViewCellSetting
+    
 	init(website: ALWebsite, setting: ALWebsiteTableViewCellSetting) {
+        self.website = website
+        self.setting = setting
+        
 		super.init(style: .default, reuseIdentifier: "ALWebsiteTableViewCell")
 		
 		self.imageView?.layer.masksToBounds = true
@@ -23,12 +29,19 @@ class ALWebsiteTableViewCell: UITableViewCell {
 		self.imageView?.layer.borderWidth = 0
 		self.imageView?.layer.cornerRadius = setting.radiusImage
 		
-		if let url = website.urlImage {
-            let placeholderImage = UIImage()
-            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: setting.sizeImage, radius: setting.radiusImage)
-            self.imageView?.af_setImage(withURL: url, placeholderImage: placeholderImage, filter: filter)
-		}
-		
+        if let url = website.urlImage {
+            let urlRequest = URLRequest(url: url)
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: self.setting.sizeImage, radius: self.setting.radiusImage)
+            
+            ImageDownloader.default.download(urlRequest, filter: filter) {[weak self] response in
+                if let image = response.result.value {
+                    self?.imageView?.image = image
+                    
+                    self?.setNeedsLayout()
+                }
+            }
+        }
+        
 		self.textLabel?.text = website.name
         self.textLabel?.font = setting.font
         self.textLabel?.textColor = setting.colorText
@@ -38,32 +51,18 @@ class ALWebsiteTableViewCell: UITableViewCell {
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
-}
-
-extension UIImage {
-	func resize(size: CGSize) -> UIImage? {
-		let widthRatio = size.width / self.size.width
-		let heightRatio = size.height / self.size.height
-		let ratio = widthRatio < heightRatio ? widthRatio : heightRatio
-		
-		let resizedSize = CGSize(width: self.size.width * ratio, height: self.size.height * ratio)
-		
-		UIGraphicsBeginImageContextWithOptions(resizedSize, false, 0.0) // 変更
-		draw(in: CGRect(origin: .zero, size: resizedSize))
-		let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-		UIGraphicsEndImageContext()
-		
-		return resizedImage
-	}
-	
-	func change(color: UIColor) -> UIImage? {
-		var image = withRenderingMode(.alwaysTemplate)
-		UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
-		color.set()
-		image.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
-		image = UIGraphicsGetImageFromCurrentImageContext()!
-		UIGraphicsEndImageContext()
-		
-		return image
-	}
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.layout()
+    }
+    
+    public func layout() {
+//        if let url = website.urlImage, self.imageView?.image == nil {
+//            let placeholderImage = UIImage()
+//            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: self.setting.sizeImage, radius: self.setting.radiusImage)
+//            self.imageView?.af_setImage(withURL: url, placeholderImage: placeholderImage, filter: filter)
+//        }
+    }
 }

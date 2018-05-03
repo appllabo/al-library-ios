@@ -16,15 +16,15 @@ public class ALArticleTableViewCellSetting {
 }
 
 public class ALArticleTableViewCell: UITableViewCell {
-    public let settingBase: ALArticleTableViewCellSetting
+    private let setting: ALArticleTableViewCellSetting
     
-    public var alArticle: ALArticle?
     private var alArticleLayouted: ALArticle?
+    public var alArticle: ALArticle?
     
     public init(setting: ALArticleTableViewCellSetting) {
-        self.settingBase = setting
+        self.setting = setting
         
-        super.init(style: .default, reuseIdentifier: self.settingBase.reuseIdentifier)
+        super.init(style: .default, reuseIdentifier: self.setting.reuseIdentifier)
     }
     
     required public init?(coder aDecoder: NSCoder) {
