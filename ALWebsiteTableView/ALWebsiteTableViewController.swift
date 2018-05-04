@@ -78,7 +78,7 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 		self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
 	}
 	
-	func open(website: ALWebsite) {
+	func open(alWebsite: ALWebsite) {
 	}
 	
 	func refresh() {
@@ -117,6 +117,6 @@ extension ALWebsiteTableViewController: UITableViewDataSource {
 
 extension ALWebsiteTableViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		self.open(website: self.websites[indexPath.row])
+        self.open(alWebsite: self.websites[indexPath.row])
 	}
 }

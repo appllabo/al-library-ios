@@ -76,7 +76,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
         self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
     }
     
-    func open(tag: ALTag) {
+    func open(alTag: ALTag) {
     }
     
     func refresh() {
@@ -115,6 +115,6 @@ extension ALTagTableViewController: UITableViewDataSource {
 
 extension ALTagTableViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.open(tag: self.tags[indexPath.row])
+        self.open(alTag: self.tags[indexPath.row])
     }
 }
