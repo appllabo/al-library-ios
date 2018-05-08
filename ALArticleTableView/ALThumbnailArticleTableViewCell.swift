@@ -29,9 +29,7 @@ public class ALThumbnailArticleTableViewCellSetting: ALArticleTableViewCellSetti
 }
 
 public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
-    public var setting: ALThumbnailArticleTableViewCellSetting {
-        return self.settingBase as! ALThumbnailArticleTableViewCellSetting
-    }
+    private let setting: ALThumbnailArticleTableViewCellSetting
     
 	private let imageViewThumbnail = UIImageView()
 	private let labelTitle = UILabel()
@@ -67,6 +65,8 @@ public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     public init(setting: ALThumbnailArticleTableViewCellSetting) {
+        self.setting = setting
+        
 		super.init(setting: setting)
 		
 		self.initView()
