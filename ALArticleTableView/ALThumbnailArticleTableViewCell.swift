@@ -65,8 +65,8 @@ public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
 	}
 	
     public init(setting: ALThumbnailArticleTableViewCellSetting) {
-		self.setting = setting
-		
+        self.setting = setting
+        
 		super.init(setting: setting)
 		
 		self.initView()
