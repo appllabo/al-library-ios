@@ -51,7 +51,7 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
         self.labelTitle.font = self.setting.fontTitle
         self.labelTitle.numberOfLines = 2
         self.labelTitle.textAlignment = .left
-        self.labelTitle.lineBreakMode = .byCharWrapping
+        self.labelTitle.lineBreakMode = .byTruncatingTail
         self.labelTitle.textColor = self.setting.colorTitle
         self.labelTitle.backgroundColor = .white
         self.labelTitle.clipsToBounds = true

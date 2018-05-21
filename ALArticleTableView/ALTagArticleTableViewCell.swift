@@ -12,10 +12,10 @@ public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     
     public var sizeThumbnail = CGSize(width: 102.0, height: 102.0)
     public var paddingThumbnail = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-    public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
+    public var paddingContent = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 12)
     public var radiusThumbnail = CGFloat(4.0)
     public var backgroundColor = UIColor.white
-    public var fontTitle = UIFont.boldSystemFont(ofSize: 17)
+    public var fontTitle = UIFont.boldSystemFont(ofSize: 16)
     public var fontDate = UIFont.systemFont(ofSize: 12)
     public var fontWebsite = UIFont.systemFont(ofSize: 12)
     public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
@@ -83,9 +83,9 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
         self.imageViewThumbnail.clipsToBounds = true
         
         self.labelTitle.font = setting.fontTitle
-        self.labelTitle.numberOfLines = 2
+        self.labelTitle.numberOfLines = 3
         self.labelTitle.textAlignment = .left
-        self.labelTitle.lineBreakMode = .byCharWrapping
+        self.labelTitle.lineBreakMode = .byTruncatingTail
         self.labelTitle.textColor = self.setting.colorTitle
         self.labelTitle.backgroundColor = .white
         self.labelTitle.clipsToBounds = true
