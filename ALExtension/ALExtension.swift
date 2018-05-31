@@ -1,14 +1,14 @@
-protocol ApplyProtocol {}
+protocol ALApply { }
 
-extension ApplyProtocol {
-	func apply(closure:(Self) -> ()) -> Self {
+extension ALApply {
+	func apply(closure: (Self) -> Void) -> Self {
 		closure(self)
 		
 		return self
 	}
 }
 
-extension NSObject: ApplyProtocol {}
+extension NSObject: ALApply { }
 
 extension UIColor {
 	convenience init(hex: Int, alpha: CGFloat) {
