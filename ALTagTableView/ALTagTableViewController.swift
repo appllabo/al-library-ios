@@ -43,16 +43,17 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
         self.tableView.contentInset.top += self.contentInsetTop
         self.tableView.scrollIndicatorInsets.top += self.contentInsetTop
         
-        let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")!
-        svgCircleWhite.size = CGSize(width: 24, height: 24)
-        let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")!
-        svgCircleLight.size = CGSize(width: 24, height: 24)
-        
-        let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor))!
-        
-        self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
-        self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
+        if let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg"), let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg") {
+			svgCircleWhite.size = CGSize(width: 24, height: 24)
+			svgCircleLight.size = CGSize(width: 24, height: 24)
+			
+			let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
+			
+			if let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor)) {
+				self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
+				self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
+			}
+		}
         
         self.view.addSubview(self.tableView)
     }
@@ -80,7 +81,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
     }
     
     func refresh() {
-        self.load(done: {})
+        self.load(done: nil)
     }
     
     func pullToRefresh() {
