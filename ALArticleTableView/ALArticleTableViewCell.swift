@@ -1,7 +1,7 @@
 import UIKit
 import AlamofireImage
 
-public class ALArticleTableViewCellSetting {
+public class ALArticleTableViewCellSetting : NSObject {
     public var reuseIdentifier: String {
         return "ALArticle"
     }
@@ -15,7 +15,7 @@ public class ALArticleTableViewCellSetting {
     }
 }
 
-public class ALArticleTableViewCell: UITableViewCell {
+public class ALArticleTableViewCell : UITableViewCell {
     private let setting: ALArticleTableViewCellSetting
     
     private var alArticleLayouted: ALArticle?

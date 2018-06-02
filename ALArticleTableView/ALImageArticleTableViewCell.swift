@@ -45,7 +45,7 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
     }
 }
 
-public class ALImageArticleTableViewCell: ALArticleTableViewCell {
+public class ALImageArticleTableViewCell : ALArticleTableViewCell {
 	private let setting: ALImageArticleTableViewCellSetting
 	
     private let imageViewThumbnail = UIImageView()
@@ -55,7 +55,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewWebsite = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(setting: ALImageArticleTableViewCellSetting) {
+	public init(image setting: ALImageArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)

@@ -1,7 +1,7 @@
 import UIKit
 import AlamofireImage
 
-public class ALThumbnailArticleTableViewCellSetting: ALArticleTableViewCellSetting {
+public class ALThumbnailArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     public override var reuseIdentifier: String {
         return "ALThumbnailArticle"
     }
@@ -20,15 +20,12 @@ public class ALThumbnailArticleTableViewCellSetting: ALArticleTableViewCellSetti
 	public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
     public var tintColor = UIColor.black
 	
-    public override init() {
-	}
-    
     override func height(width: CGFloat) -> CGFloat {
         return self.sizeThumbnail.height
     }
 }
 
-public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
+public class ALThumbnailArticleTableViewCell : ALArticleTableViewCell {
     private let setting: ALThumbnailArticleTableViewCellSetting
     
 	private let imageViewThumbnail = UIImageView()
@@ -64,7 +61,7 @@ public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
 		return stackView
 	}
 	
-    public init(setting: ALThumbnailArticleTableViewCellSetting) {
+    public init(thumbnail setting: ALThumbnailArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)

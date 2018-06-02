@@ -33,7 +33,7 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
     }
 }
 
-public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
+public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
 	private let setting: ALInstaArticleTableViewCellSetting
 	
     private let imageViewThumbnail = UIImageView()
@@ -43,7 +43,7 @@ public class ALInstaArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewWebsite = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(setting: ALInstaArticleTableViewCellSetting) {
+	public init(insta setting: ALInstaArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)
