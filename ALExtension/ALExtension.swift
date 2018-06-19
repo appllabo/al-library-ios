@@ -1,14 +1,18 @@
-protocol ALApply { }
+protocol ALScope { }
 
-extension ALApply {
+extension ALScope {
 	func apply(closure: (Self) -> Void) -> Self {
 		closure(self)
 		
 		return self
 	}
+	
+	func run(closure: (Self) -> Void) {
+		closure(self)
+	}
 }
 
-extension NSObject: ALApply { }
+extension NSObject: ALScope { }
 
 extension UIColor {
 	convenience init(hex: Int, alpha: CGFloat) {
