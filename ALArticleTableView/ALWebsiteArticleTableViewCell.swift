@@ -30,7 +30,7 @@ public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSettin
     }
 }
 
-public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
+public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
     private let setting: ALWebsiteArticleTableViewCellSetting
     
     private let imageViewThumbnail: UIImageView = {
@@ -108,7 +108,7 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
         return stackView
     } ()
 	
-	public init(setting: ALWebsiteArticleTableViewCellSetting) {
+	public init(website setting: ALWebsiteArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)
