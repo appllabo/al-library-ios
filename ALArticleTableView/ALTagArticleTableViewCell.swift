@@ -60,17 +60,16 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
         self.labelDate.backgroundColor = .white
         self.labelDate.clipsToBounds = true
 		
-		let stackView = UIStackView()
-		stackView.axis = .horizontal
-		stackView.alignment = .bottom
-		stackView.distribution = .fill
-		stackView.spacing = 4
-		
-		stackView.addArrangedSubview(self.imageViewTag)
-		stackView.addArrangedSubview(self.labelTag)
-		stackView.addArrangedSubview(self.labelDate)
-		
-		return stackView
+		return UIStackView().apply {
+			$0.axis = .horizontal
+			$0.alignment = .bottom
+			$0.distribution = .fill
+			$0.spacing = 4
+			
+			$0.addArrangedSubview(self.imageViewTag)
+			$0.addArrangedSubview(self.labelTag)
+			$0.addArrangedSubview(self.labelDate)
+		}
 	}
 	
 	public init(tag setting: ALTagArticleTableViewCellSetting) {
@@ -124,10 +123,11 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filter, block: {image in
+            alArticle.loadThumbnailImage(filter: filter, block: { image in
                 if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
+					let transition = CATransition().apply {
+						$0.type = kCATransitionFade
+					}
                     
                     self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
                     self.imageViewThumbnail.image = image
@@ -142,7 +142,7 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusTagImage * 2.0, height: self.setting.radiusTagImage * 2.0), radius: 0.0)
             
-            alArticle.loadTagImage(filter: filter, block: {image in
+            alArticle.loadTagImage(filter: filter, block: { image in
                 if self.alArticle == alArticle {
                     self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
                 }

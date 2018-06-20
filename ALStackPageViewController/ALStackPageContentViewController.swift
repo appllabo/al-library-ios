@@ -10,47 +10,45 @@ class ALStackPageContentViewController: UIViewController {
 	}
 	
 	internal var heightTabBar: CGFloat {
-		var height = self.tabBarController?.tabBar.frame.size.height ?? 0
-		
 		if #available(iOS 11.0, *) {
-			height = self.view.safeAreaInsets.bottom
+			return self.view.safeAreaInsets.bottom
+		} else {
+			return self.tabBarController?.tabBar.frame.size.height ?? 0
 		}
-		
-		return height
 	}
 	
 	internal var safeAreaInsetsBottom: CGFloat {
-		var bottom = CGFloat(0.0)
-		
 		if #available(iOS 11.0, *) {
-			bottom = self.view.safeAreaInsets.bottom
+			return self.view.safeAreaInsets.bottom
+		} else {
+			return CGFloat(0.0)
 		}
-		
-		return bottom
 	}
 	
 	public var attributedTitleMain: NSMutableAttributedString {
-		let attributedText = NSMutableAttributedString(string: self.title ?? "Main")
 		let lineHeight = CGFloat(22.0)
-		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byTruncatingTail
-		paragraphStyle.minimumLineHeight = lineHeight
-		paragraphStyle.maximumLineHeight = lineHeight
-		attributedText.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, attributedText.length))
+		let paragraphStyle = NSMutableParagraphStyle().apply {
+			$0.lineBreakMode = .byTruncatingTail
+			$0.minimumLineHeight = lineHeight
+			$0.maximumLineHeight = lineHeight
+		}
 		
-		return attributedText
+		return NSMutableAttributedString(string: self.title ?? "Main").apply {
+			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
+		}
 	}
 	
 	public var attributedTitleSub: NSMutableAttributedString {
-		let attributedText = NSMutableAttributedString(string: self.title ?? "Sub")
 		let lineHeight = CGFloat(22.0)
-		let paragraphStyle = NSMutableParagraphStyle()
-		paragraphStyle.lineBreakMode = .byTruncatingTail
-		paragraphStyle.minimumLineHeight = lineHeight
-		paragraphStyle.maximumLineHeight = lineHeight
-		attributedText.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, attributedText.length))
+		let paragraphStyle = NSMutableParagraphStyle().apply {
+			$0.lineBreakMode = .byTruncatingTail
+			$0.minimumLineHeight = lineHeight
+			$0.maximumLineHeight = lineHeight
+		}
 		
-		return attributedText
+		return NSMutableAttributedString(string: self.title ?? "Sub").apply {
+			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
+		}
 	}
     
 	init() {
