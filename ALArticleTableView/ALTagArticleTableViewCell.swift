@@ -30,7 +30,7 @@ public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     }
 }
 
-public class ALTagArticleTableViewCell: ALArticleTableViewCell {
+public class ALTagArticleTableViewCell : ALArticleTableViewCell {
 	private let setting: ALTagArticleTableViewCellSetting
 	
     private let imageViewThumbnail = UIImageView()
@@ -73,7 +73,7 @@ public class ALTagArticleTableViewCell: ALArticleTableViewCell {
 		return stackView
 	}
 	
-	public init(setting: ALTagArticleTableViewCellSetting) {
+	public init(tag setting: ALTagArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)

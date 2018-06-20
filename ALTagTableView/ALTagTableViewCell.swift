@@ -1,7 +1,7 @@
 import UIKit
 import AlamofireImage
 
-public class ALTagTableViewCellSetting {
+public class ALTagTableViewCellSetting : NSObject {
     public var reuseIdentifier: String {
         return "ALTag"
     }
@@ -11,13 +11,9 @@ public class ALTagTableViewCellSetting {
     public var radiusImage = CGFloat(14.5)
     public var fontText = UIFont.systemFont(ofSize: 17)
     public var colorText = UIColor.black
-    
-    public init() {
-        
-    }
 }
 
-class ALTagTableViewCell: UITableViewCell {
+class ALTagTableViewCell : UITableViewCell {
     private let data: ALTag
     private let setting: ALTagTableViewCellSetting
     
