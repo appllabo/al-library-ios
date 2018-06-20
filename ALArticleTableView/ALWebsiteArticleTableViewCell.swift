@@ -30,85 +30,57 @@ public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSettin
     }
 }
 
-public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
+public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
     private let setting: ALWebsiteArticleTableViewCellSetting
     
-    private let imageViewThumbnail: UIImageView = {
-        let imageView = UIImageView()
-        
-        imageView.contentMode = .center
-        imageView.backgroundColor = .white
-        imageView.clipsToBounds = true
-        
-        return imageView
-    } ()
+	private let imageViewThumbnail = UIImageView().apply {
+        $0.contentMode = .center
+        $0.backgroundColor = .white
+        $0.clipsToBounds = true
+    }
     
-    private let labelTitle: UILabel = {
-        let label = UILabel()
-        
-        label.numberOfLines = 3
-        label.textAlignment = .left
-        label.lineBreakMode = .byTruncatingTail
-        label.backgroundColor = .white
-        label.clipsToBounds = true
-        
-        return label
-    } ()
+	private let labelTitle = UILabel().apply {
+        $0.numberOfLines = 3
+        $0.textAlignment = .left
+        $0.lineBreakMode = .byTruncatingTail
+        $0.backgroundColor = .white
+        $0.clipsToBounds = true
+    }
     
-    private let labelDate: UILabel = {
-        let label = UILabel()
-        
-        label.textAlignment = .right
-        label.backgroundColor = .white
-        label.clipsToBounds = true
-        
-        return label
-    } ()
+	private let labelDate = UILabel().apply {
+        $0.textAlignment = .right
+        $0.backgroundColor = .white
+        $0.clipsToBounds = true
+    }
     
-    private let labelWebsite: UILabel = {
-        let label = UILabel()
+	private let labelWebsite = UILabel().apply {
+        $0.textAlignment = .left
+        $0.setContentHuggingPriority(0, for: .horizontal)
+        $0.setContentCompressionResistancePriority(0, for: .horizontal)
+        $0.backgroundColor = .white
+        $0.clipsToBounds = true
+    }
     
-        label.textAlignment = .left
-        label.setContentHuggingPriority(0, for: .horizontal)
-        label.setContentCompressionResistancePriority(0, for: .horizontal)
-        label.backgroundColor = .white
-        label.clipsToBounds = true
-        
-        return label
-    } ()
+	private let imageViewWebsite = UIImageView().apply {
+        $0.contentMode = .center
+        $0.backgroundColor = .white
+        $0.clipsToBounds = true
+    }
     
-    private let imageViewWebsite: UIImageView = {
-        let imageView = UIImageView()
-        
-        imageView.contentMode = .center
-        imageView.backgroundColor = .white
-        imageView.clipsToBounds = true
-        
-        return imageView
-    } ()
+	private let stackViewBottom = UIStackView().apply {
+        $0.axis = .horizontal
+        $0.alignment = .center
+        $0.distribution = .fill
+        $0.spacing = 4
+    }
     
-    private let stackViewBottom: UIStackView = {
-        let stackView = UIStackView()
-        
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.distribution = .fill
-        stackView.spacing = 4
-        
-        return stackView
-    } ()
-    
-    private let stackViewRight: UIStackView = {
-        let stackView = UIStackView()
-        
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
-        
-        return stackView
-    } ()
+	private let stackViewRight = UIStackView().apply {
+        $0.axis = .vertical
+        $0.alignment = .fill
+        $0.distribution = .equalSpacing
+    }
 	
-	public init(setting: ALWebsiteArticleTableViewCellSetting) {
+	public init(website setting: ALWebsiteArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)
@@ -160,7 +132,7 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filter, block: {image in
+            alArticle.loadThumbnailImage(filter: filter, block: { image in
                 if self.alArticle == alArticle {
                     let transition = CATransition()
                     transition.type = kCATransitionFade
@@ -178,10 +150,11 @@ public class ALWebsiteArticleTableViewCell: ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2.0, height: self.setting.radiusWebsiteImage * 2.0))
             
-            self.alArticle?.loadWebsiteImage(filter: filter, block: {image in
+            self.alArticle?.loadWebsiteImage(filter: filter, block: { image in
                 if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
+					let transition = CATransition().apply {
+						$0.type = kCATransitionFade
+					}
                     
                     self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
                     self.imageViewWebsite.image = image

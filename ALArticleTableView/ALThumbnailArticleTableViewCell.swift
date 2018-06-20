@@ -1,7 +1,7 @@
 import UIKit
 import AlamofireImage
 
-public class ALThumbnailArticleTableViewCellSetting: ALArticleTableViewCellSetting {
+public class ALThumbnailArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     public override var reuseIdentifier: String {
         return "ALThumbnailArticle"
     }
@@ -20,15 +20,12 @@ public class ALThumbnailArticleTableViewCellSetting: ALArticleTableViewCellSetti
 	public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
     public var tintColor = UIColor.black
 	
-    public override init() {
-	}
-    
     override func height(width: CGFloat) -> CGFloat {
         return self.sizeThumbnail.height
     }
 }
 
-public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
+public class ALThumbnailArticleTableViewCell : ALArticleTableViewCell {
     private let setting: ALThumbnailArticleTableViewCellSetting
     
 	private let imageViewThumbnail = UIImageView()
@@ -52,19 +49,18 @@ public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
 		self.labelWebsite.backgroundColor = .white
 		self.labelWebsite.clipsToBounds = true
 		
-		let stackView = UIStackView()
-		stackView.axis = .horizontal
-		stackView.alignment = .bottom
-		stackView.distribution = .fill
-		stackView.spacing = 8
-		
-		stackView.addArrangedSubview(self.labelDate)
-		stackView.addArrangedSubview(self.labelWebsite)
-		
-		return stackView
+		return UIStackView().apply {
+			$0.axis = .horizontal
+			$0.alignment = .bottom
+			$0.distribution = .fill
+			$0.spacing = 8
+			
+			$0.addArrangedSubview(self.labelDate)
+			$0.addArrangedSubview(self.labelWebsite)
+		}
 	}
 	
-    public init(setting: ALThumbnailArticleTableViewCellSetting) {
+    public init(thumbnail setting: ALThumbnailArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)
@@ -118,10 +114,11 @@ public class ALThumbnailArticleTableViewCell: ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filter, block: {image in
+            alArticle.loadThumbnailImage(filter: filter, block: { image in
                 if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
+					let transition = CATransition().apply {
+						$0.type = kCATransitionFade
+					}
                     
                     self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
                     self.imageViewThumbnail.image = image

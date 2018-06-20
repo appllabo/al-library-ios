@@ -2,7 +2,7 @@ import UIKit
 import SVGKit
 import INSPullToRefresh
 
-class ALArticleTableViewController: ALSwipeTabContentViewController {
+class ALArticleTableViewController : ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 
     fileprivate let cellSetting = ALArticleTableViewCellSetting()

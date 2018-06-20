@@ -45,7 +45,7 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
     }
 }
 
-public class ALImageArticleTableViewCell: ALArticleTableViewCell {
+public class ALImageArticleTableViewCell : ALArticleTableViewCell {
 	private let setting: ALImageArticleTableViewCellSetting
 	
     private let imageViewThumbnail = UIImageView()
@@ -55,7 +55,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 	private let imageViewWebsite = UIImageView()
 	private let stackViewInfo = UIStackView()
 	
-	public init(setting: ALImageArticleTableViewCellSetting) {
+	public init(image setting: ALImageArticleTableViewCellSetting) {
         self.setting = setting
         
 		super.init(setting: setting)
@@ -72,7 +72,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         self.imageViewThumbnail.backgroundColor = .white
         self.imageViewThumbnail.clipsToBounds = true
         
-        self.initStackView(info: self.stackViewInfo)
+        self.initStackView()
         
         self.contentView.addSubview(self.labelTitle)
         self.contentView.addSubview(self.imageViewThumbnail)
@@ -83,7 +83,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-	private func initStackView(info: UIStackView) {
+	private func initStackView() {
         self.imageViewWebsite.tintColor = self.setting.tintColor
         self.imageViewWebsite.setContentHuggingPriority(1, for: .horizontal)
         self.imageViewWebsite.setContentCompressionResistancePriority(1, for: .horizontal)
@@ -105,14 +105,14 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         self.labelDate.backgroundColor = .white
         self.labelDate.clipsToBounds = true
 		
-		info.axis = .horizontal
-		info.alignment = .center
-		info.distribution = .fill
-		info.spacing = 4
+		self.stackViewInfo.axis = .horizontal
+		self.stackViewInfo.alignment = .center
+		self.stackViewInfo.distribution = .fill
+		self.stackViewInfo.spacing = 4
 		
-		info.addArrangedSubview(self.imageViewWebsite)
-		info.addArrangedSubview(self.labelWebsite)
-		info.addArrangedSubview(self.labelDate)
+		self.stackViewInfo.addArrangedSubview(self.imageViewWebsite)
+		self.stackViewInfo.addArrangedSubview(self.labelWebsite)
+		self.stackViewInfo.addArrangedSubview(self.labelDate)
 	}
 	
 	override func layout(alArticle: ALArticle) {
@@ -135,7 +135,7 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
             let heightThumbnail = widthThumbnail / 16 * 9
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filterThumbnail, block: {image in
+            alArticle.loadThumbnailImage(filter: filterThumbnail, block: { image in
                 if self.alArticle == alArticle {
                     let transition = CATransition()
                     transition.type = kCATransitionFade
@@ -153,10 +153,11 @@ public class ALImageArticleTableViewCell: ALArticleTableViewCell {
         } else {
             let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2.0, height: self.setting.radiusWebsiteImage * 2.0))
             
-            alArticle.loadWebsiteImage(filter: filterWebsite, block: {image in
+            alArticle.loadWebsiteImage(filter: filterWebsite, block: { image in
                 if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
+					let transition = CATransition().apply {
+                    	$0.type = kCATransitionFade
+					}
                     
                     self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
                     self.imageViewWebsite.image = image
