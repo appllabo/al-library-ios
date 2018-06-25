@@ -129,6 +129,7 @@ extension ALWebPageViewController: WKNavigationDelegate {
             
             if let param = path[1].removingPercentEncoding {
                 let json = JSON(parseJSON: param)
+				
                 self.evaluate(json)
             } else {
                 print(path[1])
