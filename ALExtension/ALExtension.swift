@@ -1,3 +1,5 @@
+import UIKit
+
 protocol ALScope { }
 
 extension ALScope {
@@ -41,22 +43,22 @@ extension UIColor {
 }
 
 extension UIImage {
-	func resize(size: CGSize) -> UIImage? {
-		let widthRatio = size.width / self.size.width
-		let heightRatio = size.height / self.size.height
-		let ratio = widthRatio < heightRatio ? widthRatio : heightRatio
+    func resize(ratio: CGFloat) -> UIImage {
+        var image = self
+        
+		let size = CGSize(width: self.size.width * ratio, height: self.size.height * ratio)
 		
-		let resizedSize = CGSize(width: self.size.width * ratio, height: self.size.height * ratio)
+		UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
 		
-		UIGraphicsBeginImageContextWithOptions(resizedSize, false, 0.0)
+		image.draw(in: CGRect(origin: .zero, size: size))
 		
-		draw(in: CGRect(origin: .zero, size: resizedSize))
-		
-		let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-		
+        if let currentImageContext = UIGraphicsGetImageFromCurrentImageContext() {
+            image = currentImageContext
+        }
+        
 		UIGraphicsEndImageContext()
 		
-		return resizedImage
+		return image
 	}
 	
 	func change(color: UIColor) -> UIImage {
@@ -66,7 +68,7 @@ extension UIImage {
 		
 		color.set()
 		
-		image.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+		image.draw(in: CGRect(origin: .zero, size: self.size))
 		
 		if let currentImageContext = UIGraphicsGetImageFromCurrentImageContext() {
 			image = currentImageContext
