@@ -104,7 +104,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     }
     
 	func refresh(done: ((UITableView) -> Void)?) {
-		self.load(isRefresh: true, done: { tableView in
+		self.refreshTable(done: { tableView in
 			self.endPullToRefresh()
 			
 			done?(self.tableView)
@@ -112,7 +112,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 	}
 	
 	func pullToRefresh() {
-		self.load(isRefresh: true, done: { tableView in
+		self.refreshTable(done: { tableView in
 			self.endPullToRefresh()
 		})
 	}
@@ -127,7 +127,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 }
 
 extension ALArticleTableViewController {
-	func load(isRefresh: Bool, done: ((UITableView) -> Void)?) {
+	func refreshTable(done: ((UITableView) -> Void)?) {
 	}
 }
 
