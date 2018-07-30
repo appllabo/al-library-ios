@@ -6,24 +6,23 @@ class ALNativeWebViewController: ALSwipeTabContentViewController {
 	init(title: String, isSwipeTab: Bool, url: URL, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
-		self.webView.frame = self.view.frame
-		self.webView.delegate = self
-//		self.webView.scrollView.contentInset.top = 64
-//		self.webView.scrollView.contentInset.bottom = 49
-//		self.webView.scrollView.scrollIndicatorInsets.top = 64
-//		self.webView.scrollView.scrollIndicatorInsets.bottom = 49
-		self.webView.backgroundColor = .clear
-		self.webView.isOpaque = false
+		self.webView.run {
+			$0.frame = self.view.frame
+			$0.delegate = self
+			$0.backgroundColor = .clear
+			$0.isOpaque = false
 		
-		if self.isSwipeTab == true {
-			self.webView.scrollView.contentInset.bottom += 44
-			self.webView.scrollView.scrollIndicatorInsets.bottom += 44
+			if self.isSwipeTab == true {
+				$0.scrollView.contentInset.bottom += 44
+				$0.scrollView.scrollIndicatorInsets.bottom += 44
+			}
+		
+			self.view.addSubview($0)
+			
+			let request = URLRequest(url: url)
+			
+			$0.loadRequest(request)
 		}
-		
-		self.view.addSubview(self.webView)
-		
-		let request = URLRequest(url: url)
-		self.webView.loadRequest(request)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -55,20 +54,22 @@ extension ALNativeWebViewController: UIWebViewDelegate {
 	}
 	
 	func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-		let urlRequest = request.url!.absoluteString
-		
-		print(urlRequest)
-		
-		if urlRequest.hasPrefix("native://") == true {
-			let path = urlRequest.components(separatedBy: "native://")
-			
-			if path[1] != "" {
-				self.evaluate(path[1])
-			}
-			
-			return false
-		} else {
+		guard let string = request.url?.absoluteString else {
 			return true
 		}
+		
+		if string.hasPrefix("native://") == false {
+			return true
+		}
+		
+		let path = string.components(separatedBy: "native://")
+		
+		if path[1] == "" {
+			return true
+		}
+		
+		self.evaluate(path[1])
+		
+		return false
 	}
 }

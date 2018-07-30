@@ -8,32 +8,36 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	init(title: String, url: URL, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
-		self.webView.navigationDelegate = self
-//		self.webView.UIDelegate = self
-		self.webView.scrollView.delegate = self
-		self.webView.frame = self.view.bounds
-		self.webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
-		self.webView.backgroundColor = .clear
-		self.webView.isOpaque = false
+		self.webView.run {
+			$0.navigationDelegate = self
+	//		$0.UIDelegate = self
+			$0.scrollView.delegate = self
+			$0.frame = self.view.frame
+			$0.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+			$0.backgroundColor = .clear
+			$0.isOpaque = false
+			
+			$0.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
+			$0.addObserver(self, forKeyPath: "title", options: .new, context: nil)
+			$0.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
+			$0.addObserver(self, forKeyPath: "canGoBack", options: .new, context: nil)
+			$0.addObserver(self, forKeyPath: "canGoForward", options: .new, context: nil)
+			
+			let request = URLRequest(url: url)
+			
+			$0.load(request)
+			
+			self.view.addSubview($0)
+		}
 		
-		self.webView.addObserver(self, forKeyPath :"estimatedProgress", options: .new, context: nil)
-		self.webView.addObserver(self, forKeyPath :"title", options: .new, context: nil)
-		self.webView.addObserver(self, forKeyPath :"loading", options: .new, context: nil)
-		self.webView.addObserver(self, forKeyPath :"canGoBack", options: .new, context: nil)
-		self.webView.addObserver(self, forKeyPath :"canGoForward", options: .new, context: nil)
-		
-        let request = URLRequest(url: url)
-        
-        self.webView.load(request)
-		
-		self.view.addSubview(self.webView)
-		
-		self.activityIndicator.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-		self.activityIndicator.center = self.view.center
-		self.activityIndicator.hidesWhenStopped = true
-		self.activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
-		self.activityIndicator.startAnimating()
-//		self.webView.addSubview(self.activityIndicator)
+		self.activityIndicator.run {
+			$0.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+			$0.center = self.view.center
+			$0.hidesWhenStopped = true
+			$0.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
+			$0.startAnimating()
+	//		self.webView.addSubview($0)
+		}
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -41,13 +45,15 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	}
 	
 	deinit {
-		self.webView.scrollView.delegate = nil
-		
-		self.webView.removeObserver(self, forKeyPath: "estimatedProgress")
-		self.webView.removeObserver(self, forKeyPath: "title")
-		self.webView.removeObserver(self, forKeyPath: "loading")
-		self.webView.removeObserver(self, forKeyPath: "canGoBack")
-		self.webView.removeObserver(self, forKeyPath: "canGoForward")
+		self.webView.run {
+			$0.scrollView.delegate = nil
+			
+			$0.removeObserver(self, forKeyPath: "estimatedProgress")
+			$0.removeObserver(self, forKeyPath: "title")
+			$0.removeObserver(self, forKeyPath: "loading")
+			$0.removeObserver(self, forKeyPath: "canGoBack")
+			$0.removeObserver(self, forKeyPath: "canGoForward")
+		}
 	}
 	
 	override func viewDidLoad() {
@@ -124,20 +130,31 @@ extension ALWebPageViewController: WKNavigationDelegate {
 	}
 	
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (@escaping (WKNavigationActionPolicy) -> Void)) {
-		if let url = navigationAction.request.url, url.absoluteString.hasPrefix("native://") == true {
-            let path = url.absoluteString.components(separatedBy: "native://")
-            
-            if let param = path[1].removingPercentEncoding {
-                let json = JSON(parseJSON: param)
-                self.evaluate(json)
-            } else {
-                print(path[1])
-            }
-            
-            decisionHandler(.cancel)
-		} else {
+		guard let string = navigationAction.request.url?.absoluteString else {
 			decisionHandler(.allow)
+			
+			return
 		}
+		
+		if string.hasPrefix("native://") == false {
+			decisionHandler(.allow)
+			
+			return
+		}
+	
+		let path = string.components(separatedBy: "native://")
+		
+		guard let param = path[1].removingPercentEncoding else {
+			decisionHandler(.allow)
+			
+			return
+		}
+		
+		let json = JSON(parseJSON: param)
+		
+		self.evaluate(json)
+		
+		decisionHandler(.cancel)
 	}
 }
 
