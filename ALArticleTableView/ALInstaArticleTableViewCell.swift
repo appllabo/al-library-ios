@@ -56,7 +56,7 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         self.labelTitle.backgroundColor = .white
         self.labelTitle.clipsToBounds = true
         
-        self.initStackView(info: self.stackViewInfo)
+        self.initStackView()
         
         self.contentView.addSubview(self.stackViewInfo)
         self.contentView.addSubview(self.imageViewThumbnail)
@@ -67,7 +67,7 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
-    private func initStackView(info: UIStackView) {
+    private func initStackView() {
         self.imageViewWebsite.contentMode = .center
         self.imageViewWebsite.clipsToBounds = true
         
@@ -88,14 +88,14 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         self.labelDate.backgroundColor = .white
         self.labelDate.clipsToBounds = true
         
-        info.axis = .horizontal
-        info.alignment = .center
-        info.distribution = .fill
-        info.spacing = 8
+        self.stackViewInfo.axis = .horizontal
+        self.stackViewInfo.alignment = .center
+        self.stackViewInfo.distribution = .fill
+        self.stackViewInfo.spacing = 8
         
-        info.addArrangedSubview(self.imageViewWebsite)
-        info.addArrangedSubview(self.labelWebsite)
-        info.addArrangedSubview(self.labelDate)
+        self.stackViewInfo.addArrangedSubview(self.imageViewWebsite)
+        self.stackViewInfo.addArrangedSubview(self.labelWebsite)
+        self.stackViewInfo.addArrangedSubview(self.labelDate)
     }
     
 	override func layout(alArticle: ALArticle) {
@@ -118,7 +118,7 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filterThumbnail, block: {image in
+            alArticle.loadThumbnailImage(filter: filterThumbnail, block: { image in
                 if self.alArticle == alArticle {
                     let transition = CATransition()
                     transition.type = kCATransitionFade
@@ -136,10 +136,11 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
             
-            alArticle.loadThumbnailImage(filter: filter, block: {image in
+            alArticle.loadThumbnailImage(filter: filter, block: { image in
                 if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
+					let transition = CATransition().apply {
+						$0.type = kCATransitionFade
+					}
                     
                     self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
                     self.imageViewThumbnail.image = image
