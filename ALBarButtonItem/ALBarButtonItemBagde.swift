@@ -15,9 +15,19 @@ class ALBarButtonItemBagde : NSObject {
 }
 
 extension UIBarButtonItem {
-	func badgeInit(barButtonItemBagde: ALBarButtonItemBagde) {
-		guard let badge = barButtonItemBagde.label else {
-			return
+	func setInit(value: String, barButtonItemBagde: ALBarButtonItemBagde) {
+		barButtonItemBagde.value = value
+		
+		barButtonItemBagde.label?.removeFromSuperview()
+		
+		barButtonItemBagde.label = nil
+		
+		let badge = barButtonItemBagde.label ?? UILabel(frame: CGRect(x: barButtonItemBagde.originX, y: barButtonItemBagde.originY, width: 20, height: 20)).apply {
+			barButtonItemBagde.label = $0
+			
+			self.customView?.addSubview($0)
+			
+			$0.textAlignment = .center
 		}
 		
 		if let customView = self.customView {
@@ -31,6 +41,14 @@ extension UIBarButtonItem {
 			
 			view.addSubview(badge)
 		}
+		
+		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+	}
+	
+	func set(value: String, barButtonItemBagde: ALBarButtonItemBagde) {
+		barButtonItemBagde.value = value
+		
+		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
 	}
 	
 	func refreshBadge(barButtonItemBagde: ALBarButtonItemBagde) {
@@ -56,36 +74,37 @@ extension UIBarButtonItem {
 		// Calculate expected size to fit new value
 		// Use an intermediate label to get expected size thanks to sizeToFit
 		// We don't call sizeToFit on the true label to avoid bad display
-		let frameLabel = duplicate(barButtonItemBagde.label, barButtonItemBagde: barButtonItemBagde)?.apply {
-			$0.sizeToFit()	
+		guard let frameLabel = duplicate(barButtonItemBagde.label, barButtonItemBagde: barButtonItemBagde) else {
+			return CGSize.zero
 		}
-		
-		return frameLabel?.frame.size ?? CGSize.zero
+	
+		frameLabel.sizeToFit()	
+			
+		return frameLabel.frame.size
 	}
 	
 	func updateBadgeFrame(barButtonItemBagde: ALBarButtonItemBagde) {
-		let expectedLabelSize = badgeExpectedSize(barButtonItemBagde: barButtonItemBagde)
-		
-		// Make sure that for small value, the badge will be big enough
-		var minHeight = expectedLabelSize.height
-		
-		// Using a const we make sure the badge respect the minimum size
-		minHeight = (minHeight < barButtonItemBagde.minSize) ? barButtonItemBagde.minSize : expectedLabelSize.height
-		
-		var minWidth = expectedLabelSize.width
-		
-		// Using const we make sure the badge doesn't get too smal
-		minWidth = minWidth < minHeight ? minHeight : expectedLabelSize.width
-		
-		barButtonItemBagde.label?.run {
-			$0.layer.masksToBounds = true
-			$0.frame = CGRect(x: barButtonItemBagde.originX, y: barButtonItemBagde.originY, width: minWidth + barButtonItemBagde.paddingX, height: minHeight + barButtonItemBagde.paddingY)
-			$0.layer.cornerRadius = (minHeight + barButtonItemBagde.paddingY) / 2
+		guard let label = barButtonItemBagde.label else {
+			return
 		}
+		
+		let expectedLabelSize = self.badgeExpectedSize(barButtonItemBagde: barButtonItemBagde)
+		
+		let minHeight = expectedLabelSize.height < barButtonItemBagde.minSize ? barButtonItemBagde.minSize : expectedLabelSize.height
+		
+		let minWidth = expectedLabelSize.width < minHeight ? minHeight : expectedLabelSize.width
+		
+		label.layer.masksToBounds = true
+		label.frame = CGRect(x: barButtonItemBagde.originX, y: barButtonItemBagde.originY, width: minWidth + barButtonItemBagde.paddingX, height: minHeight + barButtonItemBagde.paddingY)
+		label.layer.cornerRadius = (minHeight + barButtonItemBagde.paddingY) / 2
 	}
 	
 	func updateBadgeValue(barButtonItemBagde: ALBarButtonItemBagde) {
-		if barButtonItemBagde.shouldAnimate && self.badge(barButtonItemBagde: barButtonItemBagde).text != barButtonItemBagde.value {
+		guard let label = barButtonItemBagde.label else {
+			return
+		}
+		
+		if barButtonItemBagde.shouldAnimate && label.text != barButtonItemBagde.value {
 			let animation = CABasicAnimation(keyPath: "transform.scale").apply {
 				$0.fromValue = 1.5
 				$0.toValue = 1
@@ -93,10 +112,10 @@ extension UIBarButtonItem {
 				$0.timingFunction = CAMediaTimingFunction(controlPoints: 0.4, 1.3, 1.0, 1.0)
 			}
 			
-			self.badge(barButtonItemBagde: barButtonItemBagde).layer.add(animation, forKey: "bounceAnimation")
+			label.layer.add(animation, forKey: "bounceAnimation")
 		}
 		
-		self.badge(barButtonItemBagde: barButtonItemBagde).text = barButtonItemBagde.value
+		label.text = barButtonItemBagde.value
 		
 		if barButtonItemBagde.shouldAnimate {
 			UIView.animate(withDuration: 0.2, animations: {
@@ -120,32 +139,12 @@ extension UIBarButtonItem {
 	
 	func removeBadge(barButtonItemBagde: ALBarButtonItemBagde) {
 		UIView.animate(withDuration: 0.2, animations: {
-			self.badge(barButtonItemBagde: barButtonItemBagde).transform = CGAffineTransform(scaleX: 0, y: 0)
+			barButtonItemBagde.label?.transform = CGAffineTransform(scaleX: 0, y: 0)
 		}, completion: { _ in
-			self.badge(barButtonItemBagde: barButtonItemBagde).removeFromSuperview()
+			barButtonItemBagde.label?.removeFromSuperview()
 			
 			barButtonItemBagde.label = nil
 		})
-	}
-	
-	func badge(barButtonItemBagde: ALBarButtonItemBagde) -> UILabel {
-		return barButtonItemBagde.label ?? UILabel(frame: CGRect(x: barButtonItemBagde.originX, y: barButtonItemBagde.originY, width: 20, height: 20)).apply {
-			barButtonItemBagde.label = $0
-			
-			self.badgeInit(barButtonItemBagde: barButtonItemBagde)
-			
-			customView?.addSubview($0)
-			
-			$0.textAlignment = .center
-		}
-	}
-	
-	func set(value: String, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.value = value
-		
-		self.updateBadgeValue(barButtonItemBagde: barButtonItemBagde)
-		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
 	}
 	
 	func set(backgroundColor: UIColor, barButtonItemBagde: ALBarButtonItemBagde) {
