@@ -17,17 +17,13 @@ class ALBarButtonItemBagde : NSObject {
 }
 
 extension UIBarButtonItem {
-	func setInit(value: String, bagde: ALBarButtonItemBagde) {
+	func reset(value: String, bagde: ALBarButtonItemBagde) {
 		bagde.value = value
 		
 		bagde.label?.removeFromSuperview()
 		
-		bagde.label = nil
-		
-		let label = bagde.label ?? UILabel(frame: CGRect(x: bagde.originX, y: bagde.originY, width: 20, height: 20)).apply {
+		let label = UILabel(frame: CGRect(x: bagde.originX, y: bagde.originY, width: 20, height: 20)).apply {
 			bagde.label = $0
-			
-			self.customView?.addSubview($0)
 			
 			$0.textAlignment = .center
 		}
