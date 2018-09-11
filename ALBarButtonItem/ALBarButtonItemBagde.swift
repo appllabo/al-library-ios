@@ -1,3 +1,5 @@
+import UIKit
+
 class ALBarButtonItemBagde : NSObject {
 	var label: UILabel?
 	var value = ""
