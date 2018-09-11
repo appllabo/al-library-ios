@@ -17,15 +17,15 @@ class ALBarButtonItemBagde : NSObject {
 }
 
 extension UIBarButtonItem {
-	func setInit(value: String, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.value = value
+	func setInit(value: String, bagde: ALBarButtonItemBagde) {
+		bagde.value = value
 		
-		barButtonItemBagde.label?.removeFromSuperview()
+		bagde.label?.removeFromSuperview()
 		
-		barButtonItemBagde.label = nil
+		bagde.label = nil
 		
-		let badge = barButtonItemBagde.label ?? UILabel(frame: CGRect(x: barButtonItemBagde.originX, y: barButtonItemBagde.originY, width: 20, height: 20)).apply {
-			barButtonItemBagde.label = $0
+		let label = bagde.label ?? UILabel(frame: CGRect(x: bagde.originX, y: bagde.originY, width: 20, height: 20)).apply {
+			bagde.label = $0
 			
 			self.customView?.addSubview($0)
 			
@@ -33,50 +33,50 @@ extension UIBarButtonItem {
 		}
 		
 		if let customView = self.customView {
-			barButtonItemBagde.originX = customView.frame.size.width - badge.frame.size.width / 2
+			bagde.originX = customView.frame.size.width - label.frame.size.width / 2
 			
 			customView.clipsToBounds = false
 			
-			customView.addSubview(badge)
+			customView.addSubview(label)
 		} else if let view = self.value(forKey: "view") as? UIView {
-			barButtonItemBagde.originX = view.frame.size.width - badge.frame.size.width
+			bagde.originX = view.frame.size.width - label.frame.size.width
 			
-			view.addSubview(badge)
+			view.addSubview(label)
 		}
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(value: String, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.value = value
+	func set(value: String, bagde: ALBarButtonItemBagde) {
+		bagde.value = value
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func refreshBadge(barButtonItemBagde: ALBarButtonItemBagde) {
-		guard let badge = barButtonItemBagde.label else {
+	func refreshBadge(bagde: ALBarButtonItemBagde) {
+		guard let lable = bagde.label else {
 			return
 		}
 		
-		badge.textColor = barButtonItemBagde.textColor
-		badge.backgroundColor = barButtonItemBagde.backgroundColor
-		badge.font = barButtonItemBagde.font
+		lable.textColor = bagde.textColor
+		lable.backgroundColor = bagde.backgroundColor
+		lable.font = bagde.font
 		
-		if barButtonItemBagde.value == "" || (barButtonItemBagde.value == "0" && barButtonItemBagde.shouldHideAtZero) {
-			badge.isHidden = true
+		if bagde.value == "" || (bagde.value == "0" && bagde.shouldHideAtZero) {
+			lable.isHidden = true
 		} else {
-			badge.isHidden = false
+			lable.isHidden = false
 			
-			self.updateBadgeValue(barButtonItemBagde: barButtonItemBagde)
+			self.updateBadgeValue(bagde: bagde)
 		}
 	}
 	
-	func badgeExpectedSize(barButtonItemBagde: ALBarButtonItemBagde) -> CGSize {
+	func badgeExpectedSize(bagde: ALBarButtonItemBagde) -> CGSize {
 		// When the value changes the badge could need to get bigger
 		// Calculate expected size to fit new value
 		// Use an intermediate label to get expected size thanks to sizeToFit
 		// We don't call sizeToFit on the true label to avoid bad display
-		guard let frameLabel = duplicate(barButtonItemBagde.label, barButtonItemBagde: barButtonItemBagde) else {
+		guard let frameLabel = duplicate(bagde.label, bagde: bagde) else {
 			return CGSize.zero
 		}
 	
@@ -85,28 +85,28 @@ extension UIBarButtonItem {
 		return frameLabel.frame.size
 	}
 	
-	func updateBadgeFrame(barButtonItemBagde: ALBarButtonItemBagde) {
-		guard let label = barButtonItemBagde.label else {
+	func updateBadgeFrame(bagde: ALBarButtonItemBagde) {
+		guard let label = bagde.label else {
 			return
 		}
 		
-		let expectedLabelSize = self.badgeExpectedSize(barButtonItemBagde: barButtonItemBagde)
+		let expectedLabelSize = self.badgeExpectedSize(bagde: bagde)
 		
-		let minHeight = expectedLabelSize.height < barButtonItemBagde.minSize ? barButtonItemBagde.minSize : expectedLabelSize.height
+		let minHeight = expectedLabelSize.height < bagde.minSize ? bagde.minSize : expectedLabelSize.height
 		
 		let minWidth = expectedLabelSize.width < minHeight ? minHeight : expectedLabelSize.width
 		
 		label.layer.masksToBounds = true
-		label.frame = CGRect(x: barButtonItemBagde.originX, y: barButtonItemBagde.originY, width: minWidth + barButtonItemBagde.paddingX, height: minHeight + barButtonItemBagde.paddingY)
-		label.layer.cornerRadius = (minHeight + barButtonItemBagde.paddingY) / 2
+		label.frame = CGRect(x: bagde.originX, y: bagde.originY, width: minWidth + bagde.paddingX, height: minHeight + bagde.paddingY)
+		label.layer.cornerRadius = (minHeight + bagde.paddingY) / 2
 	}
 	
-	func updateBadgeValue(barButtonItemBagde: ALBarButtonItemBagde) {
-		guard let label = barButtonItemBagde.label else {
+	func updateBadgeValue(bagde: ALBarButtonItemBagde) {
+		guard let label = bagde.label else {
 			return
 		}
 		
-		if barButtonItemBagde.shouldAnimate && label.text != barButtonItemBagde.value {
+		if bagde.shouldAnimate && label.text != bagde.value {
 			let animation = CABasicAnimation(keyPath: "transform.scale").apply {
 				$0.fromValue = 1.5
 				$0.toValue = 1
@@ -117,18 +117,18 @@ extension UIBarButtonItem {
 			label.layer.add(animation, forKey: "bounceAnimation")
 		}
 		
-		label.text = barButtonItemBagde.value
+		label.text = bagde.value
 		
-		if barButtonItemBagde.shouldAnimate {
+		if bagde.shouldAnimate {
 			UIView.animate(withDuration: 0.2, animations: {
-				self.updateBadgeFrame(barButtonItemBagde: barButtonItemBagde)
+				self.updateBadgeFrame(bagde: bagde)
 			})
 		} else {
-			self.updateBadgeFrame(barButtonItemBagde: barButtonItemBagde)
+			self.updateBadgeFrame(bagde: bagde)
 		}
 	}
 	
-	func duplicate(_ labelToCopy: UILabel?, barButtonItemBagde: ALBarButtonItemBagde) -> UILabel? {
+	func duplicate(_ labelToCopy: UILabel?, bagde: ALBarButtonItemBagde) -> UILabel? {
 		guard let label = labelToCopy else {
 			return nil
 		}
@@ -139,67 +139,67 @@ extension UIBarButtonItem {
 		}
 	}
 	
-	func removeBadge(barButtonItemBagde: ALBarButtonItemBagde) {
+	func removeBadge(bagde: ALBarButtonItemBagde) {
 		UIView.animate(withDuration: 0.2, animations: {
-			barButtonItemBagde.label?.transform = CGAffineTransform(scaleX: 0, y: 0)
+			bagde.label?.transform = CGAffineTransform(scaleX: 0, y: 0)
 		}, completion: { _ in
-			barButtonItemBagde.label?.removeFromSuperview()
+			bagde.label?.removeFromSuperview()
 			
-			barButtonItemBagde.label = nil
+			bagde.label = nil
 		})
 	}
 	
-	func set(backgroundColor: UIColor, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.backgroundColor = backgroundColor
+	func set(backgroundColor: UIColor, bagde: ALBarButtonItemBagde) {
+		bagde.backgroundColor = backgroundColor
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(textColor: UIColor, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.textColor = textColor
+	func set(textColor: UIColor, bagde: ALBarButtonItemBagde) {
+		bagde.textColor = textColor
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(font: UIFont, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.font = font
+	func set(font: UIFont, bagde: ALBarButtonItemBagde) {
+		bagde.font = font
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(padding: CGFloat, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.padding = padding
+	func set(padding: CGFloat, bagde: ALBarButtonItemBagde) {
+		bagde.padding = padding
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(minSize: CGFloat, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.minSize = minSize
+	func set(minSize: CGFloat, bagde: ALBarButtonItemBagde) {
+		bagde.minSize = minSize
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(originX: CGFloat, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.originX = originX
+	func set(originX: CGFloat, bagde: ALBarButtonItemBagde) {
+		bagde.originX = originX
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(originY: CGFloat, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.originY = originY
+	func set(originY: CGFloat, bagde: ALBarButtonItemBagde) {
+		bagde.originY = originY
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(shouldHideAtZero: Bool, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.shouldHideAtZero = shouldHideAtZero
+	func set(shouldHideAtZero: Bool, bagde: ALBarButtonItemBagde) {
+		bagde.shouldHideAtZero = shouldHideAtZero
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 	
-	func set(shouldAnimate: Bool, barButtonItemBagde: ALBarButtonItemBagde) {
-		barButtonItemBagde.shouldAnimate = shouldAnimate
+	func set(shouldAnimate: Bool, bagde: ALBarButtonItemBagde) {
+		bagde.shouldAnimate = shouldAnimate
 		
-		self.refreshBadge(barButtonItemBagde: barButtonItemBagde)
+		self.refreshBadge(bagde: bagde)
 	}
 }
