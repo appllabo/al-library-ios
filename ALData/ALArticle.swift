@@ -20,44 +20,56 @@ public class ALArticle: ALData {
 	}
 	
     public func loadThumbnailImage(filter: ImageFilter, block: @escaping (UIImage) -> Void) {
-        if let url = self.urlImageThumbnail {
-            let urlRequest = URLRequest(url: url)
-            
-            ImageDownloader.default.download(urlRequest, filter: filter) {response in
-                if let image = response.result.value {
-					self.imageThumbnail = image
-					
-                    block(image)
-                }
+        guard let url = self.urlImageThumbnail else {
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        
+        ImageDownloader.default.download(request, filter: filter) { response in
+            guard let image = response.result.value else {
+                return
             }
+            
+            self.imageThumbnail = image
+            
+            block(image)
         }
     }
     
     public func loadWebsiteImage(filter: ImageFilter, block: @escaping (UIImage) -> Void) {
-        if let url = self.urlImageWebsite {
-            let urlRequest = URLRequest(url: url)
-            
-            ImageDownloader.default.download(urlRequest, filter: filter) {response in
-                if let image = response.result.value {
-					self.imageWebsite = image
-					
-                    block(image)
-                }
+        guard let url = self.urlImageWebsite else {
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        
+        ImageDownloader.default.download(request, filter: filter) { response in
+            guard let image = response.result.value else {
+                return
             }
+            
+            self.imageWebsite = image
+            
+            block(image)
         }
     }
     
     public func loadTagImage(filter: CompositeImageFilter, block: @escaping (UIImage) -> Void) {
-        if let url = self.urlImageTag {
-            let urlRequest = URLRequest(url: url)
-            
-            ImageDownloader.default.download(urlRequest, filter: filter) {response in
-                if let image = response.result.value {
-                    self.imageTag = image
-                    
-                    block(image)
-                }
+        guard let url = self.urlImageTag else {
+            return
+        }
+        
+        let request = URLRequest(url: url)
+        
+        ImageDownloader.default.download(request, filter: filter) { response in
+            guard let image = response.result.value else {
+                return
             }
+            
+            self.imageTag = image
+            
+            block(image)
         }
     }
     

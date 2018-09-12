@@ -13,19 +13,21 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
-		self.tableView.delegate = self
-		self.tableView.dataSource = self
-		self.tableView.cellLayoutMarginsFollowReadableWidth = false
-		self.tableView.backgroundColor = .clear
-        
-        if let separatorInset = self.cellSetting.separatorInset {
-            self.tableView.separatorInset = separatorInset
+        self.tableView.apply {
+            $0.delegate = self
+            $0.dataSource = self
+            $0.cellLayoutMarginsFollowReadableWidth = false
+            $0.backgroundColor = .clear
+            
+            if let separatorInset = self.cellSetting.separatorInset {
+                $0.separatorInset = separatorInset
+            }
+        }.run {
+            $0.ins_addPullToRefresh(withHeight: 60.0, handler: { _ in
+                self.pullToRefresh()
+            })
         }
-		
-		self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: { scrollView in
-			self.pullToRefresh()
-		})
-	}
+    }
 	
 	required init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
@@ -38,29 +40,34 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 		
 		super.viewDidLoad()
 		
-		self.tableView.frame = self.view.frame
-        self.tableView.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
-		
-		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-		
-		self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
-		self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-		
-        self.tableView.contentInset.top += self.contentInsetTop
-        self.tableView.scrollIndicatorInsets.top += self.contentInsetTop
-		
-		if let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg"), let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg") {
-			svgCircleWhite.size = CGSize(width: 24, height: 24)
-			svgCircleLight.size = CGSize(width: 24, height: 24)
-			
-			let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
-			
-			if let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor)) {
-				self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
-				self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
-			}
-		}
+        self.tableView.run {
+            $0.frame = self.view.frame
+            $0.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
+            
+            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+            
+            $0.contentInset.top = heightStatusBar + heightNavigationBar
+            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+            
+            $0.contentInset.top += self.contentInsetTop
+            $0.scrollIndicatorInsets.top += self.contentInsetTop
+        
+            let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
+                $0.size = CGSize(width: 24, height: 24)
+            }
+        
+            let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")?.apply {
+                $0.size = CGSize(width: 24, height: 24)
+            }
+        
+            let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
+        
+            if let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight?.uiImage, frontImage: svgCircleWhite?.uiImage.change(color: self.view.tintColor)) {
+                $0.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
+                $0.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
+            }
+        }
 		
 		self.view.addSubview(self.tableView)
 	}
@@ -80,16 +87,16 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
-        self.tableView.contentInset.bottom = self.heightTabBar + self.contentInsetBottom
-        self.tableView.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
+        self.tableView.run {
+            $0.contentInset.bottom = self.heightTabBar + self.contentInsetBottom
+            $0.scrollIndicatorInsets.bottom = self.heightTabBar + self.contentInsetBottom
+        }
     }
     
     func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)
-        
-        cell.alArticle = alArticle
-        
-        return cell
+        return (tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)).apply {
+            $0.alArticle = alArticle
+        }
     }
     
     func getCellHeight(width: CGFloat) -> CGFloat {
@@ -103,7 +110,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     func open(alArticle: ALArticle) {
     }
     
-	func refresh(done: ((UITableView) -> Void)?) {
+	func refresh(done: ((UITableView) -> Void)? = nil) {
 		self.refreshTable(done: { tableView in
 			self.endPullToRefresh()
 			
@@ -127,7 +134,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 }
 
 extension ALArticleTableViewController {
-	func refreshTable(done: ((UITableView) -> Void)?) {
+	func refreshTable(done: ((UITableView) -> Void)? = nil) {
 	}
 }
 

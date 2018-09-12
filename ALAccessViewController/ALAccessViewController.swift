@@ -10,9 +10,11 @@ class ALAccessViewController: UIViewController {
 		
 		self.webView.delegate = self
 		
-		let request = NSMutableURLRequest(url: url)
-		request.setValue(referer, forHTTPHeaderField: "Referer")
-		self.webView.loadRequest(request as URLRequest)
+        let request = NSMutableURLRequest(url: url).apply {
+            $0.setValue(referer, forHTTPHeaderField: "Referer")
+        } as URLRequest
+        
+		self.webView.loadRequest(request)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -48,12 +50,14 @@ extension ALAccessViewController: UIWebViewDelegate {
 	}
 	
 	func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
-		let urlRequest = request.url!.absoluteString
+        guard let string = request.url?.absoluteString else {
+            return true
+        }
 		
-		if urlRequest.hasPrefix("itms://") == true || urlRequest.hasPrefix("itmss://") == true || urlRequest.hasPrefix("itms-apps://") == true || urlRequest.hasPrefix("itms-appss://") == true || urlRequest.hasPrefix("itms-services://") == true {
+		if string.hasPrefix("itms://") == true || string.hasPrefix("itmss://") == true || string.hasPrefix("itms-apps://") == true || string.hasPrefix("itms-appss://") == true || string.hasPrefix("itms-services://") == true {
 			return false
 		} else {
-			return true
+            return true
 		}
 	}
 }

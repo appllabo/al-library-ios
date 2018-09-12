@@ -1,12 +1,8 @@
 import UIKit
 
-public class ALMenuTableViewCellSetting {
+public class ALMenuTableViewCellSetting : NSObject {
     public var font = UIFont.systemFont(ofSize: 17)
     public var color = UIColor.black
-    
-    public init() {
-        
-    }
 }
 
 class ALMenuViewController: ALSwipeTabContentViewController {
@@ -30,10 +26,12 @@ class ALMenuViewController: ALSwipeTabContentViewController {
         
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
-		self.tableView.delegate = self
-		self.tableView.dataSource = self
-		self.tableView.backgroundColor = .clear
-		self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.run {
+            $0.delegate = self
+            $0.dataSource = self
+            $0.backgroundColor = .clear
+            $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        }
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -47,16 +45,18 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		
 		super.viewDidLoad()
 		
-		self.tableView.frame = self.view.frame
-		
-		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-		
-		self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
-		self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-		
-        self.tableView.contentInset.top += self.contentInsetTop
-        self.tableView.scrollIndicatorInsets.top += self.contentInsetTop
+        self.tableView.run {
+            $0.frame = self.view.frame
+            
+            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+            
+            $0.contentInset.top = heightStatusBar + heightNavigationBar
+            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+            
+            $0.contentInset.top += self.contentInsetTop
+            $0.scrollIndicatorInsets.top += self.contentInsetTop
+        }
 		
 		self.view.addSubview(self.tableView)
 	}
@@ -95,43 +95,45 @@ extension ALMenuViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-		if case let .String(header) = self.sections[section]["header"]! {
-			return header
+        guard case let .String(header)? = self.sections[section]["header"] else {
+            return ""
 		}
-		
-		return ""
+        
+        return header
 	}
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		if case let .Array(contents) = self.sections[section]["contents"]! {
-			return contents.count
+        guard case let .Array(contents)? = self.sections[section]["contents"] else {
+            return 0
 		}
-		
-		return 0
+        
+        return contents.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
-		
-		if case let .Array(contents) = self.sections[indexPath.section]["contents"]! {
-			if case let .Dictionary(content) = contents[indexPath.row] {
-				if case let .String(label) = content["label"]! {
-					cell.textLabel?.text = label
-                    cell.textLabel?.font = self.setting.font
-                    cell.textLabel?.textColor = self.setting.color
-				}
-				
-				if let detail = content["detail"] {
-					if case let .String(text) = detail {
-						cell.detailTextLabel?.text = text
-						cell.detailTextLabel?.textAlignment = .right
-                        cell.detailTextLabel?.font = self.setting.font
-					}
-				}
-			}
-		}
-		
-		cell.accessoryType = .disclosureIndicator
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell").apply {
+            $0.accessoryType = .disclosureIndicator
+        }
+        
+        guard case let .Array(contents)? = self.sections[indexPath.section]["contents"] else {
+            return cell
+        }
+        
+        guard case let .Dictionary(content) = contents[indexPath.row] else {
+            return cell
+        }
+        
+        if case let .String(label)? = content["label"] {
+            cell.textLabel?.text = label
+            cell.textLabel?.font = self.setting.font
+            cell.textLabel?.textColor = self.setting.color
+        }
+        
+        if case let .String(text)? = content["detail"] {
+            cell.detailTextLabel?.text = text
+            cell.detailTextLabel?.textAlignment = .right
+            cell.detailTextLabel?.font = self.setting.font
+        }
 		
 		return cell
 	}
@@ -139,12 +141,16 @@ extension ALMenuViewController: UITableViewDataSource {
 
 extension ALMenuViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-		if case let .Array(contents) = self.sections[indexPath.section]["contents"]! {
-			if case let .Dictionary(content) = contents[indexPath.row] {
-				if case let .Closure(method) = content["method"]! {
-					method(tableView, indexPath)
-				}
-			}
-		}
+        guard case let .Array(contents)? = self.sections[indexPath.section]["contents"] else {
+            return
+        }
+        
+        guard case let .Dictionary(content) = contents[indexPath.row] else {
+            return
+        }
+        
+        if case let .Closure(method)? = content["method"] {
+            method(tableView, indexPath)
+        }
 	}
 }

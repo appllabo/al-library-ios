@@ -16,13 +16,13 @@ class ALNativeWebViewController: ALSwipeTabContentViewController {
 				$0.scrollView.contentInset.bottom += 44
 				$0.scrollView.scrollIndicatorInsets.bottom += 44
 			}
-		
-			self.view.addSubview($0)
-			
-			let request = URLRequest(url: url)
-			
-			$0.loadRequest(request)
 		}
+        
+        self.view.addSubview(self.webView)
+        
+        let request = URLRequest(url: url)
+        
+        self.webView.loadRequest(request)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {

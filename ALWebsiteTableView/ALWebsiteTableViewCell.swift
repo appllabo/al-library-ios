@@ -20,16 +20,18 @@ class ALWebsiteTableViewCell : UITableViewCell {
         
 		super.init(style: .default, reuseIdentifier: "ALWebsiteTableViewCell")
 		
-		self.imageView?.layer.masksToBounds = true
-		self.imageView?.layer.borderColor = UIColor.clear.cgColor
-		self.imageView?.layer.borderWidth = 0
-		self.imageView?.layer.cornerRadius = setting.radiusImage
+        self.imageView?.run {
+            $0.layer.masksToBounds = true
+            $0.layer.borderColor = UIColor.clear.cgColor
+            $0.layer.borderWidth = 0
+            $0.layer.cornerRadius = setting.radiusImage
+        }
 		
         if let url = website.urlImage {
-            let urlRequest = URLRequest(url: url)
+            let request = URLRequest(url: url)
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: self.setting.sizeImage, radius: self.setting.radiusImage)
             
-            ImageDownloader.default.download(urlRequest, filter: filter) {[weak self] response in
+            ImageDownloader.default.download(request, filter: filter) { [weak self] response in
                 if let image = response.result.value {
                     self?.imageView?.image = image
                     
@@ -38,9 +40,12 @@ class ALWebsiteTableViewCell : UITableViewCell {
             }
         }
         
-		self.textLabel?.text = website.name
-        self.textLabel?.font = setting.font
-        self.textLabel?.textColor = setting.colorText
+        self.textLabel?.run {
+            $0.text = website.name
+            $0.font = setting.font
+            $0.textColor = setting.colorText
+        }
+        
 		self.accessoryType = .disclosureIndicator
 	}
 	

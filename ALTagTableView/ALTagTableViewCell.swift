@@ -40,10 +40,10 @@ class ALTagTableViewCell : UITableViewCell {
         self.imageView?.tintColor = setting.tintColor
         
         if let url = self.data.urlImage, self.imageView?.image == nil {
-            let urlRequest = URLRequest(url: url)
+            let request = URLRequest(url: url)
             let filter = AspectScaledToFillSizeFilter(size: CGSize(width: 20, height: 20))
 
-            ImageDownloader.default.download(urlRequest, filter: filter) {[weak self] response in
+            ImageDownloader.default.download(request, filter: filter) { [weak self] response in
                 if let image = response.result.value {
                     self?.imageView?.image = image.withRenderingMode(.alwaysTemplate)
                     
@@ -52,9 +52,11 @@ class ALTagTableViewCell : UITableViewCell {
             }
         }
         
-        self.textLabel?.text = self.data.name
-        self.textLabel?.font = setting.fontText
-        self.textLabel?.textColor = setting.colorText
+        self.textLabel?.run {
+            $0.text = self.data.name
+            $0.font = setting.fontText
+            $0.textColor = setting.colorText
+        }
         
         self.accessoryType = .disclosureIndicator
     }
