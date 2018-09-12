@@ -14,14 +14,14 @@ class ALPercentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition
             return
         }
 		
-		let containerView = transitionContext.containerView
+        let containerView = transitionContext.containerView.apply {
+            $0.insertSubview(toView, belowSubview: fromView)
+        }
 		
-		containerView.insertSubview(toView, belowSubview: fromView)
-		
-		let colorView = UIView(frame: containerView.frame)
-        
-		colorView.backgroundColor = .black
-		colorView.layer.opacity = 0.1
+        let colorView = UIView(frame: containerView.frame).apply {
+            $0.backgroundColor = .black
+            $0.layer.opacity = 0.1
+        }
         
 		containerView.insertSubview(colorView, aboveSubview: toView)
 		
@@ -29,18 +29,17 @@ class ALPercentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition
 		
 		fromView.frame = containerView.frame
 		fromView.transform = .identity
+        fromView.layer.masksToBounds = false
+        fromView.layer.shadowRadius = 3.0
+        fromView.layer.shadowOffset = CGSize(width: -4.0, height: 0.0)
+        fromView.layer.shadowOpacity = 0.2
         
 		toView.frame = containerView.frame
 		toView.transform = CGAffineTransform(translationX: offset, y: 0)
 		
-		fromView.layer.masksToBounds = false
-		fromView.layer.shadowRadius = 3.0
-		fromView.layer.shadowOffset = CGSize(width: -4.0, height: 0.0)
-		fromView.layer.shadowOpacity = 0.2
+		let duration = transitionDuration(using: transitionContext)
 		
-		let aniDuration = transitionDuration(using: transitionContext)
-		
-		UIView.animate(withDuration: aniDuration, delay: 0, options: .curveLinear, animations: {
+		UIView.animate(withDuration: duration, delay: 0, options: .curveLinear, animations: {
 			fromView.transform = CGAffineTransform(translationX: containerView.frame.width, y: 0)
 			toView.transform = .identity
 			colorView.layer.opacity = 0.0

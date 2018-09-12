@@ -11,14 +11,16 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
     override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
         super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
         
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.cellLayoutMarginsFollowReadableWidth = false
-        self.tableView.backgroundColor = .clear
-        
-        self.tableView.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
-            self.pullToRefresh()
-        })
+        self.tableView.apply {
+            $0.delegate = self
+            $0.dataSource = self
+            $0.cellLayoutMarginsFollowReadableWidth = false
+            $0.backgroundColor = .clear
+        }.run {
+            $0.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
+                self.pullToRefresh()
+            })
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -32,28 +34,33 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
         
         super.viewDidLoad()
         
-        self.tableView.frame = self.view.frame
-        
-        let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-        let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-        
-        self.tableView.contentInset.top = heightStatusBar + heightNavigationBar
-        self.tableView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-        
-        self.tableView.contentInset.top += self.contentInsetTop
-        self.tableView.scrollIndicatorInsets.top += self.contentInsetTop
-        
-        if let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg"), let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg") {
-			svgCircleWhite.size = CGSize(width: 24, height: 24)
-			svgCircleLight.size = CGSize(width: 24, height: 24)
-			
-			let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
-			
-			if let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight.uiImage, frontImage: svgCircleWhite.uiImage.change(color: self.view.tintColor)) {
-				self.tableView.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
-				self.tableView.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
-			}
-		}
+        self.tableView.run {
+            $0.frame = self.view.frame
+            
+            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+            
+            $0.contentInset.top = heightStatusBar + heightNavigationBar
+            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+            
+            $0.contentInset.top += self.contentInsetTop
+            $0.scrollIndicatorInsets.top += self.contentInsetTop
+            
+            let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
+                $0.size = CGSize(width: 24, height: 24)
+            }
+            
+            let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")?.apply {
+                $0.size = CGSize(width: 24, height: 24)
+            }
+                
+            let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
+            
+            if let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight?.uiImage, frontImage: svgCircleWhite?.uiImage.change(color: self.view.tintColor)) {
+                $0.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
+                $0.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)
+            }
+        }
         
         self.view.addSubview(self.tableView)
     }
@@ -81,7 +88,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
     }
     
     func refresh() {
-        self.load(done: nil)
+        self.load()
     }
     
     func pullToRefresh() {
@@ -100,7 +107,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 }
 
 extension ALTagTableViewController {
-    func load(done: (() -> Void)?) {
+    func load(done: (() -> Void)? = nil) {
     }
 }
 

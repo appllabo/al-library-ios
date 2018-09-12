@@ -22,13 +22,13 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 			$0.addObserver(self, forKeyPath: "loading", options: .new, context: nil)
 			$0.addObserver(self, forKeyPath: "canGoBack", options: .new, context: nil)
 			$0.addObserver(self, forKeyPath: "canGoForward", options: .new, context: nil)
-			
-			let request = URLRequest(url: url)
-			
-			$0.load(request)
-			
-			self.view.addSubview($0)
 		}
+        
+        let request = URLRequest(url: url)
+        
+        self.webView.load(request)
+        
+        self.view.addSubview(self.webView)
 		
 		self.activityIndicator.run {
 			$0.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
@@ -36,8 +36,9 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 			$0.hidesWhenStopped = true
 			$0.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
 			$0.startAnimating()
-	//		self.webView.addSubview($0)
 		}
+        
+//        self.webView.addSubview(self.activityIndicator)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -63,14 +64,16 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		
 		super.viewDidLoad()
 		
-		let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-		let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-		
-		self.webView.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
-		self.webView.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-		
-        self.webView.scrollView.contentInset.top += self.contentInsetTop
-        self.webView.scrollView.scrollIndicatorInsets.top += self.contentInsetTop
+		self.webView.run {
+            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+            
+            $0.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
+            $0.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+            
+            $0.scrollView.contentInset.top += self.contentInsetTop
+            $0.scrollView.scrollIndicatorInsets.top += self.contentInsetTop
+        }
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {

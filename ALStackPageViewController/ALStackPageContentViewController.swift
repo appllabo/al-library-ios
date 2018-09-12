@@ -26,28 +26,26 @@ class ALStackPageContentViewController: UIViewController {
 	}
 	
 	public var attributedTitleMain: NSMutableAttributedString {
-		let lineHeight = CGFloat(22.0)
 		let paragraphStyle = NSMutableParagraphStyle().apply {
 			$0.lineBreakMode = .byTruncatingTail
-			$0.minimumLineHeight = lineHeight
-			$0.maximumLineHeight = lineHeight
+			$0.minimumLineHeight = CGFloat(22.0)
+			$0.maximumLineHeight = CGFloat(22.0)
 		}
 		
-		return NSMutableAttributedString(string: self.title ?? "Main").apply {
-			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
+		return NSMutableAttributedString(string: self.title ?? "Main").apply { string in
+			string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
 		}
 	}
 	
 	public var attributedTitleSub: NSMutableAttributedString {
-		let lineHeight = CGFloat(22.0)
 		let paragraphStyle = NSMutableParagraphStyle().apply {
 			$0.lineBreakMode = .byTruncatingTail
-			$0.minimumLineHeight = lineHeight
-			$0.maximumLineHeight = lineHeight
+			$0.minimumLineHeight = CGFloat(22.0)
+			$0.maximumLineHeight = CGFloat(22.0)
 		}
 		
-		return NSMutableAttributedString(string: self.title ?? "Sub").apply {
-			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
+		return NSMutableAttributedString(string: self.title ?? "Sub").apply { string in
+			string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
 		}
 	}
     
