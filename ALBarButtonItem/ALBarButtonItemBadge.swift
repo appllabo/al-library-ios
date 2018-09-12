@@ -5,15 +5,15 @@ class ALBarButtonItemBadge : NSObject {
 	var value = ""
 	var backgroundColor = UIColor.red
 	var textColor = UIColor.white
-	var font = UIFont.systemFont(ofSize: 12.0)
-	var padding = CGFloat(6.0)
-	var paddingX = CGFloat(6.0)
-	var paddingY = CGFloat(6.0)
-	var minSize = CGFloat(8.0)
-	var originX = CGFloat(0.0)
-	var originY = CGFloat(-4.0)
+	var font = UIFont.systemFont(ofSize: 11.0)
+	var origin = CGPoint(x: 0.0, y: 0.0)
+	var marginX = CGFloat(0.0)
+	var marginY = CGFloat(2.0)
+	var paddingX = CGFloat(8.0)
+	var paddingY = CGFloat(2.0)
 	var shouldHideAtZero = false
 	var shouldAnimate = true
+	var duration = 0.2
 }
 
 extension UIBarButtonItem {
@@ -22,20 +22,28 @@ extension UIBarButtonItem {
 		
 		badge.label?.removeFromSuperview()
 		
-		let label = UILabel(frame: CGRect(x: badge.originX, y: badge.originY, width: 20, height: 20)).apply {
-			badge.label = $0
-			
-			$0.textAlignment = .center
-		}
-		
 		if let customView = self.customView {
-			badge.originX = customView.frame.size.width - label.frame.size.width / 2
+			badge.origin = CGPoint(x: customView.frame.size.width, y: 0.0)
+			
+			let label = UILabel(frame: CGRect(x: badge.origin.x, y: badge.origin.y, width: 0.0, height: 0.0)).apply {
+				$0.layer.masksToBounds = true
+				$0.textAlignment = .center
+			}
+			
+			badge.label = label
 			
 			customView.clipsToBounds = false
 			
 			customView.addSubview(label)
 		} else if let view = self.value(forKey: "view") as? UIView {
-			badge.originX = view.frame.size.width - label.frame.size.width
+			badge.origin = CGPoint(x: view.frame.size.width, y: 0.0)
+			
+			let label = UILabel(frame: CGRect(x: badge.origin.x, y: badge.origin.y, width: 0.0, height: 0.0)).apply {
+				$0.layer.masksToBounds = true
+				$0.textAlignment = .center
+			}
+			
+			badge.label = label
 			
 			view.addSubview(label)
 		}
@@ -67,46 +75,22 @@ extension UIBarButtonItem {
 		}
 	}
 	
-	func badgeExpectedSize(badge: ALBarButtonItemBadge) -> CGSize {
-		// When the value changes the badge could need to get bigger
-		// Calculate expected size to fit new value
-		// Use an intermediate label to get expected size thanks to sizeToFit
-		// We don't call sizeToFit on the true label to avoid bad display
-		guard let frameLabel = duplicate(badge.label, badge: badge) else {
-			return CGSize.zero
-		}
-	
-		frameLabel.sizeToFit()	
+	func updateBadgeFrame(label: UILabel, badge: ALBarButtonItemBadge) {
+		let sizeContent = UILabel(frame: label.frame).apply {
+			$0.text = label.text
+			$0.font = label.font
 			
-		return frameLabel.frame.size
-	}
-	
-	func updateBadgeFrame(badge: ALBarButtonItemBadge) {
-		guard let label = badge.label else {
-			return
-		}
+			$0.sizeToFit()
+		}.frame.size
 		
-		let expectedLabelSize = self.badgeExpectedSize(badge: badge)
+		let height = sizeContent.height + badge.paddingY
+		let width = sizeContent.width + badge.paddingX > height ? sizeContent.width + badge.paddingX : height
 		
-//		let minHeight = expectedLabelSize.height < badge.minSize ? badge.minSize : expectedLabelSize.height
-//		
-//		let minWidth = expectedLabelSize.width < minHeight ? minHeight : expectedLabelSize.width
-//		
-//		label.layer.masksToBounds = true
-//		label.frame = CGRect(x: badge.originX, y: badge.originY, width: minWidth + badge.paddingX, height: minHeight + badge.paddingY)
-//		label.layer.cornerRadius = (minHeight + badge.paddingY) / 2
+		let x = badge.origin.x + badge.marginX - width / 2.0
+		let y = badge.origin.y + badge.marginY
 		
-		var minHeight = expectedLabelSize.height
-		
-		minHeight = (minHeight < badge.minSize) ? badge.minSize : expectedLabelSize.height
-		
-		var minWidth = expectedLabelSize.width
-		
-		minWidth = (minWidth < minHeight) ? minHeight : expectedLabelSize.width
-		
-		label.layer.masksToBounds = true
-		label.frame = CGRect(x: badge.originX, y: badge.originY, width: minWidth + badge.padding, height: minHeight + badge.padding)
-		label.layer.cornerRadius = (minHeight + badge.padding) / 2
+		label.frame = CGRect(x: x, y: y, width: width, height: height)
+		label.layer.cornerRadius = height / 2.0
 	}
 	
 	func updateBadgeValue(badge: ALBarButtonItemBadge) {
@@ -118,7 +102,7 @@ extension UIBarButtonItem {
 			let animation = CABasicAnimation(keyPath: "transform.scale").apply {
 				$0.fromValue = 1.5
 				$0.toValue = 1
-				$0.duration = 0.2
+				$0.duration = badge.duration
 				$0.timingFunction = CAMediaTimingFunction(controlPoints: 0.4, 1.3, 1.0, 1.0)
 			}
 			
@@ -128,86 +112,36 @@ extension UIBarButtonItem {
 		label.text = badge.value
 		
 		if badge.shouldAnimate {
-			UIView.animate(withDuration: 0.2, animations: {
-				self.updateBadgeFrame(badge: badge)
+			let sizeContent = UILabel(frame: label.frame).apply {
+				$0.text = label.text
+				$0.font = label.font
+				
+				$0.sizeToFit()
+			}.frame.size
+			
+			let height = sizeContent.height + badge.paddingY
+			
+			let x = badge.origin.x + badge.marginX
+			let y = badge.origin.y + badge.marginY + height / 2.0
+			
+			label.frame = CGRect(x: x, y: y, width: 0, height: 0)
+			label.layer.cornerRadius = 0.0
+			
+			UIView.animate(withDuration: badge.duration, animations: {
+				self.updateBadgeFrame(label: label, badge: badge)
 			})
 		} else {
-			self.updateBadgeFrame(badge: badge)
-		}
-	}
-	
-	func duplicate(_ labelToCopy: UILabel?, badge: ALBarButtonItemBadge) -> UILabel? {
-		guard let label = labelToCopy else {
-			return nil
-		}
-		
-		return UILabel(frame: label.frame).apply {
-			$0.text = label.text
-			$0.font = label.font
+			self.updateBadgeFrame(label: label, badge: badge)
 		}
 	}
 	
 	func removeBadge(badge: ALBarButtonItemBadge) {
-		UIView.animate(withDuration: 0.2, animations: {
+		UIView.animate(withDuration: badge.duration, animations: {
 			badge.label?.transform = CGAffineTransform(scaleX: 0, y: 0)
 		}, completion: { _ in
 			badge.label?.removeFromSuperview()
 			
 			badge.label = nil
 		})
-	}
-	
-	func set(backgroundColor: UIColor, badge: ALBarButtonItemBadge) {
-		badge.backgroundColor = backgroundColor
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(textColor: UIColor, badge: ALBarButtonItemBadge) {
-		badge.textColor = textColor
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(font: UIFont, badge: ALBarButtonItemBadge) {
-		badge.font = font
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(padding: CGFloat, badge: ALBarButtonItemBadge) {
-		badge.padding = padding
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(minSize: CGFloat, badge: ALBarButtonItemBadge) {
-		badge.minSize = minSize
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(originX: CGFloat, badge: ALBarButtonItemBadge) {
-		badge.originX = originX
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(originY: CGFloat, badge: ALBarButtonItemBadge) {
-		badge.originY = originY
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(shouldHideAtZero: Bool, badge: ALBarButtonItemBadge) {
-		badge.shouldHideAtZero = shouldHideAtZero
-		
-		self.refreshBadge(badge: badge)
-	}
-	
-	func set(shouldAnimate: Bool, badge: ALBarButtonItemBadge) {
-		badge.shouldAnimate = shouldAnimate
-		
-		self.refreshBadge(badge: badge)
 	}
 }
