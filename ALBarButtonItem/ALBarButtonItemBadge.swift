@@ -11,7 +11,7 @@ class ALBarButtonItemBadge : NSObject {
 	var marginY = CGFloat(2.0)
 	var paddingX = CGFloat(8.0)
 	var paddingY = CGFloat(2.0)
-	var shouldHideAtZero = false
+	var shouldHideAtZero = true
 	var shouldAnimate = true
 	var duration = 0.2
 }
