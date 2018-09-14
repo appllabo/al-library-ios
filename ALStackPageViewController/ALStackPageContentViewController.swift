@@ -32,8 +32,8 @@ class ALStackPageContentViewController: UIViewController {
 			$0.maximumLineHeight = CGFloat(22.0)
 		}
 		
-		return NSMutableAttributedString(string: self.title ?? "Main").apply { string in
-			string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
+		return NSMutableAttributedString(string: self.title ?? "Main").apply {
+			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
 		}
 	}
 	
@@ -44,8 +44,8 @@ class ALStackPageContentViewController: UIViewController {
 			$0.maximumLineHeight = CGFloat(22.0)
 		}
 		
-		return NSMutableAttributedString(string: self.title ?? "Sub").apply { string in
-			string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
+		return NSMutableAttributedString(string: self.title ?? "Sub").apply {
+			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
 		}
 	}
     
