@@ -94,9 +94,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     }
     
     func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
-        return (tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)).apply {
-            $0.alArticle = alArticle
-        }
+        return tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)
     }
     
     func getCellHeight(width: CGFloat) -> CGFloat {
@@ -144,7 +142,11 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return self.cell(alArticle: self.articles[indexPath.row])
+        let article = self.articles[indexPath.row]
+        
+        return self.cell(alArticle: article).apply {
+            $0.alArticle = article
+        }
 	}
 	
 	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
