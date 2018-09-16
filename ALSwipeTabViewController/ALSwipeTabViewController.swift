@@ -1,16 +1,6 @@
 import XLPagerTabStrip
 
 class ALSwipeTabViewController: ButtonBarPagerTabStripViewController {
-    internal var heightTabBar: CGFloat {
-        var height = self.tabBarController?.tabBar.frame.size.height ?? 0
-        
-        if #available(iOS 11.0, *) {
-            height = self.view.safeAreaInsets.bottom
-        }
-        
-        return height
-    }
-    
 	internal var swipeTabContentViewControllers = [ALSwipeTabContentViewController]()
 	
 	init() {

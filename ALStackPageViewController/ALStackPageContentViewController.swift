@@ -1,30 +1,6 @@
 import UIKit
 
 class ALStackPageContentViewController: UIViewController {
-	internal var contentInsetTop: CGFloat {
-		return 0.0
-	}
-	
-	internal var contentInsetBottom: CGFloat {
-		return 0.0
-	}
-	
-	internal var heightTabBar: CGFloat {
-		if #available(iOS 11.0, *) {
-			return self.view.safeAreaInsets.bottom
-		} else {
-			return self.tabBarController?.tabBar.frame.size.height ?? 0
-		}
-	}
-	
-	internal var safeAreaInsetsBottom: CGFloat {
-		if #available(iOS 11.0, *) {
-			return self.view.safeAreaInsets.bottom
-		} else {
-			return CGFloat(0.0)
-		}
-	}
-	
 	public var attributedTitleMain: NSMutableAttributedString {
 		let paragraphStyle = NSMutableParagraphStyle().apply {
 			$0.lineBreakMode = .byTruncatingTail
@@ -32,8 +8,8 @@ class ALStackPageContentViewController: UIViewController {
 			$0.maximumLineHeight = CGFloat(22.0)
 		}
 		
-		return NSMutableAttributedString(string: self.title ?? "Main").apply { string in
-			string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
+		return NSMutableAttributedString(string: self.title ?? "Main").apply {
+			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
 		}
 	}
 	
@@ -44,8 +20,8 @@ class ALStackPageContentViewController: UIViewController {
 			$0.maximumLineHeight = CGFloat(22.0)
 		}
 		
-		return NSMutableAttributedString(string: self.title ?? "Sub").apply { string in
-			string.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, string.length))
+		return NSMutableAttributedString(string: self.title ?? "Sub").apply {
+			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
 		}
 	}
     

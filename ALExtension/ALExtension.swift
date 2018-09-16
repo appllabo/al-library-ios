@@ -79,3 +79,37 @@ extension UIImage {
 		return image
 	}
 }
+
+extension UIViewController {
+	var heightStatusBar: CGFloat {
+		return UIApplication.shared.statusBarFrame.size.height
+	}
+	
+	var heightNavigationBar: CGFloat {
+		return self.navigationController?.navigationBar.frame.size.height ?? 0.0
+	}
+	
+	var heightTabBar: CGFloat {
+		if #available(iOS 11.0, *) {
+			return self.view.safeAreaInsets.bottom
+		}
+		
+		return self.tabBarController?.tabBar.frame.size.height ?? 0.0
+	}
+	
+	var heightToolBar: CGFloat {
+		if #available(iOS 11.0, *) {
+			return self.view.safeAreaInsets.bottom
+		}
+		
+		return self.navigationController?.toolbar.frame.size.height ?? 0.0
+	}
+	
+	var contentInsetTop: CGFloat {
+		return 0.0
+	}
+	
+	var contentInsetBottom: CGFloat {
+		return 0.0
+	}
+}
