@@ -28,8 +28,6 @@ class ALImagePageViewController: UIPageViewController {
 	}
 	
 	override func viewDidLoad() {
-		self.automaticallyAdjustsScrollViewInsets = false
-		
 		super.viewDidLoad()
 	}
 	
