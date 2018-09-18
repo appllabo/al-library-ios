@@ -5,7 +5,9 @@ import INSPullToRefresh
 class ALArticleTableViewController : ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 
-    fileprivate let cellSetting = ALArticleTableViewCellSetting()
+    internal var separatorInset: UIEdgeInsets? {
+        return nil
+    }
     
 	internal var articles = [ALArticle]()
     internal var articlesAdd = [ALArticle]()
@@ -17,11 +19,6 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
             $0.delegate = self
             $0.dataSource = self
             $0.cellLayoutMarginsFollowReadableWidth = false
-            $0.backgroundColor = .clear
-            
-            if let separatorInset = self.cellSetting.separatorInset {
-                $0.separatorInset = separatorInset
-            }
         }.run {
             $0.ins_addPullToRefresh(withHeight: 60.0, handler: { _ in
                 self.pullToRefresh()
@@ -43,6 +40,11 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
         self.tableView.run {
             $0.frame = self.view.frame
             $0.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
+            $0.backgroundColor = .clear
+            
+            if let separatorInset = self.separatorInset {
+                $0.separatorInset = separatorInset
+            }
             
             let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
             let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
@@ -94,7 +96,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     }
     
     func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: self.cellSetting)
+        return tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: ALArticleTableViewCellSetting())
     }
     
     func getCellHeight(width: CGFloat) -> CGFloat {

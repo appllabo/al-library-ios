@@ -6,7 +6,7 @@ public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
         return "ALTagArticle"
     }
     
-    public override var separatorInset: UIEdgeInsets? {
+    public override var separatorInset: UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: self.paddingThumbnail.left, bottom: 0, right: 0)
     }
     

@@ -6,6 +6,10 @@ public class ALThumbnailArticleTableViewCellSetting : ALArticleTableViewCellSett
         return "ALThumbnailArticle"
     }
     
+    public override var separatorInset: UIEdgeInsets {
+        return UIEdgeInsets(top: 0, left: self.paddingThumbnail.left, bottom: 0, right: 0)
+    }
+    
     public var sizeThumbnail = CGSize(width: 102.0, height: 102.0)
 	public var paddingThumbnail = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 	public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
