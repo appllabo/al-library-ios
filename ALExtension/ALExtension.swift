@@ -17,7 +17,7 @@ extension ALScope {
 extension NSObject: ALScope { }
 
 extension UIColor {
-	convenience init(hex: Int, alpha: CGFloat) {
+	convenience init(hex: Int, alpha: CGFloat = 1.0) {
 		let r = CGFloat((hex & 0xFF0000) >> 16) / 255.0
 		let g = CGFloat((hex & 0x00FF00) >> 8) / 255.0
 		let b = CGFloat(hex & 0x0000FF) / 255.0
@@ -25,7 +25,7 @@ extension UIColor {
 		self.init(red: r, green: g, blue: b, alpha: alpha)
 	}
 	
-	convenience init(hex1: Int, hex2: Int, blend: CGFloat, alpha: CGFloat) {
+	convenience init(hex1: Int, hex2: Int, blend: CGFloat, alpha: CGFloat = 1.0) {
 		let r1 = CGFloat((hex1 & 0xFF0000) >> 16) / 255.0
 		let g1 = CGFloat((hex1 & 0x00FF00) >> 8) / 255.0
 		let b1 = CGFloat(hex1 & 0x0000FF) / 255.0
