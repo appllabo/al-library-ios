@@ -81,10 +81,6 @@ extension UIImage {
 }
 
 extension UIViewController {
-	var heightStatusBar: CGFloat {
-		return UIApplication.shared.statusBarFrame.size.height
-	}
-	
 	var heightNavigationBar: CGFloat {
 		return self.navigationController?.navigationBar.frame.size.height ?? 0.0
 	}

@@ -54,13 +54,12 @@ public class ALArticleTableViewCell : UITableViewCell {
     }
     
     internal func layout(alArticle: ALArticle) {
+        self.textLabel?.text = alArticle.title
     }
     
     internal func read() {
-        
     }
     
     internal func unread() {
-        
     }
 }
