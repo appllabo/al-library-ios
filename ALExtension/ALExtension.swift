@@ -132,12 +132,12 @@ extension UIViewController {
 		
 		switch panGesture.state {
 		case .began:
-			navigationController?.delegate = self
-			_ = navigationController?.popViewController(animated: true)
+			self.navigationController?.delegate = self as? UINavigationControllerDelegate
+			_ = self.navigationController?.popViewController(animated: true)
 			
 		case .changed:
-			if let percentDrivenInteractiveTransition = self.percentDrivenInteractiveTransition {
-				percentDrivenInteractiveTransition.update(percent)
+			if let transition = self.percentDrivenInteractiveTransition {
+				transition.update(percent)
 			}
 			
 			self.view.layer.shadowOpacity = Float((1.0 - percent) * 0.2)
