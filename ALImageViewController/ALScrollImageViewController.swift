@@ -97,9 +97,7 @@ class ALScrollImageViewController: UIViewController {
 	}
 	
 	func setImage(data: Data) {
-		guard let image = (autoreleasepool {
-			return UIImage.animatedImage(withAnimatedGIFData: data)
-		}) else {
+		guard let image = (autoreleasepool { UIImage.animatedImage(withAnimatedGIFData: data) }) else {
 			print("failed create image")
 			
 			return

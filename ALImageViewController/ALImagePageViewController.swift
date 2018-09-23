@@ -29,18 +29,8 @@ class ALImagePageViewController: UIPageViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-	}
-	
-	override func viewDidDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
+		
+		self.refreshPageNumber()
 	}
 	
 	func next() {
@@ -69,7 +59,7 @@ class ALImagePageViewController: UIPageViewController {
 		}
 	}
 	
-	func setImageIndex(_ index: Int) -> Bool {
+	func setImage(index: Int) -> Bool {
 		self.index = index
 		
 		if self.index < self.urls.count {
@@ -116,7 +106,7 @@ class ALImagePageViewController: UIPageViewController {
 				print(error)
 			}
 			
-			self.saveFiles([urlTemp]) { _ in
+			self.saveFiles(paths: [urlTemp]) { _ in
 				done?(url)
 			}
 		}.resume()
@@ -156,7 +146,7 @@ class ALImagePageViewController: UIPageViewController {
 				
 				if paths.count == self.urls.count {
 					DispatchQueue.main.async {
-						self.saveFiles(paths) { _ in
+						self.saveFiles(paths: paths) { _ in
 							done?()
 						}
 					}
@@ -167,7 +157,7 @@ class ALImagePageViewController: UIPageViewController {
 		}
 	}
 	
-	private func saveFiles(_ paths: [URL], done: (() -> Void)? = nil) {
+	private func saveFiles(paths: [URL], done: (() -> Void)? = nil) {
 		let list = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.album, subtype: PHAssetCollectionSubtype.any, options: nil)
 		
 		var assetAlbum: PHAssetCollection?
@@ -198,7 +188,7 @@ class ALImagePageViewController: UIPageViewController {
 				
 				print("アルバム作成完了")
 				
-				self.saveFiles(paths, done: done)
+				self.saveFiles(paths: paths, done: done)
 			}
 			
 			return
