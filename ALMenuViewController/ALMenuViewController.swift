@@ -5,7 +5,7 @@ public class ALMenuTableViewCellSetting : NSObject {
     public var color = UIColor.black
 }
 
-class ALMenuViewController: ALSwipeTabContentViewController {
+class ALMenuViewController : ALSwipeTabContentViewController {
 	internal let tableView = UITableView(frame: CGRect.zero, style: .grouped)
 	
     internal let setting: ALMenuTableViewCellSetting
@@ -14,7 +14,7 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		case String(String)
 		case Array([SectionData])
 		case Dictionary([String: SectionData])
-		case Closure((_ tableView: UITableView, _ indexPath: IndexPath) -> Void)
+		case Closure((UITableView, IndexPath) -> Void)
 	}
 	
 	internal var sections: [[String: SectionData]] {
@@ -29,7 +29,6 @@ class ALMenuViewController: ALSwipeTabContentViewController {
         self.tableView.run {
             $0.delegate = self
             $0.dataSource = self
-            $0.backgroundColor = .clear
             $0.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         }
 	}
@@ -47,6 +46,7 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 		
         self.tableView.run {
             $0.frame = self.view.frame
+			$0.backgroundColor = .clear
             
             let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
             let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
@@ -83,9 +83,11 @@ class ALMenuViewController: ALSwipeTabContentViewController {
 
 extension ALMenuViewController {	
 	internal func deselectRow() {
-		if let indexPath = self.tableView.indexPathForSelectedRow {
-			self.tableView.deselectRow(at: indexPath, animated: true)
+		guard let indexPath = self.tableView.indexPathForSelectedRow else {
+			return
 		}
+		
+		self.tableView.deselectRow(at: indexPath, animated: true)
 	}
 }
 
