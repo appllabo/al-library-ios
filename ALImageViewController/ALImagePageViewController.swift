@@ -52,7 +52,7 @@ class ALImagePageViewController: UIPageViewController {
 				$0.view.tag = self.index
 			}
 			
-			self.setViewControllers([viewController], direction: .forward, animated: true, completion: nil)
+			self.setViewControllers([viewController], direction: .forward, animated: true)
 		}
 	}
 	
@@ -65,7 +65,7 @@ class ALImagePageViewController: UIPageViewController {
 				$0.view.tag = self.index
 			}
 			
-			self.setViewControllers([viewController], direction: .reverse, animated: true, completion: nil)
+			self.setViewControllers([viewController], direction: .reverse, animated: true)
 		}
 	}
 	
@@ -79,7 +79,7 @@ class ALImagePageViewController: UIPageViewController {
 				$0.view.tag = self.index
 			}
 			
-			self.setViewControllers([viewController], direction: .forward, animated: true, completion: nil)
+			self.setViewControllers([viewController], direction: .forward, animated: true)
 			
 			self.refreshPageNumber()
 			
@@ -98,14 +98,14 @@ class ALImagePageViewController: UIPageViewController {
 		self.navigationController?.setNavigationBarHidden(false, animated: true)
 	}
 	
-	func saveOne(done: ((_ url: URL) -> Void)? = nil) {
+	func saveOne(done: ((URL) -> Void)? = nil) {
 		let url = self.urls[self.index]
 		
-		URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in		
+		URLSession.shared.dataTask(with: url) { data, response, error in		
 			guard let data = data else {
 				return
 			}
-
+			
 			guard let urlTemp = NSURL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent("tmp.gif") else {
 				return
 			}
@@ -116,10 +116,10 @@ class ALImagePageViewController: UIPageViewController {
 				print(error)
 			}
 			
-			self.saveFiles([urlTemp], done: { _ in
+			self.saveFiles([urlTemp]) { _ in
 				done?(url)
-			})
-		}).resume()
+			}
+		}.resume()
 	}
 	
 	func saveAll(done: (() -> Void)? = nil) {
@@ -129,7 +129,7 @@ class ALImagePageViewController: UIPageViewController {
 		for (i, url) in self.urls.enumerated() {
 			print(url)
 			
-			URLSession.shared.dataTask(with: url as URL, completionHandler: { data, response, error in				
+			URLSession.shared.dataTask(with: url) { data, response, error in				
 				OSSpinLockLock(&spinLock)
 				
 				guard let pathTemp = NSURL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true).appendingPathComponent("tmp\(i).gif") else {
@@ -155,13 +155,15 @@ class ALImagePageViewController: UIPageViewController {
 				print("\(i):\(paths.count)")
 				
 				if paths.count == self.urls.count {
-					self.saveFiles(paths, done: { _ in
-						done?()
-					})
+					DispatchQueue.main.async {
+						self.saveFiles(paths) { _ in
+							done?()
+						}
+					}
 				}
 				
 				OSSpinLockUnlock(&spinLock)
-			}).resume()
+			}.resume()
 		}
 	}
 	
@@ -170,52 +172,18 @@ class ALImagePageViewController: UIPageViewController {
 		
 		var assetAlbum: PHAssetCollection?
 		
-		list.enumerateObjects({ album, index, isStop in
+		list.enumerateObjects { album, index, isStop in
 			if album.localizedTitle == AppParameter.AlbumName {
 				assetAlbum = album 
+				
 				isStop.pointee = true
 			}
-		})
+		}
 		
-		if let album = assetAlbum {
-			PHPhotoLibrary.shared().performChanges({
-				var assetPlaceholder = [PHObjectPlaceholder]()
-				
-				for pathTemp in paths {
-					guard let result = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: pathTemp) else {
-						continue
-					}
-					
-					guard let placeholderForCreatedAsset = result.placeholderForCreatedAsset else {
-						continue
-					}
-					
-					assetPlaceholder.append(placeholderForCreatedAsset)
-				}
-				
-				PHAssetCollectionChangeRequest(for: album)?.run {
-					$0.addAssets(assetPlaceholder as NSFastEnumeration)
-				}
-			}, completionHandler: { success, error in
-				print("Finished deleting asset.")
-				print(success)
-	
-				if let error = error {
-					print(error)
-					
-					if error._code == 2047 {
-						self.openSetting()
-					}
-					
-					return
-				}
-				
-				done?()
-			})
-		} else {
+		guard let album = assetAlbum else {
 			PHPhotoLibrary.shared().performChanges({
 				PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: AppParameter.AlbumName)
-			}, completionHandler: { success, error in
+			}) { success, error in
 				print(success)
 				
 				if let error = error {
@@ -231,7 +199,44 @@ class ALImagePageViewController: UIPageViewController {
 				print("アルバム作成完了")
 				
 				self.saveFiles(paths, done: done)
-			})
+			}
+			
+			return
+		}
+		
+		PHPhotoLibrary.shared().performChanges({
+			var assetPlaceholder = [PHObjectPlaceholder]()
+			
+			for pathTemp in paths {
+				guard let result = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: pathTemp) else {
+					continue
+				}
+				
+				guard let placeholderForCreatedAsset = result.placeholderForCreatedAsset else {
+					continue
+				}
+				
+				assetPlaceholder.append(placeholderForCreatedAsset)
+			}
+			
+			PHAssetCollectionChangeRequest(for: album)?.run {
+				$0.addAssets(assetPlaceholder as NSFastEnumeration)
+			}
+		}) { success, error in
+			print("Finished deleting asset.")
+			print(success)
+
+			if let error = error {
+				print(error)
+				
+				if error._code == 2047 {
+					self.openSetting()
+				}
+				
+				return
+			}
+			
+			done?()
 		}
 	}
 	
@@ -240,20 +245,20 @@ class ALImagePageViewController: UIPageViewController {
 		let message = "設定画面を開きます。写真へのアクセスを許可してから再度保存してください。"		
 		
 		let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert).apply {
-			let ok = UIAlertAction(title: "はい", style: .default, handler: { action in
+			let ok = UIAlertAction(title: "はい", style: .default) { action in
 				guard let url = URL(string: UIApplicationOpenSettingsURLString) else {
 					return
 				}
 				
 				UIApplication.shared.openURL(url)
-			})
-			let cancel = UIAlertAction(title: "キャンセル", style: .cancel, handler: nil)
+			}
+			let cancel = UIAlertAction(title: "キャンセル", style: .cancel)
 
 			$0.addAction(ok)
 			$0.addAction(cancel)
 		}
 		
-		self.present(alertController, animated: true, completion: nil)
+		self.present(alertController, animated: true)
 	}
 }
 

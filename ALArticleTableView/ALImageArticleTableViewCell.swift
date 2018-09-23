@@ -135,15 +135,18 @@ public class ALImageArticleTableViewCell : ALArticleTableViewCell {
             let heightThumbnail = widthThumbnail / 16 * 9
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filterThumbnail, block: { image in
-                if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
-                    
-                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                    self.imageViewThumbnail.image = image
-                }
-            })
+            alArticle.loadThumbnailImage(filter: filterThumbnail) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				let transition = CATransition().apply {
+					$0.type = kCATransitionFade
+				}
+				
+				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+				self.imageViewThumbnail.image = image
+            }
         }
         
         self.imageViewWebsite.image = nil
@@ -153,16 +156,18 @@ public class ALImageArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filterWebsite = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2.0, height: self.setting.radiusWebsiteImage * 2.0))
             
-            alArticle.loadWebsiteImage(filter: filterWebsite, block: { image in
-                if self.alArticle == alArticle {
-					let transition = CATransition().apply {
-                    	$0.type = kCATransitionFade
-					}
-                    
-                    self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
-                    self.imageViewWebsite.image = image
-                }
-            })
+            alArticle.loadWebsiteImage(filter: filterWebsite) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				let transition = CATransition().apply {
+					$0.type = kCATransitionFade
+				}
+				
+				self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
+				self.imageViewWebsite.image = image
+            }
         }
 	}
     

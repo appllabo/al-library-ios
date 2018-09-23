@@ -108,4 +108,55 @@ extension UIViewController {
 	var contentInsetBottom: CGFloat {
 		return 0.0
 	}
+	
+	var percentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition? {
+		get {
+			return nil
+		}
+		
+		set(value) {
+		}
+	}
+	
+	var panGestureRecognizer: UIPanGestureRecognizer? {
+		get {
+			return nil
+		}
+		
+		set(value) {
+		}
+	}
+	
+	func handlePanGesture(_ panGesture: UIPanGestureRecognizer) {
+		let percent = max(panGesture.translation(in: view).x, 0) / self.view.frame.width
+		
+		switch panGesture.state {
+		case .began:
+			navigationController?.delegate = self
+			_ = navigationController?.popViewController(animated: true)
+			
+		case .changed:
+			if let percentDrivenInteractiveTransition = self.percentDrivenInteractiveTransition {
+				percentDrivenInteractiveTransition.update(percent)
+			}
+			
+			self.view.layer.shadowOpacity = Float((1.0 - percent) * 0.2)
+			
+		case .ended:
+			let velocity = panGesture.velocity(in: view).x
+			
+			if percent >= 0.3 || velocity > 500 {
+				self.percentDrivenInteractiveTransition?.finish()
+			} else {
+				self.percentDrivenInteractiveTransition?.cancel()
+			}
+			
+		case .cancelled,
+			 .failed:
+			self.percentDrivenInteractiveTransition?.cancel()
+			
+		default:
+			break
+		}
+	}
 }

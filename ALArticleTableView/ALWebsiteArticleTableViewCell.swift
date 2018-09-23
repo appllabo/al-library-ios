@@ -132,15 +132,18 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filter, block: { image in
-                if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
-                    
-                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                    self.imageViewThumbnail.image = image
-                }
-            })
+            alArticle.loadThumbnailImage(filter: filter) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				let transition = CATransition().apply {
+					$0.type = kCATransitionFade
+				}
+				
+				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+				self.imageViewThumbnail.image = image
+            }
         }
         
         self.imageViewWebsite.image = nil
@@ -150,16 +153,18 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: self.setting.radiusWebsiteImage * 2.0, height: self.setting.radiusWebsiteImage * 2.0))
             
-            self.alArticle?.loadWebsiteImage(filter: filter, block: { image in
-                if self.alArticle == alArticle {
-					let transition = CATransition().apply {
-						$0.type = kCATransitionFade
-					}
-                    
-                    self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
-                    self.imageViewWebsite.image = image
-                }
-            })
+            self.alArticle?.loadWebsiteImage(filter: filter) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				let transition = CATransition().apply {
+					$0.type = kCATransitionFade
+				}
+				
+				self.imageViewWebsite.layer.add(transition, forKey: kCATransition)
+				self.imageViewWebsite.image = image
+            }
         }
     }
     

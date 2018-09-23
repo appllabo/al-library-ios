@@ -118,15 +118,18 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filterThumbnail = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: widthThumbnail, height: heightThumbnail), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filterThumbnail, block: { image in
-                if self.alArticle == alArticle {
-                    let transition = CATransition()
-                    transition.type = kCATransitionFade
-                    
-                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                    self.imageViewThumbnail.image = image
-                }
-            })
+            alArticle.loadThumbnailImage(filter: filterThumbnail) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				let transition = CATransition().apply {
+					$0.type = kCATransitionFade
+				}
+				
+				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+				self.imageViewThumbnail.image = image
+            }
         }
         
         self.imageViewWebsite.image = nil
@@ -136,16 +139,18 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeCircleFilter(size: CGSize(width: 100.0, height: 100.0))
             
-            alArticle.loadThumbnailImage(filter: filter, block: { image in
-                if self.alArticle == alArticle {
-					let transition = CATransition().apply {
-						$0.type = kCATransitionFade
-					}
-                    
-                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                    self.imageViewThumbnail.image = image
-                }
-            })
+            alArticle.loadThumbnailImage(filter: filter) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				let transition = CATransition().apply {
+					$0.type = kCATransitionFade
+				}
+				
+				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+				self.imageViewThumbnail.image = image
+            }
         }
     }
     

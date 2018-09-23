@@ -123,16 +123,18 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.sizeThumbnail.width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right, height: self.setting.sizeThumbnail.height - self.setting.paddingThumbnail.top - self.setting.paddingThumbnail.bottom), radius: self.setting.radiusThumbnail)
             
-            alArticle.loadThumbnailImage(filter: filter, block: { image in
-                if self.alArticle == alArticle {
-					let transition = CATransition().apply {
-						$0.type = kCATransitionFade
-					}
-                    
-                    self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
-                    self.imageViewThumbnail.image = image
-                }
-            })
+            alArticle.loadThumbnailImage(filter: filter) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				let transition = CATransition().apply {
+					$0.type = kCATransitionFade
+				}
+				
+				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
+				self.imageViewThumbnail.image = image
+            }
         }
         
         self.imageViewTag.image = nil
@@ -142,11 +144,13 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
         } else {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: CGSize(width: self.setting.radiusTagImage * 2.0, height: self.setting.radiusTagImage * 2.0), radius: 0.0)
             
-            alArticle.loadTagImage(filter: filter, block: { image in
-                if self.alArticle == alArticle {
-                    self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
-                }
-            })
+            alArticle.loadTagImage(filter: filter) { image in
+                if self.alArticle != alArticle {
+					return
+				}
+				
+				self.imageViewTag.image = image.withRenderingMode(.alwaysTemplate)
+            }
         }
     }
     

@@ -74,10 +74,10 @@ class ALScrollImageViewController: UIViewController {
 			$0.requestCachePolicy = .returnCacheDataElseLoad
 		}
 		
-		URLSession(configuration: configuration).dataTask(with: url, completionHandler: { data, response, error in
-			DispatchQueue.main.async(execute: {
+		URLSession(configuration: configuration).dataTask(with: url) { data, response, error in
+			DispatchQueue.main.async {
 				self.activityIndicatorView.stopAnimating()
-			})
+			}
 			
 			if let error = error {
 				print("failed get data")
@@ -90,10 +90,10 @@ class ALScrollImageViewController: UIViewController {
 				return
 			}
 			
-			DispatchQueue.main.async(execute: {
+			DispatchQueue.main.async {
 				self.setImage(data: data)
-			})
-		}).resume()
+			}
+		}.resume()
 	}
 	
 	func setImage(data: Data) {

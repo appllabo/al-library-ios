@@ -17,9 +17,9 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
             $0.cellLayoutMarginsFollowReadableWidth = false
             $0.backgroundColor = .clear
         }.run {
-            $0.ins_addPullToRefresh(withHeight: 60.0, handler: {scrollView in
+            $0.ins_addPullToRefresh(withHeight: 60.0) {scrollView in
                 self.pullToRefresh()
-            })
+            }
         }
     }
     

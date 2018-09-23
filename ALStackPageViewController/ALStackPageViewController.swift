@@ -11,7 +11,9 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
     
     internal let pageControl = UIPageControl()
     
-	internal var isEnableForward: Bool = false
+	internal var isEnableForward: Bool {
+		return self.index < self.contentViewControllers.count - 1
+	}
     
 	internal var colorTitleMain: UIColor {
 		return .init(hex: 0x000000, alpha: 1.0)
@@ -52,57 +54,63 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 		
-		self.setViewControllers(self.contentViewControllers, direction: .forward, animated: true, completion: nil)
+		self.setViewControllers(self.contentViewControllers, direction: .forward, animated: true)
 		
 		self.titleView.frame = titleViewFrame
 		
-		self.labelTitle.text = self.contentViewControllers[0].title
-		self.labelTitle.frame = self.titleView.frame
-		self.labelTitle.numberOfLines = 2
-		self.labelTitle.font = self.fontTitleMain
-		self.labelTitle.textColor = self.colorTitleMain
-		self.labelTitle.textAlignment = .center
+		self.labelTitle.run {
+			$0.text = self.contentViewControllers[0].title
+			$0.frame = self.titleView.frame
+			$0.numberOfLines = 2
+			$0.font = self.fontTitleMain
+			$0.textColor = self.colorTitleMain
+			$0.textAlignment = .center
+		}
 		
-        self.stackViewTitle.axis = .vertical
-        self.stackViewTitle.alignment = .center
-        self.stackViewTitle.distribution = .fillEqually
-        self.stackViewTitle.frame = CGRect(x: 0, y: 0, width: self.titleView.frame.width, height: 40)
-        self.stackViewTitle.alpha = 0.0
+		self.stackViewTitle.run {
+			$0.axis = .vertical
+			$0.alignment = .center
+			$0.distribution = .fillEqually
+			$0.frame = CGRect(x: 0, y: 0, width: self.titleView.frame.width, height: 40)
+			$0.alpha = 0.0
+		}
         
-        self.labelTitleSub.font = self.fontTitleSub
-        self.labelTitleSub.textColor = self.colorTitleSub
-        self.labelTitleSub.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleSub
+        self.labelTitleSub.run {
+			$0.font = self.fontTitleSub
+			$0.textColor = self.colorTitleSub
+			$0.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleSub
+		}
         
-        self.labelTitleMain.font = self.fontTitleMain
-        self.labelTitleMain.textColor = self.colorTitleMain
-        self.labelTitleMain.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleMain
+        self.labelTitleMain.run {
+			$0.font = self.fontTitleMain
+			$0.textColor = self.colorTitleMain
+			$0.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleMain
+	}
         
-        self.pageControl.pageIndicatorTintColor = self.pageIndicatorTintColor
-        self.pageControl.currentPageIndicatorTintColor = self.currentPageIndicatorTintColor
-        self.pageControl.backgroundColor = .clear
-        self.pageControl.numberOfPages = 1
-        self.pageControl.currentPage = self.index
-        self.pageControl.isUserInteractionEnabled = false
-        self.pageControl.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+        self.pageControl.run {
+			$0.pageIndicatorTintColor = self.pageIndicatorTintColor
+			$0.currentPageIndicatorTintColor = self.currentPageIndicatorTintColor
+			$0.backgroundColor = .clear
+			$0.numberOfPages = 1
+			$0.currentPage = self.index
+			$0.isUserInteractionEnabled = false
+			$0.transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+		}
         
-        self.stackViewTitle.addArrangedSubview(self.labelTitleSub)
-        self.stackViewTitle.addArrangedSubview(self.labelTitleMain)
+		self.stackViewTitle.run {
+			$0.addArrangedSubview(self.labelTitleSub)
+        	$0.addArrangedSubview(self.labelTitleMain)
+		}
         
-		self.titleView.addSubview(self.labelTitle)
-		self.titleView.addSubview(self.stackViewTitle)
-//        self.titleView.addSubview(self.stackViewNext)
+		self.titleView.run {
+			$0.addSubview(self.labelTitle)
+			$0.addSubview(self.stackViewTitle)
+//        	$0.addSubview(self.stackViewNext)
+		}
 		
 		self.navigationItem.titleView = self.titleView
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-	
 	func scrollContentView(_ scrollView: UIScrollView) {
 		if self.contentViewControllers.count == 1 {
 			if scrollView.contentOffset.y <= -scrollView.contentInset.top {
@@ -146,8 +154,7 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
         if self.index > 0 {
             let indexNext = self.index - 1
             
-            self.setViewControllers([self.contentViewControllers[indexNext]], direction: .reverse, animated: true) {bool -> Void in
-                self.isEnableForward = true
+            self.setViewControllers([self.contentViewControllers[indexNext]], direction: .reverse, animated: true) { bool in
                 self.index = indexNext
                 self.pageControl.currentPage = self.index
                 
@@ -156,6 +163,8 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 				} else {
 					self.disableGesture = false
 				}
+				
+				self.refreshPageNumber()
             }
         } else {
             self.navigationController?.popViewController(animated: true)
@@ -166,21 +175,17 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
         if self.index < self.contentViewControllers.count - 1 {
             let indexNext = self.index + 1
             
-            self.setViewControllers([self.contentViewControllers[indexNext]], direction: .forward, animated: true) {bool -> Void in
+            self.setViewControllers([self.contentViewControllers[indexNext]], direction: .forward, animated: true) { bool in
                 self.index = indexNext
                 self.pageControl.currentPage = self.index
-                
-                if indexNext == self.contentViewControllers.count - 1 {
-                    self.isEnableForward = false
-                } else {
-                    self.isEnableForward = true
-                }
                 
 				if self.index > 0 {
 					self.disableGesture = true
 				} else {
 					self.disableGesture = false
 				}
+				
+				self.refreshPageNumber()
             }
         }
     }
@@ -199,7 +204,6 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
         }
         
 		self.isMoving = true
-		self.isEnableForward = false
         self.scrollView?.isScrollEnabled = false
         
         if self.index == 0 {
@@ -242,8 +246,13 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 			} else {
 				self.disableGesture = false
 			}
+			
+			self.refreshPageNumber()
         }
     }
+	
+	func refreshPageNumber() {
+	}
 }
 
 extension ALStackPageViewController {	
@@ -252,15 +261,11 @@ extension ALStackPageViewController {
 		
 		self.pageControl.currentPage = self.index
 		
-		if let contentViewController = self.contentViewControllers[self.index] as? ALStackPageContentViewController {
-			self.labelTitleMain.attributedText = contentViewController.attributedTitleMain
-			self.labelTitleSub.attributedText = contentViewController.attributedTitleSub
+		if let viewController = self.contentViewControllers[self.index] as? ALStackPageContentViewController {
+			self.labelTitleMain.attributedText = viewController.attributedTitleMain
+			self.labelTitleSub.attributedText = viewController.attributedTitleSub
 		}
 		
-		if self.index == self.contentViewControllers.count - 1 {
-			self.isEnableForward = false
-		} else {
-			self.isEnableForward = true
-		}
+		self.refreshPageNumber()
 	}
 }

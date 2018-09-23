@@ -39,6 +39,7 @@ class ALSloppySwipeViewController: UIViewController {
 		super.viewDidLoad()
 		
 		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+		
 		addGesture()
 	}
 	
@@ -75,69 +76,5 @@ extension UIViewController: UINavigationControllerDelegate {
 		}
 		
 		return self.percentDrivenInteractiveTransition
-	}
-}
-
-extension UIViewController {
-	var percentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition? {
-		get {
-			return nil
-		}
-		
-		set(value) {
-		}
-	}
-	
-	var panGestureRecognizer: UIPanGestureRecognizer? {
-		get {
-			return nil
-		}
-		
-		set(value) {
-		}
-	}
-	
-	/*
-	var isSloppySwipe: Bool {
-		get {
-			return true
-		}
-		
-		set(value) {
-		}
-	}
-	*/
-	
-	func handlePanGesture(_ panGesture: UIPanGestureRecognizer) {
-		let percent = max(panGesture.translation(in: view).x, 0) / self.view.frame.width
-		
-		switch panGesture.state {
-		case .began:
-			navigationController?.delegate = self
-			_ = navigationController?.popViewController(animated: true)
-			
-		case .changed:
-			if let percentDrivenInteractiveTransition = self.percentDrivenInteractiveTransition {
-				percentDrivenInteractiveTransition.update(percent)
-			}
-			
-			self.view.layer.shadowOpacity = Float((1.0 - percent) * 0.2)
-			
-		case .ended:
-			let velocity = panGesture.velocity(in: view).x
-			
-			// Continue if drag more than 50% of screen width or velocity is higher than 1000
-			if percent > 0.5 || velocity > 1000 {
-				self.percentDrivenInteractiveTransition?.finish()
-			} else {
-				self.percentDrivenInteractiveTransition?.cancel()
-			}
-			
-		case .cancelled, .failed:
-			self.percentDrivenInteractiveTransition?.cancel()
-			
-		default:
-			break
-		}
 	}
 }

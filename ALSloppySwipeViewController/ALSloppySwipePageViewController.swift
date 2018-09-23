@@ -58,6 +58,7 @@ class ALSloppySwipePageViewController: UIPageViewController {
 		
 		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
 		self.panGestureRecognizer?.delegate = self
+		
 		self.addGesture()
 	}
 	
@@ -128,7 +129,9 @@ extension ALSloppySwipePageViewController: UIScrollViewDelegate {
 
 extension ALSloppySwipePageViewController: UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-		let index = (self.contentViewControllers.index(of: viewController))!
+		guard let index = self.contentViewControllers.index(of: viewController) else {
+			return nil
+		}
 		
 		if index > 0 {
 			return self.contentViewControllers[index - 1]
@@ -138,7 +141,9 @@ extension ALSloppySwipePageViewController: UIPageViewControllerDataSource {
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-		let index = (self.contentViewControllers.index(of: viewController))!
+		guard let index = self.contentViewControllers.index(of: viewController) else {
+			return nil
+		}
 		
 		if index < self.contentViewControllers.count - 1 {
 			return self.contentViewControllers[index + 1]
@@ -160,7 +165,11 @@ extension ALSloppySwipePageViewController: UIPageViewControllerDelegate {
 			return
 		}
 		
-		self.index = self.contentViewControllers.index(of: pageViewController.viewControllers!.first!)!
+		guard let first = pageViewController.viewControllers?.first, let index = self.contentViewControllers.index(of: first) else {
+			return
+		}
+		
+		self.index = index
 		
 		self.isScrolling = false
 		

@@ -20,9 +20,9 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
             $0.dataSource = self
             $0.cellLayoutMarginsFollowReadableWidth = false
         }.run {
-            $0.ins_addPullToRefresh(withHeight: 60.0, handler: { _ in
+            $0.ins_addPullToRefresh(withHeight: 60.0) { _ in
                 self.pullToRefresh()
-            })
+            }
         }
     }
 	
@@ -111,17 +111,17 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     }
     
 	func refresh(done: ((UITableView) -> Void)? = nil) {
-		self.refreshTable(done: { tableView in
+		self.refreshTable { tableView in
 			self.endPullToRefresh()
 			
 			done?(self.tableView)
-		})
+		}
 	}
 	
 	func pullToRefresh() {
-		self.refreshTable(done: { tableView in
+		self.refreshTable { tableView in
 			self.endPullToRefresh()
-		})
+		}
 	}
 	
 	func endPullToRefresh() {
