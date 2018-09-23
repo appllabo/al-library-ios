@@ -46,7 +46,7 @@ extension UIBarButtonItem {
                 $0.font = label.font
                 
                 $0.sizeToFit()
-                }.frame.size
+			}.frame.size
             
             let height = sizeContent.height + badge.paddingY
             
@@ -55,9 +55,9 @@ extension UIBarButtonItem {
             
             label.frame = CGRect(x: x, y: y, width: 0, height: 0)
             label.layer.cornerRadius = 0.0
-        }, completion: { _ in
+        }) { _ in
             label.removeFromSuperview()
-        })
+        }
     }
     
     private func initBadge(value: String, badge: ALBarButtonItemBadge) {
