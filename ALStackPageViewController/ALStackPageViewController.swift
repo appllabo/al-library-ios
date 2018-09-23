@@ -150,7 +150,7 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 		self.labelTitleSub.attributedText = viewController.attributedTitleSub
 	}
 	
-    func goBack(_ sender: UIButton) {
+    @objc func goBack(_ sender: UIButton) {
         if self.index > 0 {
             let indexNext = self.index - 1
             
@@ -171,7 +171,7 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
         }
     }
     
-    func goForward(_ sender: UIButton) {
+    @objc func goForward(_ sender: UIButton) {
         if self.index < self.contentViewControllers.count - 1 {
             let indexNext = self.index + 1
             

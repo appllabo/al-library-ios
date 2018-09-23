@@ -17,7 +17,7 @@ class ALImagePageViewController: UIPageViewController {
 	init(urls: [URL]) {
 		self.urls = urls
 		
-		super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewControllerOptionInterPageSpacingKey: self.Padding])
+		super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: [UIPageViewController.OptionsKey.interPageSpacing: self.Padding])
 		
 		self.dataSource = self
 		self.delegate = self
@@ -106,7 +106,7 @@ class ALImagePageViewController: UIPageViewController {
 				print(error)
 			}
 			
-			self.saveFiles(paths: [urlTemp]) { _ in
+			self.saveFiles(paths: [urlTemp]) {
 				done?(url)
 			}
 		}.resume()
@@ -146,9 +146,7 @@ class ALImagePageViewController: UIPageViewController {
 				
 				if paths.count == self.urls.count {
 					DispatchQueue.main.async {
-						self.saveFiles(paths: paths) { _ in
-							done?()
-						}
+						self.saveFiles(paths: paths, done: done)
 					}
 				}
 				
@@ -158,7 +156,7 @@ class ALImagePageViewController: UIPageViewController {
 	}
 	
 	private func saveFiles(paths: [URL], done: (() -> Void)? = nil) {
-		let list = PHAssetCollection.fetchAssetCollections(with: PHAssetCollectionType.album, subtype: PHAssetCollectionSubtype.any, options: nil)
+		let list = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: nil)
 		
 		var assetAlbum: PHAssetCollection?
 		
@@ -236,7 +234,7 @@ class ALImagePageViewController: UIPageViewController {
 		
 		let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert).apply {
 			let ok = UIAlertAction(title: "はい", style: .default) { action in
-				guard let url = URL(string: UIApplicationOpenSettingsURLString) else {
+				guard let url = URL(string: UIApplication.openSettingsURLString) else {
 					return
 				}
 				

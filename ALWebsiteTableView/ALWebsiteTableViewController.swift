@@ -111,7 +111,7 @@ class ALWebsiteTableViewController: ALSwipeTabContentViewController {
 }
 
 extension ALWebsiteTableViewController {
-	func load(done: (() -> Void)? = nil) {
+	@objc func load(done: (() -> Void)? = nil) {
 	}
 }
 

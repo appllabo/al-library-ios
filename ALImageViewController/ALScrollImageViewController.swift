@@ -35,7 +35,7 @@ class ALScrollImageViewController: UIViewController {
 			$0.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
 			$0.center = self.view.center
 			$0.hidesWhenStopped = true
-			$0.activityIndicatorViewStyle = .white
+			$0.style = .white
 			$0.startAnimating()
 		}
 		
@@ -121,14 +121,14 @@ class ALScrollImageViewController: UIViewController {
 		self.scrollView.contentInset = UIEdgeInsets(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
 	}
 	
-	func tapSingle(_ gesture: UITapGestureRecognizer) {
+	@objc func tapSingle(_ gesture: UITapGestureRecognizer) {
 		self.scrollView.setZoomScale(1.0, animated: true)
 		
 		self.navigationController?.setNavigationBarHidden(false, animated: true)
 		self.navigationController?.setToolbarHidden(false, animated: true)
 	}
 	
-	func tapDouble(_ gesture: UITapGestureRecognizer) {
+	@objc func tapDouble(_ gesture: UITapGestureRecognizer) {
 		if self.scrollView.zoomScale < self.scrollView.maximumZoomScale {
 			let center = gesture.location(in: gesture.view)
 			

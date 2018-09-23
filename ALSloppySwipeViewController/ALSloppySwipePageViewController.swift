@@ -34,7 +34,7 @@ class ALSloppySwipePageViewController: UIPageViewController {
 	internal var isBack: Bool = false
 	internal var index: Int = 0
 	
-	init(contentViewController: UIViewController, transitionStyle style: UIPageViewControllerTransitionStyle, navigationOrientation: UIPageViewControllerNavigationOrientation, isSloppySwipe: Bool, options: [String : Any]? = nil) {
+	init(contentViewController: UIViewController, transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, isSloppySwipe: Bool, options: [UIPageViewController.OptionsKey : Any]? = nil) {
 		self.isSloppySwipe = isSloppySwipe
 		self.contentViewControllers = [contentViewController]
 		
@@ -53,7 +53,7 @@ class ALSloppySwipePageViewController: UIPageViewController {
 		
 		self.automaticallyAdjustsScrollViewInsets = false
 		
-		self.scrollView = self.view.subviews.flatMap { $0 as? UIScrollView }.first
+		self.scrollView = self.view.subviews.compactMap { $0 as? UIScrollView }.first
 		self.scrollView?.delegate = self
 		
 		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))

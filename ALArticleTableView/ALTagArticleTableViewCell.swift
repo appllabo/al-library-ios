@@ -49,8 +49,8 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
 		self.labelTag.font = self.setting.fontWebsite
 		self.labelTag.textAlignment = .left
 		self.labelTag.textColor = self.setting.colorWebsite
-		self.labelTag.setContentHuggingPriority(0, for: .horizontal)
-		self.labelTag.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelTag.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
+		self.labelTag.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
         self.labelTag.backgroundColor = .white
         self.labelTag.clipsToBounds = true
 		
@@ -109,7 +109,7 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
         self.labelTag.text = alArticle.stringTags
         self.labelDate.text = alArticle.date
         
-        self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
+        self.imageViewThumbnail.frame = CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height).inset(by: self.setting.paddingThumbnail)
         
         let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
         let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
@@ -129,7 +129,7 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
 				}
 				
 				let transition = CATransition().apply {
-					$0.type = kCATransitionFade
+					$0.type = .fade
 				}
 				
 				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)

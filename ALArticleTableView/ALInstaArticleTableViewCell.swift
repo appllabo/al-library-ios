@@ -77,8 +77,8 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         self.labelWebsite.font = self.setting.fontWebsite
         self.labelWebsite.textAlignment = .left
         self.labelWebsite.textColor = self.setting.colorWebsite
-        self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-        self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelWebsite.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
+		self.labelWebsite.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
         self.labelWebsite.backgroundColor = .white
         self.labelWebsite.clipsToBounds = true
         
@@ -103,9 +103,9 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
 		let widthThumbnail = width - self.setting.paddingThumbnail.left - self.setting.paddingThumbnail.right
 		let heightThumbnail = widthThumbnail / 16 * 9
 		
-        self.stackViewInfo.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: width, height: 54), self.setting.paddingInfo)
+        self.stackViewInfo.frame = CGRect(x: 0, y: 0, width: width, height: 54).inset(by: self.setting.paddingInfo)
 		self.imageViewThumbnail.frame = CGRect(x: 0, y: 54, width: width, height: heightThumbnail)
-        self.labelTitle.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 54 + heightThumbnail, width: width, height: 64), self.setting.paddingTitle)
+        self.labelTitle.frame = CGRect(x: 0, y: 54 + heightThumbnail, width: width, height: 64).inset(by: self.setting.paddingTitle)
         
         self.labelTitle.text = alArticle.title
         self.labelDate.text = alArticle.date
@@ -124,7 +124,7 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
 				}
 				
 				let transition = CATransition().apply {
-					$0.type = kCATransitionFade
+					$0.type = .fade
 				}
 				
 				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
@@ -145,7 +145,7 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
 				}
 				
 				let transition = CATransition().apply {
-					$0.type = kCATransitionFade
+					$0.type = .fade
 				}
 				
 				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)

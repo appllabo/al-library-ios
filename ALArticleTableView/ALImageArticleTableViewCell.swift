@@ -33,15 +33,15 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
     }
     
     func rectTitle(width: CGFloat) -> CGRect {
-        return UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: width, height: 64), self.paddingTitle)
+        return CGRect(x: 0, y: 0, width: width, height: 64).inset(by: self.paddingTitle)
     }
     
     func rectThumbnail(width: CGFloat) -> CGRect {
-        return UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64, width: width, height: width / 16 * 9), self.paddingThumbnail)
+        return CGRect(x: 0, y: 64, width: width, height: width / 16 * 9).inset(by: self.paddingThumbnail)
     }
     
     func rectStack(width: CGFloat) -> CGRect {
-        return UIEdgeInsetsInsetRect(CGRect(x: 0, y: 64 + width / 16 * 9, width: width, height: 44), self.paddingInfo)
+        return CGRect(x: 0, y: 64 + width / 16 * 9, width: width, height: 44).inset(by: self.paddingInfo)
     }
 }
 
@@ -85,23 +85,23 @@ public class ALImageArticleTableViewCell : ALArticleTableViewCell {
 	
 	private func initStackView() {
         self.imageViewWebsite.tintColor = self.setting.tintColor
-        self.imageViewWebsite.setContentHuggingPriority(1, for: .horizontal)
-        self.imageViewWebsite.setContentCompressionResistancePriority(1, for: .horizontal)
+		self.imageViewWebsite.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .horizontal)
+		self.imageViewWebsite.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1), for: .horizontal)
         self.imageViewWebsite.contentMode = .center
         self.imageViewWebsite.clipsToBounds = true
         
 		self.labelWebsite.font = self.setting.fontWebsite
 		self.labelWebsite.textAlignment = .left
 		self.labelWebsite.textColor = self.setting.colorWebsite
-		self.labelWebsite.setContentHuggingPriority(0, for: .horizontal)
-		self.labelWebsite.setContentCompressionResistancePriority(0, for: .horizontal)
+		self.labelWebsite.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
+		self.labelWebsite.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
         self.labelWebsite.backgroundColor = .white
         self.labelWebsite.clipsToBounds = true
         
 		self.labelDate.font = self.setting.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.setting.colorDate
-        self.labelDate.setContentHuggingPriority(1, for: .horizontal)
+		self.labelDate.setContentHuggingPriority(UILayoutPriority(rawValue: 1), for: .horizontal)
         self.labelDate.backgroundColor = .white
         self.labelDate.clipsToBounds = true
 		
@@ -141,7 +141,7 @@ public class ALImageArticleTableViewCell : ALArticleTableViewCell {
 				}
 				
 				let transition = CATransition().apply {
-					$0.type = kCATransitionFade
+					$0.type = .fade
 				}
 				
 				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
@@ -162,7 +162,7 @@ public class ALImageArticleTableViewCell : ALArticleTableViewCell {
 				}
 				
 				let transition = CATransition().apply {
-					$0.type = kCATransitionFade
+					$0.type = .fade
 				}
 				
 				self.imageViewWebsite.layer.add(transition, forKey: kCATransition)

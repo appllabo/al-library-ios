@@ -55,8 +55,8 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
     
 	private let labelWebsite = UILabel().apply {
         $0.textAlignment = .left
-        $0.setContentHuggingPriority(0, for: .horizontal)
-        $0.setContentCompressionResistancePriority(0, for: .horizontal)
+		$0.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
+		$0.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
         $0.backgroundColor = .white
         $0.clipsToBounds = true
     }
@@ -114,7 +114,7 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
 	}
 	
     override func layout(alArticle: ALArticle) {
-        self.imageViewThumbnail.frame = UIEdgeInsetsInsetRect(CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height), self.setting.paddingThumbnail)
+        self.imageViewThumbnail.frame = CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height).inset(by: self.setting.paddingThumbnail)
         
         let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
         let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
@@ -138,7 +138,7 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
 				}
 				
 				let transition = CATransition().apply {
-					$0.type = kCATransitionFade
+					$0.type = .fade
 				}
 				
 				self.imageViewThumbnail.layer.add(transition, forKey: kCATransition)
@@ -159,7 +159,7 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
 				}
 				
 				let transition = CATransition().apply {
-					$0.type = kCATransitionFade
+					$0.type = .fade
 				}
 				
 				self.imageViewWebsite.layer.add(transition, forKey: kCATransition)

@@ -9,7 +9,7 @@ class ALStackPageContentViewController: UIViewController {
 		}
 		
 		return NSMutableAttributedString(string: self.title ?? "Main").apply {
-			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
+			$0.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, $0.length))
 		}
 	}
 	
@@ -21,7 +21,7 @@ class ALStackPageContentViewController: UIViewController {
 		}
 		
 		return NSMutableAttributedString(string: self.title ?? "Sub").apply {
-			$0.addAttribute(NSParagraphStyleAttributeName, value: paragraphStyle, range: NSMakeRange(0, $0.length))
+			$0.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSMakeRange(0, $0.length))
 		}
 	}
     

@@ -12,10 +12,7 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 			$0.navigationDelegate = self
 	//		$0.UIDelegate = self
 			$0.scrollView.delegate = self
-			$0.frame = self.view.frame
-			$0.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
-			$0.backgroundColor = .clear
-			$0.isOpaque = false
+			$0.scrollView.decelerationRate = .normal
 			
 			$0.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
 			$0.addObserver(self, forKeyPath: "title", options: .new, context: nil)
@@ -34,7 +31,7 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 			$0.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
 			$0.center = self.view.center
 			$0.hidesWhenStopped = true
-			$0.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
+			$0.style = .white
 			$0.startAnimating()
 		}
         
@@ -65,6 +62,10 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 		super.viewDidLoad()
 		
 		self.webView.run {
+			$0.frame = self.view.frame
+			$0.backgroundColor = .clear
+			$0.isOpaque = false
+			
             let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
             let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
             
@@ -163,6 +164,6 @@ extension ALWebPageViewController: WKNavigationDelegate {
 
 extension ALWebPageViewController: UIScrollViewDelegate {
 	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-		self.webView.scrollView.decelerationRate = UIScrollViewDecelerationRateNormal
+		self.webView.scrollView.decelerationRate = .normal
 	}
 }

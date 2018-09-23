@@ -81,11 +81,11 @@ extension UIImage {
 }
 
 extension UIViewController {
-	var heightNavigationBar: CGFloat {
+	@objc var heightNavigationBar: CGFloat {
 		return self.navigationController?.navigationBar.frame.size.height ?? 0.0
 	}
 	
-	var heightTabBar: CGFloat {
+	@objc var heightTabBar: CGFloat {
 		if #available(iOS 11.0, *) {
 			return self.view.safeAreaInsets.bottom
 		}
@@ -93,7 +93,7 @@ extension UIViewController {
 		return self.tabBarController?.tabBar.frame.size.height ?? 0.0
 	}
 	
-	var heightToolBar: CGFloat {
+	@objc var heightToolBar: CGFloat {
 		if #available(iOS 11.0, *) {
 			return self.view.safeAreaInsets.bottom
 		}
@@ -101,15 +101,15 @@ extension UIViewController {
 		return self.navigationController?.toolbar.frame.size.height ?? 0.0
 	}
 	
-	var contentInsetTop: CGFloat {
+	@objc var contentInsetTop: CGFloat {
 		return 0.0
 	}
 	
-	var contentInsetBottom: CGFloat {
+	@objc var contentInsetBottom: CGFloat {
 		return 0.0
 	}
 	
-	var percentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition? {
+	@objc var percentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition? {
 		get {
 			return nil
 		}
@@ -118,7 +118,7 @@ extension UIViewController {
 		}
 	}
 	
-	var panGestureRecognizer: UIPanGestureRecognizer? {
+	@objc var panGestureRecognizer: UIPanGestureRecognizer? {
 		get {
 			return nil
 		}
@@ -127,7 +127,7 @@ extension UIViewController {
 		}
 	}
 	
-	func handlePanGesture(_ panGesture: UIPanGestureRecognizer) {
+	@objc func handlePanGesture(_ panGesture: UIPanGestureRecognizer) {
 		let percent = max(panGesture.translation(in: view).x, 0) / self.view.frame.width
 		
 		switch panGesture.state {

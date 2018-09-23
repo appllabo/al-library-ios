@@ -1,7 +1,7 @@
 import XLPagerTabStrip
 
 class ALSwipeTabContentViewController: ALSloppySwipeViewController {
-    override var contentInsetTop: CGFloat {
+	override var contentInsetTop: CGFloat {
         if self.isSwipeTab == true {
             return 44.0 + super.contentInsetTop
         } else {

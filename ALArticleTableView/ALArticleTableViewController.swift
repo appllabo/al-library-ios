@@ -99,23 +99,8 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
         return tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: ALArticleTableViewCellSetting())
     }
     
-    func getCellHeight(width: CGFloat) -> CGFloat {
-        return 44.0
-    }
-    
 	func didSelectRow(at indexPath: IndexPath) {
         self.open(alArticle: self.articles[indexPath.row])
-	}
-	
-    func open(alArticle: ALArticle) {
-    }
-    
-	func refresh(done: ((UITableView) -> Void)? = nil) {
-		self.refreshTable { tableView in
-			self.endPullToRefresh()
-			
-			done?(self.tableView)
-		}
 	}
 	
 	func pullToRefresh() {
@@ -134,7 +119,22 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 }
 
 extension ALArticleTableViewController {
-	func refreshTable(done: ((UITableView) -> Void)? = nil) {
+	@objc func getCellHeight(width: CGFloat) -> CGFloat {
+		return 44.0
+	}
+	
+	@objc func open(alArticle: ALArticle) {
+	}
+	
+	@objc func refresh(done: ((UITableView) -> Void)? = nil) {
+		self.refreshTable { tableView in
+			self.endPullToRefresh()
+			
+			done?(self.tableView)
+		}
+	}
+	
+	@objc func refreshTable(done: ((UITableView) -> Void)? = nil) {
 	}
 }
 

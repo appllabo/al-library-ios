@@ -53,7 +53,7 @@ extension ALNativeWebViewController: UIWebViewDelegate {
 	func webViewDidFinishLoad(_ webView: UIWebView) {
 	}
 	
-	func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+	func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebView.NavigationType) -> Bool {
 		guard let string = request.url?.absoluteString else {
 			return true
 		}
