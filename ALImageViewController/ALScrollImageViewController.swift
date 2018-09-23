@@ -70,11 +70,9 @@ class ALScrollImageViewController: UIViewController {
 	}
 	
 	func load(url: URL) {
-		let configuration = URLSessionConfiguration.default.apply {
+		URLSession(configuration: URLSessionConfiguration.default.apply {
 			$0.requestCachePolicy = .returnCacheDataElseLoad
-		}
-		
-		URLSession(configuration: configuration).dataTask(with: url) { data, response, error in
+		}).dataTask(with: url) { data, response, error in
 			DispatchQueue.main.async {
 				self.activityIndicatorView.stopAnimating()
 			}

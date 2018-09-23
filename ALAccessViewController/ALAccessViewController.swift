@@ -10,11 +10,9 @@ class ALAccessViewController: UIViewController {
 		
 		self.webView.delegate = self
 		
-        let request = NSMutableURLRequest(url: url).apply {
-            $0.setValue(referer, forHTTPHeaderField: "Referer")
-        } as URLRequest
-        
-		self.webView.loadRequest(request)
+		self.webView.loadRequest(NSMutableURLRequest(url: url).apply {
+			$0.setValue(referer, forHTTPHeaderField: "Referer")
+		} as URLRequest)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
