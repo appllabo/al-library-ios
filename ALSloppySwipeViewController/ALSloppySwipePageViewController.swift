@@ -56,7 +56,7 @@ class ALSloppySwipePageViewController: UIPageViewController {
 		self.scrollView = self.view.subviews.compactMap { $0 as? UIScrollView }.first
 		self.scrollView?.delegate = self
 		
-		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
 		self.panGestureRecognizer?.delegate = self
 		
 		self.addGesture()

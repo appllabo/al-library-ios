@@ -38,7 +38,7 @@ class ALSloppySwipeViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
 		
 		addGesture()
 	}

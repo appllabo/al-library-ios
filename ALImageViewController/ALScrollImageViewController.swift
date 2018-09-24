@@ -19,10 +19,10 @@ class ALScrollImageViewController: UIViewController {
 			$0.isScrollEnabled = true
 			$0.isUserInteractionEnabled = true
 			
-			let tapGestureSingle = UITapGestureRecognizer(target: self, action:#selector(tapSingle(_:))).apply {
+			let tapGestureSingle = UITapGestureRecognizer(target: self, action:#selector(tapSingle)).apply {
 				$0.numberOfTapsRequired = 1
 			}
-			let tapGestureDouble = UITapGestureRecognizer(target: self, action:#selector(tapDouble(_:))).apply {
+			let tapGestureDouble = UITapGestureRecognizer(target: self, action:#selector(tapDouble)).apply {
 				$0.numberOfTapsRequired = 2
 			}
 			

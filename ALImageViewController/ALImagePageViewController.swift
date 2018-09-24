@@ -33,7 +33,7 @@ class ALImagePageViewController: UIPageViewController {
 		self.refreshPageNumber()
 	}
 	
-	func next() {
+	func goNext() {
 		if self.index < self.urls.count - 1 {
 			self.index += 1
 			self.refreshPageNumber()
@@ -46,7 +46,7 @@ class ALImagePageViewController: UIPageViewController {
 		}
 	}
 	
-	func previous() {
+	func goBack() {
 		if self.index > 0 {
 			self.index -= 1
 			self.refreshPageNumber()
