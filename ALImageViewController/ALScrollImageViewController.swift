@@ -63,7 +63,7 @@ class ALScrollImageViewController: UIViewController {
 		super.viewDidLoad()
 		
 		self.scrollView.run {
-			$0.frame = self.view.frame
+			$0.frame = self.view.bounds
 			$0.showsHorizontalScrollIndicator = true
 			$0.showsVerticalScrollIndicator = true
 		}

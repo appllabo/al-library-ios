@@ -18,15 +18,15 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
     public var fontTitle = UIFont.boldSystemFont(ofSize: 20)
     public var fontDate = UIFont.systemFont(ofSize: 14)
     public var fontWebsite = UIFont.boldSystemFont(ofSize: 16)
-    public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
-    public var colorTitleRead = UIColor(hex: 0x707070, alpha: 1.0)
-    public var colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-    public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+    public var colorTitle = UIColor(hex: 0x000000)
+    public var colorTitleRead = UIColor(hex: 0x707070)
+    public var colorDate = UIColor(hex: 0xa0a0a0)
+    public var colorWebsite = UIColor(hex: 0xa0a0a0)
     public var tintColor = UIColor.black
 	public var paddingInfo = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(18)
-	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+	public var colorBottom = UIColor(hex: 0xa0a0a0)
 	
     override func height(width: CGFloat) -> CGFloat {
         return 54 + width / 16 * 9 + 64

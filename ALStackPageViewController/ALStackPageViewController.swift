@@ -16,19 +16,19 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
 	}
     
 	internal var colorTitleMain: UIColor {
-		return .init(hex: 0x000000, alpha: 1.0)
+		return .init(hex: 0x000000)
 	}
 	
 	internal var colorTitleSub: UIColor {
-		return .init(hex: 0x808080, alpha: 1.0)
+		return .init(hex: 0x808080)
 	}
 	
     internal var pageIndicatorTintColor: UIColor {
-        return .init(hex: 0xa0a0a0, alpha: 1.0)
+        return .init(hex: 0xa0a0a0)
     }
     
     internal var currentPageIndicatorTintColor: UIColor {
-        return .init(hex: 0x007aff, alpha: 1.0)
+        return .init(hex: 0x007aff)
     }
     
     internal var fontTitleMain: UIFont {

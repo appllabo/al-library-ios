@@ -18,10 +18,10 @@ public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     public var fontTitle = UIFont.boldSystemFont(ofSize: 16)
     public var fontDate = UIFont.systemFont(ofSize: 12)
     public var fontWebsite = UIFont.systemFont(ofSize: 12)
-    public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
-    public var colorTitleRead = UIColor(hex: 0x707070, alpha: 1.0)
-    public var colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-    public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+    public var colorTitle = UIColor(hex: 0x000000)
+    public var colorTitleRead = UIColor(hex: 0x707070)
+    public var colorDate = UIColor(hex: 0xa0a0a0)
+    public var colorWebsite = UIColor(hex: 0xa0a0a0)
     public var tintColor = UIColor.black
 	public var radiusTagImage = CGFloat(8.5)
     

@@ -45,17 +45,14 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 		super.viewDidLoad()
 		
         self.tableView.run {
-            $0.frame = self.view.frame
+            $0.frame = self.view.bounds
 			$0.backgroundColor = .clear
             
             let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
             let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
             
-            $0.contentInset.top = heightStatusBar + heightNavigationBar
-            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-            
-            $0.contentInset.top += self.contentInsetTop
-            $0.scrollIndicatorInsets.top += self.contentInsetTop
+            $0.contentInset.top = heightStatusBar + heightNavigationBar + self.contentInsetTop
+            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar + self.contentInsetTop
         }
 		
 		self.view.addSubview(self.tableView)

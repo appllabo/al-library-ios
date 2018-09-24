@@ -18,15 +18,15 @@ public class ALImageArticleTableViewCellSetting : ALArticleTableViewCellSetting 
     public var fontTitle = UIFont.boldSystemFont(ofSize: 20)
     public var fontDate = UIFont.systemFont(ofSize: 14)
     public var fontWebsite = UIFont.systemFont(ofSize: 14)
-    public var colorTitle = UIColor(hex: 0x000000, alpha: 1.0)
-    public var colorTitleRead = UIColor(hex: 0x707070, alpha: 1.0)
-    public var colorDate = UIColor(hex: 0xa0a0a0, alpha: 1.0)
-    public var colorWebsite = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+    public var colorTitle = UIColor(hex: 0x000000)
+    public var colorTitleRead = UIColor(hex: 0x707070)
+    public var colorDate = UIColor(hex: 0xa0a0a0)
+    public var colorWebsite = UIColor(hex: 0xa0a0a0)
     public var tintColor = UIColor.black
 	public var paddingInfo = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
 	public var paddingTitle = UIEdgeInsets(top: 4, left: 12, bottom: 4, right: 12)
 	public var radiusWebsiteImage = CGFloat(10)
-	public var colorBottom = UIColor(hex: 0xa0a0a0, alpha: 1.0)
+	public var colorBottom = UIColor(hex: 0xa0a0a0)
 	
     override func height(width: CGFloat) -> CGFloat {
         return 64 + width / 16 * 9 + 44

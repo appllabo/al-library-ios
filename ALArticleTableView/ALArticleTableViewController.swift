@@ -38,7 +38,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 		super.viewDidLoad()
 		
         self.tableView.run {
-            $0.frame = self.view.frame
+            $0.frame = self.view.bounds
             $0.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
             $0.backgroundColor = .clear
             
@@ -49,22 +49,18 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
             let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
             let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
             
-            $0.contentInset.top = heightStatusBar + heightNavigationBar
-            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-            
-            $0.contentInset.top += self.contentInsetTop
-            $0.scrollIndicatorInsets.top += self.contentInsetTop
-        
+            $0.contentInset.top = heightStatusBar + heightNavigationBar + self.contentInsetTop
+            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar + self.contentInsetTop
+			
             let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)
             }
-        
             let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)
             }
-        
+        	
             let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
-        
+        	
             if let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight?.uiImage, frontImage: svgCircleWhite?.uiImage.change(color: self.view.tintColor)) {
                 $0.ins_pullToRefreshBackgroundView.delegate = pullToRefresh
                 $0.ins_pullToRefreshBackgroundView.addSubview(pullToRefresh)

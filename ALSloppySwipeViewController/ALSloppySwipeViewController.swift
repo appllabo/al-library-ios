@@ -69,8 +69,9 @@ extension UIViewController: UINavigationControllerDelegate {
 		navigationController.delegate = nil
 		
 		if self.panGestureRecognizer?.state == .began {
-			self.percentDrivenInteractiveTransition = UIPercentDrivenInteractiveTransition()
-			self.percentDrivenInteractiveTransition?.completionCurve = .easeOut
+			self.percentDrivenInteractiveTransition = UIPercentDrivenInteractiveTransition().apply {
+				$0.completionCurve = .easeOut
+			}
 		} else {
 			self.percentDrivenInteractiveTransition = nil
 		}

@@ -1,16 +1,16 @@
 import WebKit
+import SafariServices
 import SwiftyJSON
 
-class ALWebPageViewController: ALSwipeTabContentViewController {
+class ALWebPageViewController : ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
-	fileprivate let activityIndicator = UIActivityIndicatorView()
 	
 	init(title: String, url: URL, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.run {
+			$0.uiDelegate = self
 			$0.navigationDelegate = self
-	//		$0.UIDelegate = self
 			$0.scrollView.delegate = self
 			$0.scrollView.decelerationRate = .normal
 			
@@ -21,21 +21,11 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 			$0.addObserver(self, forKeyPath: "canGoForward", options: .new, context: nil)
 		}
         
+		self.view.addSubview(self.webView)
+		
         let request = URLRequest(url: url)
         
         self.webView.load(request)
-        
-        self.view.addSubview(self.webView)
-		
-		self.activityIndicator.run {
-			$0.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
-			$0.center = self.view.center
-			$0.hidesWhenStopped = true
-			$0.style = .white
-			$0.startAnimating()
-		}
-        
-//        self.webView.addSubview(self.activityIndicator)
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -55,25 +45,21 @@ class ALWebPageViewController: ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
-		if #available(iOS 11.0, *) {
-			self.webView.scrollView.contentInsetAdjustmentBehavior = .never
-		}
-		
 		super.viewDidLoad()
 		
 		self.webView.run {
-			$0.frame = self.view.frame
+			$0.frame = self.view.bounds
 			$0.backgroundColor = .clear
 			$0.isOpaque = false
 			
-            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-            
-            $0.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
-            $0.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-            
-            $0.scrollView.contentInset.top += self.contentInsetTop
-            $0.scrollView.scrollIndicatorInsets.top += self.contentInsetTop
+//            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+//            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+//            
+//            $0.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
+//            $0.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
+//            
+//            $0.scrollView.contentInset.top += self.contentInsetTop
+//            $0.scrollView.scrollIndicatorInsets.top += self.contentInsetTop
         }
 	}
 	
@@ -162,7 +148,37 @@ extension ALWebPageViewController: WKNavigationDelegate {
 	}
 }
 
-extension ALWebPageViewController: UIScrollViewDelegate {
+extension ALWebPageViewController : WKUIDelegate {
+	func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+		guard let url = navigationAction.request.url else {
+			return nil
+		}
+		
+		if navigationAction.targetFrame == nil, UIApplication.shared.canOpenURL(url) == true {
+			let viewController = SFSafariViewController(url: url, entersReaderIfAvailable: false).apply {
+				$0.delegate = self
+			}
+			
+			self.present(viewController, animated: true)
+		}
+		
+		return nil
+	}
+}
+
+extension ALWebPageViewController: SFSafariViewControllerDelegate {
+	func safariViewController(_ controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
+	}
+	
+	func safariViewController(_ controller: SFSafariViewController, activityItemsFor URL: URL, title: String?) -> [UIActivity] {
+		return []
+	}
+	
+	func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+	}
+}
+
+extension ALWebPageViewController : UIScrollViewDelegate {
 	func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
 		self.webView.scrollView.decelerationRate = .normal
 	}

@@ -1,6 +1,6 @@
 import XLPagerTabStrip
 
-class ALSwipeTabContentViewController: ALSloppySwipeViewController {
+class ALSwipeTabContentViewController : ALSloppySwipeViewController {
 	override var contentInsetTop: CGFloat {
         if self.isSwipeTab == true {
             return 44.0 + super.contentInsetTop
@@ -17,8 +17,6 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
 		self.isSwipeTab = isSwipeTab
 		
 		super.init(isSloppySwipe: isSloppySwipe)
-		
-		self.title = self.indicatorInfo.title
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -26,19 +24,13 @@ class ALSwipeTabContentViewController: ALSloppySwipeViewController {
 	}
 	
 	override func viewDidLoad() {
-		self.automaticallyAdjustsScrollViewInsets = false
+		self.title = self.indicatorInfo.title
 		
 		super.viewDidLoad()
-		
-        self.view.frame = CGRect(x: self.view.frame.origin.x, y: self.view.frame.origin.y - self.contentInsetTop, width: self.view.frame.width, height: self.view.frame.height)
-	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
 	}
 }
 
-extension ALSwipeTabContentViewController: IndicatorInfoProvider {
+extension ALSwipeTabContentViewController : IndicatorInfoProvider {
 	func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
 		return self.indicatorInfo
 	}

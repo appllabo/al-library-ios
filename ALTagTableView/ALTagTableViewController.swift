@@ -35,7 +35,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
         super.viewDidLoad()
         
         self.tableView.run {
-            $0.frame = self.view.frame
+            $0.frame = self.view.bounds
             
             let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
             let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
