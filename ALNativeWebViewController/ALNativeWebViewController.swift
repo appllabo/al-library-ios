@@ -1,17 +1,14 @@
 import UIKit
 
-class ALNativeWebViewController: ALSwipeTabContentViewController {
+class ALNativeWebViewController : ALSwipeTabContentViewController {
 	private let webView = UIWebView()
 	
 	init(title: String, isSwipeTab: Bool, url: URL, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.run {
-			$0.frame = self.view.frame
 			$0.delegate = self
-			$0.backgroundColor = .clear
-			$0.isOpaque = false
-		
+			
 			if self.isSwipeTab == true {
 				$0.scrollView.contentInset.bottom += 44
 				$0.scrollView.scrollIndicatorInsets.bottom += 44
@@ -31,14 +28,12 @@ class ALNativeWebViewController: ALSwipeTabContentViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+		
+		self.webView.run {
+			$0.frame = self.view.frame
+			$0.backgroundColor = .clear
+			$0.isOpaque = false
+		}
 	}
 	
 	func evaluate(_ path: String) {
@@ -46,7 +41,7 @@ class ALNativeWebViewController: ALSwipeTabContentViewController {
 	}
 }
 
-extension ALNativeWebViewController: UIWebViewDelegate {
+extension ALNativeWebViewController : UIWebViewDelegate {
 	func webViewDidStartLoad(_ webView: UIWebView) {
 	}
 	
@@ -64,11 +59,9 @@ extension ALNativeWebViewController: UIWebViewDelegate {
 		
 		let path = string.components(separatedBy: "native://")
 		
-		if path[1] == "" {
-			return true
+		if path.indices.contains(1) == true {
+			self.evaluate(path[1])
 		}
-		
-		self.evaluate(path[1])
 		
 		return false
 	}
