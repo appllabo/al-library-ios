@@ -27,12 +27,12 @@ class ALSloppySwipePageViewController: UIPageViewController {
 	
 	internal var contentViewControllers: [UIViewController]
 	
-	internal var scrollView: UIScrollView!
-	internal var disableGesture: Bool = false
-	internal var isMoving: Bool = false
-	internal var isScrolling: Bool = false
-	internal var isBack: Bool = false
-	internal var index: Int = 0
+	internal var scrollView: UIScrollView?
+	internal var disableGesture = false
+	internal var isMoving = false
+	internal var isScrolling = false
+	internal var isBack = false
+	internal var index = 0
 	
 	init(contentViewController: UIViewController, transitionStyle style: UIPageViewController.TransitionStyle, navigationOrientation: UIPageViewController.NavigationOrientation, isSloppySwipe: Bool, options: [UIPageViewController.OptionsKey : Any]? = nil) {
 		self.isSloppySwipe = isSloppySwipe

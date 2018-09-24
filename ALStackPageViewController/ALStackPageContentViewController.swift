@@ -1,6 +1,25 @@
 import UIKit
 
-class ALStackPageContentViewController: UIViewController {
+class ALStackPageContentViewController : UIViewController {
+	override var contentInsetTop: CGFloat {
+		if #available(iOS 11.0, *) {
+			return super.contentInsetTop
+		} else {
+			let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+			let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 0
+			
+			return super.contentInsetTop + heightStatusBar + heightNavigationBar
+		}
+    }
+    
+	override var contentInsetBottom: CGFloat {
+		if #available(iOS 11.0, *) {
+			return super.contentInsetBottom
+		} else {
+			return super.contentInsetBottom + self.heightToolBar
+		}
+	}
+	
 	public var attributedTitleMain: NSMutableAttributedString {
 		let paragraphStyle = NSMutableParagraphStyle().apply {
 			$0.lineBreakMode = .byTruncatingTail
