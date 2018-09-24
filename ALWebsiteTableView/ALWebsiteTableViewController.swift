@@ -5,10 +5,14 @@ import INSPullToRefresh
 class ALWebsiteTableViewController : ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
+	internal var separatorInset: UIEdgeInsets? {
+		return nil
+	}
+	
 	internal var websites: [ALWebsite]
 	internal var cells = [ALWebsiteTableViewCell]()
 	
-	init(title: String, websites: [ALWebsite], isSwipeTab: Bool, isSloppySwipe: Bool, cellSetting: ALWebsiteTableViewCellSetting) {
+	init(title: String, websites: [ALWebsite], isSwipeTab: Bool, isSloppySwipe: Bool) {
 		self.websites = websites
 		
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
@@ -39,6 +43,10 @@ class ALWebsiteTableViewController : ALSwipeTabContentViewController {
             $0.frame = self.view.bounds
 			$0.backgroundColor = .clear
             
+			if let separatorInset = self.separatorInset {
+				$0.separatorInset = separatorInset
+			}
+			
 			if #available(iOS 11.0, *) {
 				$0.contentInset.top = self.contentInsetTop + 64
 				$0.scrollIndicatorInsets.top = self.contentInsetTop + 64

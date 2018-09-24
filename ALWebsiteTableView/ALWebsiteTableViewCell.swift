@@ -2,6 +2,10 @@ import UIKit
 import AlamofireImage
 
 public class ALWebsiteTableViewCellSetting : NSObject {
+	public var separatorInset: UIEdgeInsets {
+		return UIEdgeInsets(top: 0, left: 59, bottom: 0, right: 0)
+	}
+	
     public var tintColor = UIColor.black
 	public var sizeImage = CGSize(width: 29, height: 29)
 	public var radiusImage = CGFloat(14.5)
@@ -32,11 +36,13 @@ class ALWebsiteTableViewCell : UITableViewCell {
             let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: self.setting.sizeImage, radius: self.setting.radiusImage)
             
             ImageDownloader.default.download(request, filter: filter) { [weak self] response in
-                if let image = response.result.value {
-                    self?.imageView?.image = image
-                    
-                    self?.setNeedsLayout()
-                }
+                guard let image = response.result.value else {
+					return
+				}
+				
+				self?.imageView?.image = image
+				
+				self?.setNeedsLayout()
             }
         }
         
