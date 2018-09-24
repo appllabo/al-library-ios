@@ -46,11 +46,13 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
                 $0.separatorInset = separatorInset
             }
             
-            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-            
-            $0.contentInset.top = heightStatusBar + heightNavigationBar + self.contentInsetTop
-            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar + self.contentInsetTop
+			if #available(iOS 11.0, *) {
+				$0.contentInset.top = self.contentInsetTop + 64
+				$0.scrollIndicatorInsets.top = self.contentInsetTop + 64
+			} else {
+				$0.contentInset.top = self.contentInsetTop
+				$0.scrollIndicatorInsets.top = self.contentInsetTop
+			}
 			
             let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)

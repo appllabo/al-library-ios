@@ -3,16 +3,12 @@ import UIKit
 class ALNativeWebViewController : ALSwipeTabContentViewController {
 	private let webView = UIWebView()
 	
-	init(title: String, isSwipeTab: Bool, url: URL, isSloppySwipe: Bool) {
+	init(title: String, url: URL, isSwipeTab: Bool, isSloppySwipe: Bool) {
 		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
 		
 		self.webView.run {
 			$0.delegate = self
-			
-			if self.isSwipeTab == true {
-				$0.scrollView.contentInset.bottom += 44
-				$0.scrollView.scrollIndicatorInsets.bottom += 44
-			}
+			$0.scrollView.decelerationRate = .normal
 		}
         
         self.view.addSubview(self.webView)
@@ -33,6 +29,9 @@ class ALNativeWebViewController : ALSwipeTabContentViewController {
 			$0.frame = self.view.bounds
 			$0.backgroundColor = .clear
 			$0.isOpaque = false
+			
+			$0.scrollView.contentInset.top = self.contentInsetTop
+			$0.scrollView.scrollIndicatorInsets.top = self.contentInsetTop
 		}
 	}
 	

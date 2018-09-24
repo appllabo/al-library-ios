@@ -3,7 +3,14 @@ import XLPagerTabStrip
 class ALSwipeTabContentViewController : ALSloppySwipeViewController {
 	override var contentInsetTop: CGFloat {
         if self.isSwipeTab == true {
-            return 44.0 + super.contentInsetTop
+			if #available(iOS 11.0, *) {
+				return 44
+			} else {
+				let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+				let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
+				
+				return super.contentInsetTop + heightStatusBar + heightNavigationBar + 44
+			}
         } else {
             return super.contentInsetTop
         }
@@ -25,8 +32,6 @@ class ALSwipeTabContentViewController : ALSloppySwipeViewController {
 	
 	override func viewDidLoad() {
 		self.title = self.indicatorInfo.title
-		
-		self.automaticallyAdjustsScrollViewInsets = false
 		
 		super.viewDidLoad()
 	}

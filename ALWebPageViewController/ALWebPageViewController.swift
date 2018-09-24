@@ -52,45 +52,9 @@ class ALWebPageViewController : ALSwipeTabContentViewController {
 			$0.backgroundColor = .clear
 			$0.isOpaque = false
 			
-//            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-//            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-//            
-//            $0.scrollView.contentInset.top = heightStatusBar + heightNavigationBar
-//            $0.scrollView.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-//            
-//            $0.scrollView.contentInset.top += self.contentInsetTop
-//            $0.scrollView.scrollIndicatorInsets.top += self.contentInsetTop
+			$0.scrollView.contentInset.top = self.contentInsetTop
+			$0.scrollView.scrollIndicatorInsets.top = self.contentInsetTop
         }
-	}
-	
-	override func viewWillAppear(_ animated: Bool) {
-		super.viewWillAppear(animated)
-		
-		if self.isSwipeTab == false {
-			self.navigationController?.navigationBar.shadowImage = nil
-			self.navigationController?.setToolbarHidden(true, animated: true)
-		}
-	}
-	
-	override func viewWillLayoutSubviews() {
-		self.webView.frame = self.view.bounds
-		
-		var heightSafeArea = CGFloat(0.0)
-		
-		if #available(iOS 11.0, *) {
-			heightSafeArea = self.view.safeAreaInsets.bottom
-		}
-		
-		self.webView.scrollView.contentInset.bottom = heightSafeArea
-		self.webView.scrollView.scrollIndicatorInsets.bottom = heightSafeArea
-	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
-	}
-	
-	override func viewDidDisappear(_ animated: Bool) {
-		super.viewDidDisappear(animated)
 	}
 	
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {

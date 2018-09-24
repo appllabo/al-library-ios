@@ -17,7 +17,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
             $0.cellLayoutMarginsFollowReadableWidth = false
             $0.backgroundColor = .clear
         }.run {
-            $0.ins_addPullToRefresh(withHeight: 60.0) {scrollView in
+            $0.ins_addPullToRefresh(withHeight: 60.0) { _ in
                 self.pullToRefresh()
             }
         }
@@ -28,28 +28,17 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
     }
     
     override func viewDidLoad() {
-        if #available(iOS 11.0, *) {
-            self.tableView.contentInsetAdjustmentBehavior = .never
-        }
-        
         super.viewDidLoad()
         
         self.tableView.run {
             $0.frame = self.view.bounds
             
-            let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 44
-            
-            $0.contentInset.top = heightStatusBar + heightNavigationBar
-            $0.scrollIndicatorInsets.top = heightStatusBar + heightNavigationBar
-            
-            $0.contentInset.top += self.contentInsetTop
-            $0.scrollIndicatorInsets.top += self.contentInsetTop
-            
+			$0.contentInset.top = self.contentInsetTop
+			$0.scrollIndicatorInsets.top = self.contentInsetTop
+
             let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)
             }
-            
             let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)
             }
