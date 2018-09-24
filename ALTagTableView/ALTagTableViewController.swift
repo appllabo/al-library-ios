@@ -27,8 +27,9 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {        if #available(iOS 11.0, *) {
-        self.tableView.contentInsetAdjustmentBehavior = .never
+    override func viewDidLoad() {
+        if #available(iOS 11.0, *) {
+            self.tableView.contentInsetAdjustmentBehavior = .never
         }
         
         super.viewDidLoad()
