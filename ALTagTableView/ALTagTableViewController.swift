@@ -92,9 +92,9 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
     }
     
     func pullToRefresh() {
-        self.load(done: {
+        self.load {
             self.endPullToRefresh()
-        })
+        }
     }
     
     func endPullToRefresh() {

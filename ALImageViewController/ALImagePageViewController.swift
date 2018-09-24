@@ -3,7 +3,7 @@ import SwiftyJSON
 import Photos
 import AssetsLibrary
 
-class ALImagePageViewController: UIPageViewController {
+class ALImagePageViewController : UIPageViewController {
 	private let Padding = 16.0
 	
 	fileprivate let urls: [URL]
@@ -28,6 +28,8 @@ class ALImagePageViewController: UIPageViewController {
 	}
 	
 	override func viewDidLoad() {
+		self.automaticallyAdjustsScrollViewInsets = false
+		
 		super.viewDidLoad()
 		
 		self.refreshPageNumber()

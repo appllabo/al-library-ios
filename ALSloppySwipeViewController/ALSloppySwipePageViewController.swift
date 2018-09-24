@@ -51,8 +51,6 @@ class ALSloppySwipePageViewController: UIPageViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.automaticallyAdjustsScrollViewInsets = false
-		
 		self.scrollView = self.view.subviews.compactMap { $0 as? UIScrollView }.first
 		self.scrollView?.delegate = self
 		

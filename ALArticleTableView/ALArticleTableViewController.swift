@@ -132,6 +132,12 @@ extension ALArticleTableViewController {
 	
 	@objc func refreshTable(done: ((UITableView) -> Void)? = nil) {
 	}
+	
+	@objc func onReachMaxNum() {
+	}
+	
+	@objc func loadNext() {
+	}
 }
 
 extension ALArticleTableViewController: UITableViewDataSource {
@@ -159,5 +165,18 @@ extension ALArticleTableViewController: UITableViewDelegate {
         if let cell = tableView.cellForRow(at: indexPath) as? ALArticleTableViewCell {
             cell.read()
         }
+	}
+	
+	func scrollViewDidScroll(_ scrollView: UIScrollView) {
+		if self.articles.count >= 300 {
+			return
+		}
+		
+		// TODO:inset等を考慮して要修正.
+		if scrollView.contentOffset.y >= 0 && scrollView.contentOffset.y + scrollView.frame.height * 2 >= scrollView.contentSize.height {
+			print("ALArticleTableViewController:scrollViewDidScroll:start")
+			
+			self.loadNext()
+		}
 	}
 }

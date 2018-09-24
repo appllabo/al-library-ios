@@ -14,7 +14,7 @@ class ALSwipeTabViewController : ButtonBarPagerTabStripViewController {
 	}
 	
 	override func viewDidLoad() {
-//		self.automaticallyAdjustsScrollViewInsets = false
+		self.automaticallyAdjustsScrollViewInsets = false
 		
 		super.viewDidLoad()
 	}

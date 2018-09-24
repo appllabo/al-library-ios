@@ -1,6 +1,6 @@
 import UIKit
 
-class ALScrollImageViewController: UIViewController {
+class ALScrollImageViewController : UIViewController {
 	private let scrollView = UIScrollView()
 	private let activityIndicatorView = UIActivityIndicatorView()
 	fileprivate let imageView = UIImageView()
