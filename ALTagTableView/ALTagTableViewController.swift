@@ -96,7 +96,7 @@ class ALTagTableViewController: ALSwipeTabContentViewController {
 }
 
 extension ALTagTableViewController {
-    func load(done: (() -> Void)? = nil) {
+    @objc func load(done: (() -> Void)? = nil) {
     }
 }
 
