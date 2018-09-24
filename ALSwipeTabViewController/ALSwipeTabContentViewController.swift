@@ -26,6 +26,8 @@ class ALSwipeTabContentViewController : ALSloppySwipeViewController {
 	override func viewDidLoad() {
 		self.title = self.indicatorInfo.title
 		
+		self.automaticallyAdjustsScrollViewInsets = false
+		
 		super.viewDidLoad()
 	}
 }
