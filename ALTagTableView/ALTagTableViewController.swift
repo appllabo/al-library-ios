@@ -11,12 +11,12 @@ class ALTagTableViewController : ALSwipeTabContentViewController {
 	override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
         
-        self.tableView.apply {
+        self.tableView.run {
             $0.delegate = self
             $0.dataSource = self
             $0.cellLayoutMarginsFollowReadableWidth = false
             $0.backgroundColor = .clear
-        }.run {
+			
             $0.ins_addPullToRefresh(withHeight: 60.0) { _ in
                 self.pullToRefresh()
             }
@@ -28,6 +28,10 @@ class ALTagTableViewController : ALSwipeTabContentViewController {
     }
     
     override func viewDidLoad() {
+		if #available(iOS 11.0, *) {
+			self.tableView.contentInsetAdjustmentBehavior = .never
+		}
+		
         super.viewDidLoad()
         
         self.tableView.run {

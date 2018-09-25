@@ -38,6 +38,10 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
+		if #available(iOS 11.0, *), self.swipeTabViewController != nil {
+			self.tableView.contentInsetAdjustmentBehavior = .never
+		}
+		
 		super.viewDidLoad()
 		
         self.tableView.run {

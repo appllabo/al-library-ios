@@ -15,11 +15,11 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
     override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
-        self.tableView.apply {
+        self.tableView.run {
             $0.delegate = self
             $0.dataSource = self
             $0.cellLayoutMarginsFollowReadableWidth = false
-        }.run {
+			
             $0.ins_addPullToRefresh(withHeight: 60.0) { _ in
                 self.pullToRefresh()
             }
@@ -39,8 +39,8 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 		
         self.tableView.run {
             $0.frame = self.view.bounds
-            $0.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
             $0.backgroundColor = .clear
+            $0.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
             
 			$0.contentInset.top = self.contentInsetTop
 			$0.scrollIndicatorInsets.top = self.contentInsetTop
