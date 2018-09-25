@@ -8,7 +8,9 @@ public class ALMenuTableViewCellSetting : NSObject {
 class ALMenuViewController : ALSwipeTabContentViewController {
 	internal let tableView = UITableView(frame: CGRect.zero, style: .grouped)
 	
-    internal let setting: ALMenuTableViewCellSetting
+    internal var setting: ALMenuTableViewCellSetting {
+        return ALMenuTableViewCellSetting()
+    }
     
 	internal enum SectionData {
 		case String(String)
@@ -21,10 +23,8 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 		return []
 	}
 	
-	init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool, setting: ALMenuTableViewCellSetting) {
-        self.setting = setting
-        
-		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
+    override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
+		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
         self.tableView.run {
             $0.delegate = self
@@ -38,6 +38,10 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
+		if #available(iOS 11.0, *), self.swipeTabViewController != nil {
+			self.tableView.contentInsetAdjustmentBehavior = .never
+		}
+		
 		super.viewDidLoad()
 		
         self.tableView.run {

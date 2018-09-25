@@ -12,14 +12,14 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 	internal var articles = [ALArticle]()
     internal var articlesAdd = [ALArticle]()
 	
-    override init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool) {
-		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
+    override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
+		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
-        self.tableView.apply {
+        self.tableView.run {
             $0.delegate = self
             $0.dataSource = self
             $0.cellLayoutMarginsFollowReadableWidth = false
-        }.run {
+			
             $0.ins_addPullToRefresh(withHeight: 60.0) { _ in
                 self.pullToRefresh()
             }
@@ -39,21 +39,16 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 		
         self.tableView.run {
             $0.frame = self.view.bounds
-            $0.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
             $0.backgroundColor = .clear
+            $0.estimatedRowHeight = self.getCellHeight(width: self.tableView.frame.width)
             
+			$0.contentInset.top = self.contentInsetTop
+			$0.scrollIndicatorInsets.top = self.contentInsetTop
+			
             if let separatorInset = self.separatorInset {
                 $0.separatorInset = separatorInset
             }
             
-			if #available(iOS 11.0, *) {
-				$0.contentInset.top = self.contentInsetTop + 64
-				$0.scrollIndicatorInsets.top = self.contentInsetTop + 64
-			} else {
-				$0.contentInset.top = self.contentInsetTop
-				$0.scrollIndicatorInsets.top = self.contentInsetTop
-			}
-			
             let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)
             }

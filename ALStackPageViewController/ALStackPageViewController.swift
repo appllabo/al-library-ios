@@ -1,6 +1,6 @@
 import UIKit
 
-class ALStackPageViewController: ALSloppySwipePageViewController {
+class ALStackPageViewController : ALSloppySwipePageViewController {
 	private let titleView = UIView()
 	
 	private let stackViewTitle = UIStackView()
@@ -52,6 +52,8 @@ class ALStackPageViewController: ALSloppySwipePageViewController {
     }
     
     override func viewDidLoad() {
+		self.automaticallyAdjustsScrollViewInsets = false
+		
         super.viewDidLoad()
 		
 		self.setViewControllers(self.contentViewControllers, direction: .forward, animated: true)

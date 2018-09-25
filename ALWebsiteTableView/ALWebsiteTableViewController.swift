@@ -12,16 +12,16 @@ class ALWebsiteTableViewController : ALSwipeTabContentViewController {
 	internal var websites: [ALWebsite]
 	internal var cells = [ALWebsiteTableViewCell]()
 	
-	init(title: String, websites: [ALWebsite], isSwipeTab: Bool, isSloppySwipe: Bool) {
+	init(title: String, websites: [ALWebsite], isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		self.websites = websites
 		
-		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
+		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
-        self.tableView.apply {
+        self.tableView.run {
             $0.delegate = self
             $0.dataSource = self
             $0.cellLayoutMarginsFollowReadableWidth = false
-        }.run {
+			
             $0.ins_addPullToRefresh(withHeight: 60.0) { _ in
                 self.pullToRefresh()
             }
@@ -43,16 +43,11 @@ class ALWebsiteTableViewController : ALSwipeTabContentViewController {
             $0.frame = self.view.bounds
 			$0.backgroundColor = .clear
             
+			$0.contentInset.top = self.contentInsetTop
+			$0.scrollIndicatorInsets.top = self.contentInsetTop
+			
 			if let separatorInset = self.separatorInset {
 				$0.separatorInset = separatorInset
-			}
-			
-			if #available(iOS 11.0, *) {
-				$0.contentInset.top = self.contentInsetTop + 64
-				$0.scrollIndicatorInsets.top = self.contentInsetTop + 64
-			} else {
-				$0.contentInset.top = self.contentInsetTop
-				$0.scrollIndicatorInsets.top = self.contentInsetTop
 			}
 			
             let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
