@@ -38,7 +38,7 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
-		if #available(iOS 11.0, *), self.swipeTabViewController != nil {
+		if #available(iOS 11.0, *) {
 			self.tableView.contentInsetAdjustmentBehavior = .never
 		}
 		
@@ -48,8 +48,8 @@ class ALMenuViewController : ALSwipeTabContentViewController {
             $0.frame = self.view.bounds
 			$0.backgroundColor = .clear
             
-			$0.contentInset.top = self.contentInsetTop
-			$0.scrollIndicatorInsets.top = self.contentInsetTop
+            $0.contentInset.top = self.contentInsetTop
+            $0.scrollIndicatorInsets.top = self.contentInsetTop
         }
 		
 		self.view.addSubview(self.tableView)

@@ -2,14 +2,17 @@ import XLPagerTabStrip
 
 class ALSwipeTabContentViewController : ALSloppySwipeViewController {
 	override var contentInsetTop: CGFloat {
+        let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
+        
         if let swipeTabViewController = self.swipeTabViewController {
-			let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-			let heightNavigationBar = swipeTabViewController.navigationController?.navigationBar.frame.size.height ?? 0
+            let heightNavigationBar = swipeTabViewController.navigationController?.navigationBar.frame.size.height ?? 0
 			let buttonBarHeight = swipeTabViewController.settings.style.buttonBarHeight ?? 0
 			
-			return super.contentInsetTop + heightStatusBar + heightNavigationBar + buttonBarHeight
+			return heightStatusBar + heightNavigationBar + buttonBarHeight
         } else {
-            return super.contentInsetTop
+            let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 0
+            
+            return heightStatusBar + heightNavigationBar
         }
     }
     
@@ -29,6 +32,7 @@ class ALSwipeTabContentViewController : ALSloppySwipeViewController {
 	
 	override func viewDidLoad() {
 		self.title = self.indicatorInfo.title
+        self.automaticallyAdjustsScrollViewInsets = false
 		
 		super.viewDidLoad()
 	}

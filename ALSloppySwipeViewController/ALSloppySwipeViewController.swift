@@ -1,28 +1,18 @@
 import UIKit
 
-class ALSloppySwipeViewController: UIViewController {
+class ALSloppySwipeViewController : UIViewController {
 	var _percentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition!
 	var _panGestureRecognizer: UIPanGestureRecognizer!
 	var isSloppySwipe: Bool
 	
 	override var percentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition? {
-		get {
-			return self._percentDrivenInteractiveTransition
-		}
-		
-		set(value) {
-			self._percentDrivenInteractiveTransition = value
-		}
+		get { return self._percentDrivenInteractiveTransition }
+		set(value) { self._percentDrivenInteractiveTransition = value }
 	}
 	
 	override var panGestureRecognizer: UIPanGestureRecognizer? {
-		get {
-			return self._panGestureRecognizer
-		}
-		
-		set(value) {
-			self._panGestureRecognizer = value
-		}
+		get { return self._panGestureRecognizer }
+		set(value) { self._panGestureRecognizer = value }
 	}
 	
 	init(isSloppySwipe: Bool) {
@@ -40,11 +30,7 @@ class ALSloppySwipeViewController: UIViewController {
 		
 		self.panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture))
 		
-		addGesture()
-	}
-	
-	override func viewDidAppear(_ animated: Bool) {
-		super.viewDidAppear(animated)
+		self.addGesture()
 	}
 	
 	func addGesture() {

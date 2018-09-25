@@ -15,7 +15,6 @@ class ALTagTableViewController : ALSwipeTabContentViewController {
             $0.delegate = self
             $0.dataSource = self
             $0.cellLayoutMarginsFollowReadableWidth = false
-            $0.backgroundColor = .clear
 			
             $0.ins_addPullToRefresh(withHeight: 60.0) { _ in
                 self.pullToRefresh()
@@ -36,14 +35,10 @@ class ALTagTableViewController : ALSwipeTabContentViewController {
         
         self.tableView.run {
             $0.frame = self.view.bounds
+            $0.backgroundColor = .clear
             
-            if #available(iOS 11.0, *) {
-                $0.contentInset.top = self.contentInsetTop + 64
-                $0.scrollIndicatorInsets.top = self.contentInsetTop + 64
-            } else {
-                $0.contentInset.top = self.contentInsetTop
-                $0.scrollIndicatorInsets.top = self.contentInsetTop
-            }
+            $0.contentInset.top = self.contentInsetTop
+            $0.scrollIndicatorInsets.top = self.contentInsetTop
             
             let svgCircleWhite = SVGKImage(named: "Resource/Library/CircleWhite.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)
@@ -51,7 +46,7 @@ class ALTagTableViewController : ALSwipeTabContentViewController {
             let svgCircleLight = SVGKImage(named: "Resource/Library/CircleLight.svg")?.apply {
                 $0.size = CGSize(width: 24, height: 24)
             }
-                
+            
             let defaultFrame = CGRect(x: 0, y: 0, width: 24, height: 24)
             
             if let pullToRefresh = INSDefaultPullToRefresh(frame: defaultFrame, back: svgCircleLight?.uiImage, frontImage: svgCircleWhite?.uiImage.change(color: self.view.tintColor)) {

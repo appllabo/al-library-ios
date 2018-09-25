@@ -21,11 +21,7 @@ class ALWebPageViewController : ALSwipeTabContentViewController {
 			$0.addObserver(self, forKeyPath: "canGoForward", options: .new, context: nil)
 		}
         
-		self.view.addSubview(self.webView)
-		
-        let request = URLRequest(url: url)
-        
-        self.webView.load(request)
+        self.webView.load(URLRequest(url: url))
 	}
 	
 	required init?(coder aDecoder: NSCoder) {
@@ -45,6 +41,10 @@ class ALWebPageViewController : ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
+        if #available(iOS 11.0, *) {
+            self.webView.scrollView.contentInsetAdjustmentBehavior = .never
+        }
+        
 		super.viewDidLoad()
 		
 		self.webView.run {
@@ -55,6 +55,8 @@ class ALWebPageViewController : ALSwipeTabContentViewController {
 			$0.scrollView.contentInset.top = self.contentInsetTop
 			$0.scrollView.scrollIndicatorInsets.top = self.contentInsetTop
         }
+        
+        self.view.addSubview(self.webView)
 	}
 	
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -70,7 +72,7 @@ class ALWebPageViewController : ALSwipeTabContentViewController {
 	func didFinish(_ navigation: WKNavigation!) {
 	}
 	
-	func evaluate(_ json: JSON) {
+	func evaluate(json: JSON) {
 	}
 }
 
@@ -104,9 +106,7 @@ extension ALWebPageViewController: WKNavigationDelegate {
 			return
 		}
 		
-		let json = JSON(parseJSON: param)
-		
-		self.evaluate(json)
+        self.evaluate(json: JSON(parseJSON: param))
 		
 		decisionHandler(.cancel)
 	}
