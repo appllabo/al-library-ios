@@ -21,10 +21,10 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 		return []
 	}
 	
-	init(title: String, isSwipeTab: Bool, isSloppySwipe: Bool, setting: ALMenuTableViewCellSetting) {
+	init(title: String, isSloppySwipe: Bool, setting: ALMenuTableViewCellSetting, swipeTabViewController: ALSwipeTabViewController? = nil) {
         self.setting = setting
         
-		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
+		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
         self.tableView.run {
             $0.delegate = self

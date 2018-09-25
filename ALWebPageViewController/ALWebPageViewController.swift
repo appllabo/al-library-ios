@@ -5,8 +5,8 @@ import SwiftyJSON
 class ALWebPageViewController : ALSwipeTabContentViewController {
 	fileprivate let webView = WKWebView()
 	
-	init(title: String, url: URL, isSwipeTab: Bool, isSloppySwipe: Bool) {
-		super.init(title: title, isSwipeTab: isSwipeTab, isSloppySwipe: isSloppySwipe)
+	init(title: String, url: URL, swipeTabViewController: ALSwipeTabViewController?, isSloppySwipe: Bool) {
+		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
 		self.webView.run {
 			$0.uiDelegate = self

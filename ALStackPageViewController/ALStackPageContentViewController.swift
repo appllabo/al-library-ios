@@ -6,7 +6,7 @@ class ALStackPageContentViewController : UIViewController {
 			return super.contentInsetTop
 		} else {
 			let heightStatusBar = UIApplication.shared.statusBarFrame.size.height
-			let heightNavigationBar = self.navigationController?.navigationBar.frame.size.height ?? 0
+			let heightNavigationBar = self.parent?.navigationController?.navigationBar.frame.size.height ?? 0
 			
 			return super.contentInsetTop + heightStatusBar + heightNavigationBar
 		}
