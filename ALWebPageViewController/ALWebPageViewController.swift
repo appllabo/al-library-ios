@@ -119,26 +119,12 @@ extension ALWebPageViewController : WKUIDelegate {
 		}
 		
 		if navigationAction.targetFrame == nil, UIApplication.shared.canOpenURL(url) == true {
-			let viewController = SFSafariViewController(url: url, entersReaderIfAvailable: false).apply {
-				$0.delegate = self
-			}
+			let viewController = SFSafariViewController(url: url, entersReaderIfAvailable: false)
 			
 			self.present(viewController, animated: true)
 		}
 		
 		return nil
-	}
-}
-
-extension ALWebPageViewController: SFSafariViewControllerDelegate {
-	func safariViewController(_ controller: SFSafariViewController, didCompleteInitialLoad didLoadSuccessfully: Bool) {
-	}
-	
-	func safariViewController(_ controller: SFSafariViewController, activityItemsFor URL: URL, title: String?) -> [UIActivity] {
-		return []
-	}
-	
-	func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
 	}
 }
 
