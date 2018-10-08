@@ -2,11 +2,13 @@ import WebKit
 import SafariServices
 import SwiftyJSON
 
-class ALWebPageViewController : ALSwipeTabContentViewController {
+class ALWebPageViewController : ALSloppySwipeViewController {
 	fileprivate let webView = WKWebView()
 	
-	init(title: String, url: URL, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
-		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
+	init(title: String, url: URL, isSloppySwipe: Bool) {
+		super.init(isSloppySwipe: isSloppySwipe)
+		
+		self.title = title
 		
 		self.webView.run {
 			$0.uiDelegate = self
@@ -41,22 +43,24 @@ class ALWebPageViewController : ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
-        if #available(iOS 11.0, *) {
-            self.webView.scrollView.contentInsetAdjustmentBehavior = .never
-        }
-        
 		super.viewDidLoad()
 		
 		self.webView.run {
 			$0.frame = self.view.bounds
 			$0.backgroundColor = .clear
 			$0.isOpaque = false
-			
-			$0.scrollView.contentInset.top = self.contentInsetTop
-			$0.scrollView.scrollIndicatorInsets.top = self.contentInsetTop
         }
         
         self.view.addSubview(self.webView)
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+//		self.webView.run {
+//			$0.scrollView.contentInset.top = self.contentInsetTop
+//			$0.scrollView.scrollIndicatorInsets.top = self.contentInsetTop
+//		}
 	}
 	
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -76,7 +80,7 @@ class ALWebPageViewController : ALSwipeTabContentViewController {
 	}
 }
 
-extension ALWebPageViewController: WKNavigationDelegate {
+extension ALWebPageViewController : WKNavigationDelegate {
 	func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
 		self.didStartProvisionalNavigation(navigation)
 	}
@@ -97,7 +101,7 @@ extension ALWebPageViewController: WKNavigationDelegate {
 			
 			return
 		}
-	
+		
 		let path = string.components(separatedBy: "native://")
 		
 		guard let param = path[1].removingPercentEncoding else {

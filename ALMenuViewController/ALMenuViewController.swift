@@ -6,7 +6,11 @@ public class ALMenuTableViewCellSetting : NSObject {
 }
 
 class ALMenuViewController : ALSwipeTabContentViewController {
-	internal let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+	internal let tableView = UITableView(frame: CGRect.zero, style: .grouped).apply {
+		if #available(iOS 11.0, *) {
+			$0.contentInsetAdjustmentBehavior = .never
+		}
+	}
 	
     internal var setting: ALMenuTableViewCellSetting {
         return ALMenuTableViewCellSetting()
@@ -38,18 +42,11 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 	}
 	
 	override func viewDidLoad() {
-		if #available(iOS 11.0, *) {
-			self.tableView.contentInsetAdjustmentBehavior = .never
-		}
-		
 		super.viewDidLoad()
 		
         self.tableView.run {
             $0.frame = self.view.bounds
 			$0.backgroundColor = .clear
-            
-            $0.contentInset.top = self.contentInsetTop
-            $0.scrollIndicatorInsets.top = self.contentInsetTop
         }
 		
 		self.view.addSubview(self.tableView)
@@ -57,6 +54,11 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+		
+		self.tableView.run {
+			$0.contentInset.top = self.contentInsetTop
+			$0.scrollIndicatorInsets.top = self.contentInsetTop
+		}
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {

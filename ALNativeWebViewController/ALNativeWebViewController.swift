@@ -1,7 +1,11 @@
 import UIKit
 
 class ALNativeWebViewController : ALSwipeTabContentViewController {
-	private let webView = UIWebView()
+	private let webView = UIWebView().apply {
+		if #available(iOS 11.0, *) {
+			$0.scrollView.contentInsetAdjustmentBehavior = .never
+		}
+	}
 	
 	init(title: String, url: URL, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
@@ -29,7 +33,13 @@ class ALNativeWebViewController : ALSwipeTabContentViewController {
 			$0.frame = self.view.bounds
 			$0.backgroundColor = .clear
 			$0.isOpaque = false
-			
+		}
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		super.viewWillAppear(animated)
+		
+		self.webView.run {
 			$0.scrollView.contentInset.top = self.contentInsetTop
 			$0.scrollView.scrollIndicatorInsets.top = self.contentInsetTop
 		}
