@@ -9,10 +9,6 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
         return nil
     }
     
-    internal var MaxNum: Int {
-        return 300
-    }
-    
 	internal var articles = [ALArticle]()
     internal var articlesAdd = [ALArticle]()
 	
@@ -165,10 +161,6 @@ extension ALArticleTableViewController: UITableViewDelegate {
 	}
 	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
-		if self.articles.count >= self.MaxNum {
-			return
-		}
-		
         if scrollView.contentOffset.y <= 0 {
             return
         }
