@@ -101,7 +101,7 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 	}
 	
 	func pullToRefresh() {
-		self.refreshTable { tableView in
+		self.refresh { tableView in
 			self.endPullToRefresh()
 		}
 	}
@@ -124,20 +124,12 @@ extension ALArticleTableViewController {
 	}
 	
 	@objc func refresh(done: ((UITableView) -> Void)? = nil) {
-		self.refreshTable { tableView in
-			self.endPullToRefresh()
-			
-			done?(self.tableView)
-		}
 	}
 	
-	@objc func refreshTable(done: ((UITableView) -> Void)? = nil) {
-	}
-	
+    @objc func add() {
+    }
+    
 	@objc func onReachMaxNum() {
-	}
-	
-	@objc func loadNext() {
 	}
 }
 
@@ -178,7 +170,7 @@ extension ALArticleTableViewController: UITableViewDelegate {
         }
         
         if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height * 2 {
-			self.loadNext()
+			self.add()
 		}
 	}
 }
