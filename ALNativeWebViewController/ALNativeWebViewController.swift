@@ -30,9 +30,8 @@ class ALNativeWebViewController : ALSwipeTabContentViewController {
 		super.viewDidLoad()
 		
 		self.webView.run {
-			$0.frame = self.view.bounds
+            $0.isOpaque = false
 			$0.backgroundColor = .clear
-			$0.isOpaque = false
 		}
 	}
 	
@@ -40,6 +39,7 @@ class ALNativeWebViewController : ALSwipeTabContentViewController {
 		super.viewWillAppear(animated)
 		
 		self.webView.run {
+            $0.frame = self.view.bounds
 			$0.scrollView.contentInset.top = self.contentInsetTop
 			$0.scrollView.scrollIndicatorInsets.top = self.contentInsetTop
 		}
