@@ -9,6 +9,10 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
         return nil
     }
     
+    internal var MaxNum: Int {
+        return 300
+    }
+    
 	internal var articles = [ALArticle]()
     internal var articlesAdd = [ALArticle]()
 	
@@ -165,14 +169,15 @@ extension ALArticleTableViewController: UITableViewDelegate {
 	}
 	
 	func scrollViewDidScroll(_ scrollView: UIScrollView) {
-		if self.articles.count >= 300 {
+		if self.articles.count >= self.MaxNum {
 			return
 		}
 		
-		// TODO:inset等を考慮して要修正.
-		if scrollView.contentOffset.y >= 0 && scrollView.contentOffset.y + scrollView.frame.height * 2 >= scrollView.contentSize.height {
-			print("ALArticleTableViewController:scrollViewDidScroll:start")
-			
+        if scrollView.contentOffset.y <= 0 {
+            return
+        }
+        
+        if scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.frame.height * 2 {
 			self.loadNext()
 		}
 	}
