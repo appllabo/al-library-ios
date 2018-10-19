@@ -15,6 +15,7 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
     public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
     public var radiusThumbnail = CGFloat(4.0)
     public var backgroundColor = UIColor.white
+    public var backgroundColorComponent = UIColor.clear
     public var fontTitle = UIFont.boldSystemFont(ofSize: 20)
     public var fontDate = UIFont.systemFont(ofSize: 14)
     public var fontWebsite = UIFont.boldSystemFont(ofSize: 16)
@@ -53,7 +54,7 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         self.labelTitle.textAlignment = .left
         self.labelTitle.lineBreakMode = .byTruncatingTail
         self.labelTitle.textColor = self.setting.colorTitle
-        self.labelTitle.backgroundColor = .white
+        self.labelTitle.backgroundColor = self.setting.backgroundColorComponent
         self.labelTitle.clipsToBounds = true
         
         self.initStackView()
@@ -79,13 +80,13 @@ public class ALInstaArticleTableViewCell : ALArticleTableViewCell {
         self.labelWebsite.textColor = self.setting.colorWebsite
 		self.labelWebsite.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
 		self.labelWebsite.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
-        self.labelWebsite.backgroundColor = .white
+        self.labelWebsite.backgroundColor = self.setting.backgroundColorComponent
         self.labelWebsite.clipsToBounds = true
         
         self.labelDate.font = self.setting.fontDate
         self.labelDate.textAlignment = .right
         self.labelDate.textColor = self.setting.colorDate
-        self.labelDate.backgroundColor = .white
+        self.labelDate.backgroundColor = self.setting.backgroundColorComponent
         self.labelDate.clipsToBounds = true
         
         self.stackViewInfo.axis = .horizontal

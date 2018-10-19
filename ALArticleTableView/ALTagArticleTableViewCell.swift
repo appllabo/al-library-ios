@@ -15,6 +15,7 @@ public class ALTagArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     public var paddingContent = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 12)
     public var radiusThumbnail = CGFloat(4.0)
     public var backgroundColor = UIColor.white
+    public var backgroundColorComponent = UIColor.clear
     public var fontTitle = UIFont.boldSystemFont(ofSize: 16)
     public var fontDate = UIFont.systemFont(ofSize: 12)
     public var fontWebsite = UIFont.systemFont(ofSize: 12)
@@ -51,13 +52,13 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
 		self.labelTag.textColor = self.setting.colorWebsite
 		self.labelTag.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
 		self.labelTag.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
-        self.labelTag.backgroundColor = .white
+        self.labelTag.backgroundColor = self.setting.backgroundColorComponent
         self.labelTag.clipsToBounds = true
 		
 		self.labelDate.font = self.setting.fontDate
 		self.labelDate.textAlignment = .right
 		self.labelDate.textColor = self.setting.colorDate
-        self.labelDate.backgroundColor = .white
+        self.labelDate.backgroundColor = self.setting.backgroundColorComponent
         self.labelDate.clipsToBounds = true
 		
 		return UIStackView().apply {
@@ -78,7 +79,7 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
 		super.init(setting: setting)
         
         self.imageViewThumbnail.contentMode = .center
-        self.imageViewThumbnail.backgroundColor = .white
+        self.imageViewThumbnail.backgroundColor = self.setting.backgroundColorComponent
         self.imageViewThumbnail.clipsToBounds = true
         
         self.labelTitle.font = setting.fontTitle
@@ -86,7 +87,7 @@ public class ALTagArticleTableViewCell : ALArticleTableViewCell {
         self.labelTitle.textAlignment = .left
         self.labelTitle.lineBreakMode = .byTruncatingTail
         self.labelTitle.textColor = self.setting.colorTitle
-        self.labelTitle.backgroundColor = .white
+        self.labelTitle.backgroundColor = self.setting.backgroundColorComponent
         self.labelTitle.clipsToBounds = true
         
         self.stackViewRight.axis = .vertical

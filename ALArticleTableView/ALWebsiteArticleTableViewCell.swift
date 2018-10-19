@@ -15,6 +15,7 @@ public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSettin
     public var paddingContent = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 12)
     public var radiusThumbnail = CGFloat(4.0)
     public var backgroundColor = UIColor.white
+    public var backgroundColorComponent = UIColor.clear
     public var fontTitle = UIFont.boldSystemFont(ofSize: 16)
     public var fontDate = UIFont.systemFont(ofSize: 12)
     public var fontWebsite = UIFont.systemFont(ofSize: 12)
@@ -35,7 +36,6 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
     
 	private let imageViewThumbnail = UIImageView().apply {
         $0.contentMode = .center
-        $0.backgroundColor = .white
         $0.clipsToBounds = true
     }
     
@@ -43,13 +43,11 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         $0.numberOfLines = 3
         $0.textAlignment = .left
         $0.lineBreakMode = .byTruncatingTail
-        $0.backgroundColor = .white
         $0.clipsToBounds = true
     }
     
 	private let labelDate = UILabel().apply {
         $0.textAlignment = .right
-        $0.backgroundColor = .white
         $0.clipsToBounds = true
     }
     
@@ -57,13 +55,11 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         $0.textAlignment = .left
 		$0.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
 		$0.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
-        $0.backgroundColor = .white
         $0.clipsToBounds = true
     }
     
 	private let imageViewWebsite = UIImageView().apply {
         $0.contentMode = .center
-        $0.backgroundColor = .white
         $0.clipsToBounds = true
     }
     
@@ -87,14 +83,18 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         
         self.labelTitle.font = self.setting.fontTitle
         self.labelTitle.textColor = self.setting.colorTitle
+        self.labelTitle.backgroundColor = self.setting.backgroundColorComponent
         
         self.labelDate.font = self.setting.fontDate
         self.labelDate.textColor = self.setting.colorDate
+        self.labelDate.backgroundColor = self.setting.backgroundColorComponent
         
         self.labelWebsite.font = self.setting.fontWebsite
         self.labelWebsite.textColor = self.setting.colorWebsite
+        self.labelWebsite.backgroundColor = self.setting.backgroundColorComponent
         
         self.imageViewWebsite.tintColor = self.setting.tintColor
+        self.imageViewWebsite.backgroundColor = self.setting.backgroundColorComponent
         self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.setting.radiusWebsiteImage * 2.0).isActive = true
         self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.setting.radiusWebsiteImage * 2.0).isActive = true
         
