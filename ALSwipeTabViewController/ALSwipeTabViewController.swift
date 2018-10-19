@@ -22,9 +22,8 @@ class ALSwipeTabViewController : ButtonBarPagerTabStripViewController {
 			oldCell?.label.textColor = self.settings.style.buttonBarItemTitleColor
 			newCell?.label.textColor = self.settings.style.selectedBarBackgroundColor
 			
-            // TODO
 			oldCell?.label.font = self.settings.style.buttonBarItemFont
-			newCell?.label.font = .boldSystemFont(ofSize: 14)
+			newCell?.label.font = self.settings.style.buttonBarItemFontBold
 		}
         
 		super.viewDidLoad()
