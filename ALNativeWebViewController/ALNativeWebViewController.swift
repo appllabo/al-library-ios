@@ -30,6 +30,7 @@ class ALNativeWebViewController : ALSwipeTabContentViewController {
 		super.viewDidLoad()
 		
 		self.webView.run {
+            $0.frame = self.view.bounds
             $0.isOpaque = false
 			$0.backgroundColor = .clear
 		}

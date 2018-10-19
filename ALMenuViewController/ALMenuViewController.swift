@@ -56,6 +56,7 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 		super.viewWillAppear(animated)
 		
 		self.tableView.run {
+            $0.frame = self.view.bounds
 			$0.contentInset.top = self.contentInsetTop
 			$0.scrollIndicatorInsets.top = self.contentInsetTop
 		}

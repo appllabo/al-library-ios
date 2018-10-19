@@ -47,13 +47,21 @@ class ALWebPageViewController : ALSloppySwipeViewController {
 		
 		self.webView.run {
 			$0.frame = self.view.bounds
+            $0.isOpaque = false
 			$0.backgroundColor = .clear
-			$0.isOpaque = false
         }
         
         self.view.addSubview(self.webView)
 	}
 	
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.webView.run {
+            $0.frame = self.view.bounds
+        }
+    }
+    
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
 		self.observeValue(self.webView, forKeyPath: keyPath)
 	}

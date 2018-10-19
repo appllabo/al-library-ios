@@ -73,6 +73,10 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
+        
+        self.tableView.run {
+            $0.frame = self.view.bounds
+        }
 	}
 	
 	override func viewDidAppear(_ animated: Bool) {
