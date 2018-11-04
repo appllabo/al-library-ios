@@ -1,7 +1,7 @@
 import SwiftyJSON
 import AlamofireImage
 
-public class ALArticle: ALData {
+public class ALArticle : ALData {
     public var isRead = false
 	public var imageThumbnail: UIImage?
 	public var imageWebsite: UIImage?
