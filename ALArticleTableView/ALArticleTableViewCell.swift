@@ -41,6 +41,8 @@ public class ALArticleTableViewCell : UITableViewCell {
         }
         
         guard let article = self.alArticle else {
+			self.layoutSkeleton()
+			
             return
         }
         
@@ -53,6 +55,9 @@ public class ALArticleTableViewCell : UITableViewCell {
         self.layout(alArticle: article)
     }
     
+	internal func layoutSkeleton() {
+	}
+	
     internal func layout(alArticle: ALArticle) {
         self.textLabel?.text = alArticle.title
     }

@@ -37,6 +37,7 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
 	private let imageViewThumbnail = UIImageView().apply {
         $0.contentMode = .center
         $0.clipsToBounds = true
+		$0.isSkeletonable = true
     }
     
 	private let labelTitle = UILabel().apply {
@@ -44,11 +45,13 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         $0.textAlignment = .left
         $0.lineBreakMode = .byTruncatingTail
         $0.clipsToBounds = true
+		$0.isSkeletonable = true
     }
     
 	private let labelDate = UILabel().apply {
         $0.textAlignment = .right
         $0.clipsToBounds = true
+		$0.isSkeletonable = true
     }
     
 	private let labelWebsite = UILabel().apply {
@@ -56,11 +59,13 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
 		$0.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
 		$0.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
         $0.clipsToBounds = true
+		$0.isSkeletonable = true
     }
     
 	private let imageViewWebsite = UIImageView().apply {
         $0.contentMode = .center
         $0.clipsToBounds = true
+		$0.isSkeletonable = true
     }
     
 	private let stackViewBottom = UIStackView().apply {
@@ -68,12 +73,14 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         $0.alignment = .center
         $0.distribution = .fill
         $0.spacing = 4
+		$0.isSkeletonable = true
     }
     
 	private let stackViewRight = UIStackView().apply {
         $0.axis = .vertical
         $0.alignment = .fill
         $0.distribution = .equalSpacing
+		$0.isSkeletonable = true
     }
 	
 	public init(website setting: ALWebsiteArticleTableViewCellSetting) {
@@ -81,39 +88,69 @@ public class ALWebsiteArticleTableViewCell : ALArticleTableViewCell {
         
 		super.init(setting: setting)
         
-        self.labelTitle.font = self.setting.fontTitle
-        self.labelTitle.textColor = self.setting.colorTitle
-        self.labelTitle.backgroundColor = self.setting.backgroundColorComponent
+		self.labelTitle.run {
+			$0.font = self.setting.fontTitle
+			$0.textColor = self.setting.colorTitle
+			$0.backgroundColor = self.setting.backgroundColorComponent
+		}
         
-        self.labelDate.font = self.setting.fontDate
-        self.labelDate.textColor = self.setting.colorDate
-        self.labelDate.backgroundColor = self.setting.backgroundColorComponent
+		self.labelDate.run {
+			$0.font = self.setting.fontDate
+			$0.textColor = self.setting.colorDate
+			$0.backgroundColor = self.setting.backgroundColorComponent
+		}
         
-        self.labelWebsite.font = self.setting.fontWebsite
-        self.labelWebsite.textColor = self.setting.colorWebsite
-        self.labelWebsite.backgroundColor = self.setting.backgroundColorComponent
+		self.labelWebsite.run {
+			$0.font = self.setting.fontWebsite
+			$0.textColor = self.setting.colorWebsite
+			$0.backgroundColor = self.setting.backgroundColorComponent
+		}
         
-        self.imageViewWebsite.tintColor = self.setting.tintColor
-        self.imageViewWebsite.backgroundColor = self.setting.backgroundColorComponent
-        self.imageViewWebsite.heightAnchor.constraint(equalToConstant: self.setting.radiusWebsiteImage * 2.0).isActive = true
-        self.imageViewWebsite.widthAnchor.constraint(equalToConstant: self.setting.radiusWebsiteImage * 2.0).isActive = true
+		self.imageViewWebsite.run {
+			$0.tintColor = self.setting.tintColor
+			$0.backgroundColor = self.setting.backgroundColorComponent
+			$0.heightAnchor.constraint(equalToConstant: self.setting.radiusWebsiteImage * 2.0).isActive = true
+			$0.widthAnchor.constraint(equalToConstant: self.setting.radiusWebsiteImage * 2.0).isActive = true
+		}
         
-        self.stackViewBottom.addArrangedSubview(self.imageViewWebsite)
-        self.stackViewBottom.addArrangedSubview(self.labelWebsite)
-        self.stackViewBottom.addArrangedSubview(self.labelDate)
+		self.stackViewBottom.run {
+			$0.addArrangedSubview(self.imageViewWebsite)
+			$0.addArrangedSubview(self.labelWebsite)
+			$0.addArrangedSubview(self.labelDate)
+		}
         
-        self.stackViewRight.addArrangedSubview(self.labelTitle)
-        self.stackViewRight.addArrangedSubview(self.stackViewBottom)
+		self.stackViewRight.run {
+			$0.addArrangedSubview(self.labelTitle)
+        	$0.addArrangedSubview(self.stackViewBottom)
+		}
         
-        self.contentView.addSubview(self.imageViewThumbnail)
-        self.contentView.addSubview(self.stackViewRight)
+		self.contentView.run {
+			$0.isSkeletonable = true
+			
+			$0.addSubview(self.imageViewThumbnail)
+        	$0.addSubview(self.stackViewRight)
+		}
 	}
 	
 	required public init?(coder aDecoder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	override func layoutSkeleton() {
+		self.imageViewThumbnail.frame = CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height).inset(by: self.setting.paddingThumbnail)
+		
+		let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
+		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
+		
+		self.stackViewBottom.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top + heightRight - 20, width: widthRight, height: 20)
+		self.labelTitle.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight - 20)
+		
+		self.contentView.showAnimatedGradientSkeleton()
+	}
+	
     override func layout(alArticle: ALArticle) {
+		self.contentView.hideSkeleton()
+		
         self.imageViewThumbnail.frame = CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height).inset(by: self.setting.paddingThumbnail)
         
         let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right

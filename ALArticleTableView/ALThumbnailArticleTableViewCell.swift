@@ -33,36 +33,39 @@ public class ALThumbnailArticleTableViewCellSetting : ALArticleTableViewCellSett
 public class ALThumbnailArticleTableViewCell : ALArticleTableViewCell {
     private let setting: ALThumbnailArticleTableViewCellSetting
     
-	private let imageViewThumbnail = UIImageView()
-	private let labelTitle = UILabel()
-    private let labelDate = UILabel()
-    private let labelWebsite = UILabel()
-	private let stackViewRight = UIStackView()
+	private let imageViewThumbnail = UIImageView().apply {
+		$0.contentMode = .center
+		$0.clipsToBounds = true
+		$0.isSkeletonable = true
+	}
 	
-	public var stackViewBottom: UIStackView {
-		self.labelDate.font = self.setting.fontDate
-		self.labelDate.textAlignment = .left
-		self.labelDate.textColor = self.setting.colorDate
-		self.labelDate.backgroundColor = self.setting.backgroundColorComponent
-		self.labelDate.clipsToBounds = true
-		
-		self.labelWebsite.font = self.setting.fontWebsite
-		self.labelWebsite.textAlignment = .right
-		self.labelWebsite.textColor = self.setting.colorWebsite
-		self.labelWebsite.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
-		self.labelWebsite.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
-		self.labelWebsite.backgroundColor = self.setting.backgroundColorComponent
-		self.labelWebsite.clipsToBounds = true
-		
-		return UIStackView().apply {
-			$0.axis = .horizontal
-			$0.alignment = .bottom
-			$0.distribution = .fill
-			$0.spacing = 8
-			
-			$0.addArrangedSubview(self.labelDate)
-			$0.addArrangedSubview(self.labelWebsite)
-		}
+	private let labelTitle = UILabel().apply {
+		$0.numberOfLines = 3
+		$0.textAlignment = .left
+		$0.clipsToBounds = true
+		$0.isSkeletonable = true
+	}
+	
+	private let labelDate = UILabel().apply {
+		$0.textAlignment = .left
+		$0.clipsToBounds = true
+		$0.isSkeletonable = true
+	}
+	
+	private let labelWebsite = UILabel().apply {
+		$0.textAlignment = .right
+		$0.setContentHuggingPriority(UILayoutPriority(rawValue: 0), for: .horizontal)
+		$0.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 0), for: .horizontal)
+		$0.clipsToBounds = true
+		$0.isSkeletonable = true
+	}
+	
+	private let stackViewBottom = UIStackView().apply {
+		$0.axis = .horizontal
+		$0.alignment = .bottom
+		$0.distribution = .fill
+		$0.spacing = 8
+		$0.isSkeletonable = true
 	}
 	
     public init(thumbnail setting: ALThumbnailArticleTableViewCellSetting) {
@@ -78,40 +81,73 @@ public class ALThumbnailArticleTableViewCell : ALArticleTableViewCell {
 	}
 	
 	private func initView() {
-        self.imageViewThumbnail.contentMode = .center
-        self.imageViewThumbnail.backgroundColor = self.setting.backgroundColorComponent
-        self.imageViewThumbnail.clipsToBounds = true
+		self.imageViewThumbnail.run {
+			$0.backgroundColor = self.setting.backgroundColorComponent
+		}
         
-		self.labelTitle.font = setting.fontTitle
-		self.labelTitle.numberOfLines = 2
-		self.labelTitle.textAlignment = .left
-		self.labelTitle.textColor = self.setting.colorTitle
-		self.labelTitle.backgroundColor = self.setting.backgroundColorComponent
-		self.labelTitle.clipsToBounds = true
+		self.labelTitle.run {
+			$0.font = self.setting.fontTitle
+			$0.textColor = self.setting.colorTitle
+			$0.backgroundColor = self.setting.backgroundColorComponent
+		}
 		
-		self.stackViewRight.axis = .vertical
-		self.stackViewRight.alignment = .fill
-		self.stackViewRight.distribution = .equalSpacing
+		self.labelDate.run {
+			$0.font = self.setting.fontDate
+			$0.textColor = self.setting.colorDate
+			$0.backgroundColor = self.setting.backgroundColorComponent
+		}
 		
-		self.stackViewRight.addArrangedSubview(self.labelTitle)
-		self.stackViewRight.addArrangedSubview(self.stackViewBottom)
+		self.labelWebsite.run {
+			$0.font = self.setting.fontWebsite
+			$0.textColor = self.setting.colorWebsite
+			$0.backgroundColor = self.setting.backgroundColorComponent
+		}
 		
-		self.contentView.addSubview(self.imageViewThumbnail)
-		self.contentView.addSubview(self.stackViewRight)
+		self.stackViewBottom.run {
+			$0.addArrangedSubview(self.labelDate)
+			$0.addArrangedSubview(self.labelWebsite)
+		}
+		
+		self.contentView.run {
+			$0.isSkeletonable = true
+			
+			$0.addSubview(self.imageViewThumbnail)
+			$0.addSubview(self.labelTitle)
+			$0.addSubview(self.stackViewBottom)
+		}
 	}
 	
-    override func layout(alArticle: ALArticle) {
+	override func layoutSkeleton() {
 		self.imageViewThumbnail.frame = CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height).inset(by: self.setting.paddingThumbnail)
 		
 		let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
 		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
 		
-		self.stackViewRight.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight)
-        
-        self.labelTitle.text = alArticle.title
+		self.stackViewBottom.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top + heightRight - 20, width: widthRight, height: 20)
+		self.labelTitle.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight - 20)
+		
+		self.contentView.showAnimatedGradientSkeleton()
+	}
+	
+    override func layout(alArticle: ALArticle) {
+		self.contentView.hideSkeleton()
+		
+		self.imageViewThumbnail.frame = CGRect(x: 0, y: 0, width: self.setting.sizeThumbnail.width, height: self.setting.sizeThumbnail.height).inset(by: self.setting.paddingThumbnail)
+		
+		let widthRight = self.contentView.frame.width - self.setting.sizeThumbnail.width - self.setting.paddingContent.left - self.setting.paddingContent.right
+		let heightRight = self.contentView.frame.height - self.setting.paddingContent.top - self.setting.paddingContent.bottom
+		
+		self.stackViewBottom.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top + heightRight - 20, width: widthRight, height: 20)
+		
+		self.labelTitle.run {
+			$0.frame = CGRect(x: self.setting.sizeThumbnail.width + self.setting.paddingContent.left, y: self.setting.paddingContent.top, width: widthRight, height: heightRight - 20)
+			$0.text = alArticle.title
+			$0.sizeToFit()
+		}
+		
         self.labelDate.text = alArticle.date
         self.labelWebsite.text = alArticle.website
-        
+		
         self.imageViewThumbnail.image = nil
         
         if let image = alArticle.imageThumbnail {
