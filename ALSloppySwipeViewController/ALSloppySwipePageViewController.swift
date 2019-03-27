@@ -127,7 +127,7 @@ extension ALSloppySwipePageViewController: UIScrollViewDelegate {
 
 extension ALSloppySwipePageViewController: UIPageViewControllerDataSource {
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-		guard let index = self.contentViewControllers.index(of: viewController) else {
+		guard let index = self.contentViewControllers.firstIndex(of: viewController) else {
 			return nil
 		}
 		
@@ -139,7 +139,7 @@ extension ALSloppySwipePageViewController: UIPageViewControllerDataSource {
 	}
 	
 	func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-		guard let index = self.contentViewControllers.index(of: viewController) else {
+		guard let index = self.contentViewControllers.firstIndex(of: viewController) else {
 			return nil
 		}
 		
@@ -163,7 +163,7 @@ extension ALSloppySwipePageViewController: UIPageViewControllerDelegate {
 			return
 		}
 		
-		guard let first = pageViewController.viewControllers?.first, let index = self.contentViewControllers.index(of: first) else {
+		guard let first = pageViewController.viewControllers?.first, let index = self.contentViewControllers.firstIndex(of: first) else {
 			return
 		}
 		
