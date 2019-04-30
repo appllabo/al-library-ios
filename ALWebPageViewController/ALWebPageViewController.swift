@@ -15,6 +15,8 @@ class ALWebPageViewController : ALSloppySwipeViewController {
 			$0.navigationDelegate = self
 			$0.scrollView.delegate = self
 			$0.scrollView.decelerationRate = .normal
+            $0.allowsBackForwardNavigationGestures = false
+            $0.configuration.userContentController.add(self, name: "native")
 			
 			$0.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
 			$0.addObserver(self, forKeyPath: "title", options: .new, context: nil)
@@ -42,6 +44,10 @@ class ALWebPageViewController : ALSloppySwipeViewController {
 		}
 	}
 	
+    func invalidate() {
+        self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "native")
+    }
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -89,30 +95,16 @@ extension ALWebPageViewController : WKNavigationDelegate {
 	}
 	
 	func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: (@escaping (WKNavigationActionPolicy) -> Void)) {
-		guard let string = navigationAction.request.url?.absoluteString else {
-			decisionHandler(.allow)
-			
-			return
-		}
-		
-		if string.hasPrefix("native://") == false {
-			decisionHandler(.allow)
-			
-			return
-		}
-		
-		let path = string.components(separatedBy: "native://")
-		
-		guard let param = path[1].removingPercentEncoding else {
-			decisionHandler(.allow)
-			
-			return
-		}
-		
-        self.evaluate(json: JSON(parseJSON: param))
-		
-		decisionHandler(.cancel)
+        decisionHandler(.allow)
 	}
+}
+
+extension ALWebPageViewController : WKScriptMessageHandler {
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let body = message.body as? [String: Any] else { return }
+        
+        self.evaluate(json: JSON(body))
+    }
 }
 
 extension ALWebPageViewController : WKUIDelegate {
