@@ -1,5 +1,6 @@
 import UIKit
 import AlamofireImage
+import SkeletonView
 
 public class ALWebsiteArticleTableViewCellSetting : ALArticleTableViewCellSetting {
     public override var reuseIdentifier: String {
