@@ -62,29 +62,26 @@ class ALImagePageViewController : UIPageViewController {
 	}
 	
 	func setImage(index: Int) -> Bool {
-		self.index = index
-		
-		if self.index < self.urls.count {
-			let url = self.urls[self.index]
-			
-			let viewController = ALScrollImageViewController(url: url).apply {
-				$0.view.tag = self.index
-			}
-			
-			self.setViewControllers([viewController], direction: .forward, animated: true)
-			
-			self.refreshPageNumber()
-			
-			return true
-		} else {
-			print("画像表示失敗")
-			
-			return false
-		}
+		if index >= self.urls.count {
+            print("画像表示失敗")
+            
+            return false
+        }
+        
+        self.index = index
+        self.refreshPageNumber()
+        
+        let viewController = ALScrollImageViewController(url: self.urls[self.index]).apply {
+            $0.view.tag = self.index
+        }
+        
+        self.setViewControllers([viewController], direction: .forward, animated: false)
+        
+        return true
 	}
 	
 	func refreshPageNumber() {
-		self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "\(self.index + 1)  /  \(self.urls.count)", style:.plain, target: self, action: nil)
+		self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "\(self.index + 1)  /  \(self.urls.count)", style: .plain, target: self, action: nil)
 		
 		self.navigationController?.setToolbarHidden(false, animated: true)
 		self.navigationController?.setNavigationBarHidden(false, animated: true)
