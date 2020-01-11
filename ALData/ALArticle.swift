@@ -28,6 +28,9 @@ public class ALArticle : ALData {
         
         ImageDownloader.default.download(request, filter: filter) { response in
             guard let image = response.result.value else {
+                print(url.relativeString)
+                print(response)
+                
                 return
             }
             
