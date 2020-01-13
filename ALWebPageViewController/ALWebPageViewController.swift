@@ -16,7 +16,7 @@ class ALWebPageViewController : ALSloppySwipeViewController {
 			$0.scrollView.delegate = self
 			$0.scrollView.decelerationRate = .normal
             $0.allowsBackForwardNavigationGestures = false
-            $0.configuration.userContentController.add(self, name: "native")
+            $0.configuration.userContentController.add(ALWeakWKScriptMessageHandler(delegate: self), name: "native")
 			
 			$0.addObserver(self, forKeyPath: "estimatedProgress", options: .new, context: nil)
 			$0.addObserver(self, forKeyPath: "title", options: .new, context: nil)
@@ -41,13 +41,11 @@ class ALWebPageViewController : ALSloppySwipeViewController {
 			$0.removeObserver(self, forKeyPath: "loading")
 			$0.removeObserver(self, forKeyPath: "canGoBack")
 			$0.removeObserver(self, forKeyPath: "canGoForward")
+            
+            $0.configuration.userContentController.removeScriptMessageHandler(forName: "native")
 		}
 	}
 	
-    func invalidate() {
-        self.webView.configuration.userContentController.removeScriptMessageHandler(forName: "native")
-    }
-    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
