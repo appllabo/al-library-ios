@@ -222,8 +222,10 @@ class ALImagePageViewController : UIPageViewController {
 				
 				return
 			}
-			
-			done?()
+
+            DispatchQueue.main.async {
+                done?()
+            }
 		}
 	}
 	
