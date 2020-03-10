@@ -9,12 +9,10 @@ class ALWebsiteTableViewController : ALSwipeTabContentViewController {
 		return nil
 	}
 	
-	internal var websites: [ALWebsite]
+	internal var websites = [ALWebsite]()
 	internal var cells = [ALWebsiteTableViewCell]()
 	
-	init(title: String, websites: [ALWebsite], isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
-		self.websites = websites
-		
+    override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
         self.tableView.run {
