@@ -2,6 +2,10 @@ import UIKit
 import AlamofireImage
 
 public class ALWebsiteTableViewCellSetting : NSObject {
+    public var reuseIdentifier: String {
+        return "ALWebsiteTableViewCell"
+    }
+    
 	public var separatorInset: UIEdgeInsets {
 		return UIEdgeInsets(top: 0, left: 59, bottom: 0, right: 0)
 	}
@@ -22,7 +26,7 @@ class ALWebsiteTableViewCell : UITableViewCell {
         self.website = website
         self.setting = setting
         
-		super.init(style: .default, reuseIdentifier: "ALWebsiteTableViewCell")
+        super.init(style: .default, reuseIdentifier: setting.reuseIdentifier)
 		
         self.imageView?.run {
             $0.layer.masksToBounds = true

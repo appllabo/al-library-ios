@@ -10,7 +10,6 @@ class ALWebsiteTableViewController : ALSwipeTabContentViewController {
 	}
 	
 	internal var websites = [ALWebsite]()
-	internal var cells = [ALWebsiteTableViewCell]()
 	
     override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
@@ -91,6 +90,10 @@ class ALWebsiteTableViewController : ALSwipeTabContentViewController {
         }
 	}
 	
+    func cell(website: ALWebsite) -> ALWebsiteTableViewCell {
+        return tableView.dequeueReusableCell(withIdentifier: "ALWebsiteTableViewCell") as? ALWebsiteTableViewCell ?? ALWebsiteTableViewCell(website: website, setting: ALWebsiteTableViewCellSetting())
+    }
+    
 	func open(alWebsite: ALWebsite) {
 	}
 	
@@ -120,11 +123,11 @@ extension ALWebsiteTableViewController {
 
 extension ALWebsiteTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.cells.count
+		return self.websites.count
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-		return self.cells[indexPath.row]
+        return self.cell(website: self.websites[indexPath.row])
 	}
 }
 
