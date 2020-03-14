@@ -5,13 +5,17 @@ import INSPullToRefresh
 class ALArticleTableViewController : ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 
-    internal var separatorInset: UIEdgeInsets? {
-        return nil
-    }
-    
 	internal var articles = [ALArticle]()
     internal var articlesAdd = [ALArticle]()
-	
+    
+    internal var separatorInset: UIEdgeInsets? {
+        nil
+    }
+    
+    internal var cell: ALArticleTableViewCell {
+        tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: ALArticleTableViewCellSetting())
+    }
+    
     override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
@@ -92,10 +96,6 @@ class ALArticleTableViewController : ALSwipeTabContentViewController {
         }
     }
     
-    func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "ALArticle") as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: ALArticleTableViewCellSetting())
-    }
-    
 	func didSelectRow(at indexPath: IndexPath) {
         self.open(alArticle: self.articles[indexPath.row])
 	}
@@ -141,7 +141,7 @@ extension ALArticleTableViewController: UITableViewDataSource {
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let article = self.articles[indexPath.row]
         
-        return self.cell(alArticle: article).apply {
+        return self.cell.apply {
             $0.alArticle = article
         }
 	}
