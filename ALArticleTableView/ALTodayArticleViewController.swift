@@ -2,14 +2,20 @@ import UIKit
 import NotificationCenter
 
 class ALTodayArticleViewController : UIViewController {
-	internal var separatorInset: UIEdgeInsets? {
-		return nil
-	}
-	
 	internal let tableView = UITableView()
 	
 	internal var articles = [ALArticle]()
 	
+    internal var separatorInset: UIEdgeInsets? {
+        nil
+    }
+    
+    internal var cell: ALArticleTableViewCell {
+        let setting = ALArticleTableViewCellSetting()
+        
+        return tableView.dequeueReusableCell(withIdentifier: setting.reuseIdentifier) as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: setting)
+    }
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -37,12 +43,6 @@ class ALTodayArticleViewController : UIViewController {
 	func load(completionHandler: (@escaping (NCUpdateResult) -> Void)) {
 	}
 	
-    func cell(alArticle: ALArticle) -> ALArticleTableViewCell {
-        let setting = ALArticleTableViewCellSetting()
-        
-        return tableView.dequeueReusableCell(withIdentifier: setting.reuseIdentifier) as? ALArticleTableViewCell ?? ALArticleTableViewCell(setting: setting)
-    }
-    
     func getCellHeight(width: CGFloat) -> CGFloat {
         return ALArticleTableViewCellSetting().height(width: width)
     }
@@ -92,7 +92,7 @@ extension ALTodayArticleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let article = self.articles[indexPath.row]
         
-        return self.cell(alArticle: article).apply {
+        return self.cell.apply {
             $0.alArticle = article
         }
     }
