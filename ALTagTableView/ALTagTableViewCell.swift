@@ -2,15 +2,15 @@ import UIKit
 import AlamofireImage
 
 public class ALTagTableViewCellSetting : NSObject {
-    public var reuseIdentifier: String {
-        return "ALTag"
-    }
-    
     public var tintColor = UIColor.black
     public var sizeImage = CGSize(width: 29, height: 29)
     public var radiusImage = CGFloat(14.5)
     public var fontText = UIFont.systemFont(ofSize: 17)
     public var colorText = UIColor.black
+    
+    public var reuseIdentifier: String {
+        "ALTag"
+    }
 }
 
 class ALTagTableViewCell : UITableViewCell {

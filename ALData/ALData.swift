@@ -3,8 +3,8 @@ import SwiftyJSON
 public class ALData: NSObject, NSCoding {
 	internal var json: JSON
 	
-	public var string: String {
-		return "\(self.json)"
+	internal var string: String {
+		"\(self.json)"
 	}
 	
 	init(string: String) {
@@ -19,7 +19,7 @@ public class ALData: NSObject, NSCoding {
 		self.json = json
 	}
 	
-	public func encode(with aCoder: NSCoder) {
+    public func encode(with aCoder: NSCoder) {
 		if let dictionary = self.json.dictionaryObject {
 			aCoder.encode(dictionary, forKey: "dictionary")
 		} else {
@@ -37,4 +37,3 @@ public class ALData: NSObject, NSCoding {
 		self.json = JSON(dictionary)
 	}
 }
-

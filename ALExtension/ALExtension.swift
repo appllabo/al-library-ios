@@ -82,31 +82,31 @@ extension UIImage {
 
 extension UIViewController {
 	@objc var heightNavigationBar: CGFloat {
-		return self.navigationController?.navigationBar.frame.size.height ?? 0.0
+		self.navigationController?.navigationBar.frame.size.height ?? 0.0
 	}
 	
 	@objc var heightTabBar: CGFloat {
 		if #available(iOS 11.0, *) {
 			return self.view.safeAreaInsets.bottom
-		}
-		
-		return self.tabBarController?.tabBar.frame.size.height ?? 0.0
+        } else {
+            return self.tabBarController?.tabBar.frame.size.height ?? 0.0
+        }
 	}
 	
 	@objc var heightToolBar: CGFloat {
 		if #available(iOS 11.0, *) {
 			return self.view.safeAreaInsets.bottom
-		}
-		
-		return self.navigationController?.toolbar.frame.size.height ?? 0.0
+        } else {
+            return self.navigationController?.toolbar.frame.size.height ?? 0.0
+        }
 	}
 	
 	@objc var contentInsetTop: CGFloat {
-		return 0.0
+		0.0
 	}
 	
 	@objc var contentInsetBottom: CGFloat {
-		return 0.0
+		0.0
 	}
 	
 	@objc var percentDrivenInteractiveTransition: UIPercentDrivenInteractiveTransition? {
@@ -114,7 +114,7 @@ extension UIViewController {
 			return nil
 		}
 		
-		set(value) {
+		set (value) {
 		}
 	}
 	
@@ -123,7 +123,7 @@ extension UIViewController {
 			return nil
 		}
 		
-		set(value) {
+		set (value) {
 		}
 	}
 	

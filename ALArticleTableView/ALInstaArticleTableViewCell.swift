@@ -2,14 +2,6 @@ import UIKit
 import AlamofireImage
 
 public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting {
-    public override var reuseIdentifier: String {
-        return "ALInstaArticle"
-    }
-    
-    public override var separatorInset: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: self.paddingThumbnail.left, bottom: 0, right: 0)
-    }
-    
     public var sizeThumbnail = CGSize(width: 102.0, height: 102.0)
     public var paddingThumbnail = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
@@ -29,6 +21,14 @@ public class ALInstaArticleTableViewCellSetting : ALArticleTableViewCellSetting 
 	public var radiusWebsiteImage = CGFloat(18)
 	public var colorBottom = UIColor(hex: 0xa0a0a0)
 	
+    public override var reuseIdentifier: String {
+        "ALInstaArticle"
+    }
+    
+    public override var separatorInset: UIEdgeInsets {
+        UIEdgeInsets(top: 0, left: self.paddingThumbnail.left, bottom: 0, right: 0)
+    }
+    
     override func height(width: CGFloat) -> CGFloat {
         return 54 + width / 16 * 9 + 64
     }

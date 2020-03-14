@@ -2,14 +2,6 @@ import UIKit
 import AlamofireImage
 
 public class ALThumbnailArticleTableViewCellSetting : ALArticleTableViewCellSetting {
-    public override var reuseIdentifier: String {
-        return "ALThumbnailArticle"
-    }
-    
-    public override var separatorInset: UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: self.paddingThumbnail.left, bottom: 0, right: 0)
-    }
-    
     public var sizeThumbnail = CGSize(width: 102.0, height: 102.0)
 	public var paddingThumbnail = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
 	public var paddingContent = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 12)
@@ -25,6 +17,14 @@ public class ALThumbnailArticleTableViewCellSetting : ALArticleTableViewCellSett
 	public var colorWebsite = UIColor(hex: 0xa0a0a0)
     public var tintColor = UIColor.black
 	
+    public override var reuseIdentifier: String {
+        "ALThumbnailArticle"
+    }
+    
+    public override var separatorInset: UIEdgeInsets {
+        UIEdgeInsets(top: 0, left: self.paddingThumbnail.left, bottom: 0, right: 0)
+    }
+    
     override func height(width: CGFloat) -> CGFloat {
         return self.sizeThumbnail.height
     }

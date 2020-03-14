@@ -6,6 +6,13 @@ public class ALMenuTableViewCellSetting : NSObject {
 }
 
 class ALMenuViewController : ALSwipeTabContentViewController {
+    internal enum SectionData {
+        case String(String)
+        case Array([SectionData])
+        case Dictionary([String: SectionData])
+        case Closure((UITableView, IndexPath) -> Void)
+    }
+    
 	internal let tableView = UITableView(frame: CGRect.zero, style: .grouped).apply {
 		if #available(iOS 11.0, *) {
 			$0.contentInsetAdjustmentBehavior = .never
@@ -13,18 +20,12 @@ class ALMenuViewController : ALSwipeTabContentViewController {
 	}
 	
     internal var setting: ALMenuTableViewCellSetting {
-        return ALMenuTableViewCellSetting()
+        ALMenuTableViewCellSetting()
     }
     
-	internal enum SectionData {
-		case String(String)
-		case Array([SectionData])
-		case Dictionary([String: SectionData])
-		case Closure((UITableView, IndexPath) -> Void)
-	}
 	
 	internal var sections: [[String: SectionData]] {
-		return []
+        []
 	}
 	
     override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {

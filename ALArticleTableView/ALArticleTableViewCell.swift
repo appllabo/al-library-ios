@@ -3,11 +3,11 @@ import AlamofireImage
 
 public class ALArticleTableViewCellSetting : NSObject {
     public var reuseIdentifier: String {
-        return "ALArticle"
+        "ALArticle"
     }
     
     public var separatorInset: UIEdgeInsets? {
-        return nil
+        nil
     }
     
     func height(width: CGFloat) -> CGFloat {

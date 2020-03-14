@@ -8,17 +8,37 @@ public class ALArticle : ALData {
     public var imageTag: UIImage?
 	
 	public var title: String? {
-		return nil
+		nil
 	}
 	
 	public var website: String? {
-		return nil
+		nil
 	}
 	
 	public var stringTags: String? {
-		return nil
+		nil
 	}
 	
+    public var date: String? {
+        nil
+    }
+    
+    public var url: URL? {
+        nil
+    }
+    
+    public var urlImageThumbnail: URL? {
+        nil
+    }
+    
+    public var urlImageWebsite: URL? {
+        nil
+    }
+    
+    public var urlImageTag: URL? {
+        nil
+    }
+    
     public func loadThumbnailImage(filter: ImageFilter, block: @escaping (UIImage) -> Void) {
         guard let url = self.urlImageThumbnail else {
             return
@@ -75,24 +95,4 @@ public class ALArticle : ALData {
             block(image)
         }
     }
-    
-    public var date: String? {
-        return nil
-    }
-    
-	public var url: URL? {
-		return nil
-	}
-	
-	public var urlImageThumbnail: URL? {
-		return nil
-	}
-	
-	public var urlImageWebsite: URL? {
-		return nil
-	}
-	
-	public var urlImageTag: URL? {
-		return nil
-	}
 }

@@ -2,20 +2,20 @@ import UIKit
 import AlamofireImage
 
 public class ALWebsiteTableViewCellSetting : NSObject {
-    public var reuseIdentifier: String {
-        return "ALWebsiteTableViewCell"
-    }
-    
-	public var separatorInset: UIEdgeInsets {
-		return UIEdgeInsets(top: 0, left: 59, bottom: 0, right: 0)
-	}
-	
     public var tintColor = UIColor.black
 	public var sizeImage = CGSize(width: 29, height: 29)
 	public var radiusImage = CGFloat(14.5)
     public var font = UIFont.systemFont(ofSize: 17)
     public var colorText = UIColor.black
     public var colorTextDetail = UIColor.black
+    
+    public var reuseIdentifier: String {
+        "ALWebsiteTableViewCell"
+    }
+    
+    public var separatorInset: UIEdgeInsets {
+        UIEdgeInsets(top: 0, left: 59, bottom: 0, right: 0)
+    }
 }
 
 class ALWebsiteTableViewCell : UITableViewCell {

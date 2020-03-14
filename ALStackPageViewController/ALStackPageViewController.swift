@@ -2,45 +2,43 @@ import UIKit
 
 class ALStackPageViewController : ALSloppySwipePageViewController {
 	private let titleView = UIView()
-	
 	private let stackViewTitle = UIStackView()
     
     internal let labelTitle = UILabel()
 	internal let labelTitleMain = UILabel()
     internal let labelTitleSub = UILabel()
-    
     internal let pageControl = UIPageControl()
     
 	internal var isEnableForward: Bool {
-		return self.index < self.contentViewControllers.count - 1
+		self.index < self.contentViewControllers.count - 1
 	}
     
 	internal var colorTitleMain: UIColor {
-		return .init(hex: 0x000000)
+		.init(hex: 0x000000)
 	}
 	
 	internal var colorTitleSub: UIColor {
-		return .init(hex: 0x808080)
+		.init(hex: 0x808080)
 	}
 	
     internal var pageIndicatorTintColor: UIColor {
-        return .init(hex: 0xa0a0a0)
+        .init(hex: 0xa0a0a0)
     }
     
     internal var currentPageIndicatorTintColor: UIColor {
-        return .init(hex: 0x007aff)
+        .init(hex: 0x007aff)
     }
     
     internal var fontTitleMain: UIFont {
-        return .boldSystemFont(ofSize: 16)
+        .boldSystemFont(ofSize: 16)
     }
     
     internal var fontTitleSub: UIFont {
-        return .systemFont(ofSize: 11)
+        .systemFont(ofSize: 11)
     }
     
 	internal var titleViewFrame: CGRect {
-		return .init(x: 0, y: 0, width: self.view.frame.width - 96, height: 44)
+		.init(x: 0, y: 0, width: self.view.frame.width - 96, height: 44)
 	}
 	
     init(contentViewController: ALStackPageContentViewController, isSloppySwipe: Bool) {
@@ -87,7 +85,7 @@ class ALStackPageViewController : ALSloppySwipePageViewController {
 			$0.font = self.fontTitleMain
 			$0.textColor = self.colorTitleMain
 			$0.attributedText = (self.contentViewControllers[self.index] as! ALStackPageContentViewController).attributedTitleMain
-	}
+        }
         
         self.pageControl.run {
 			$0.pageIndicatorTintColor = self.pageIndicatorTintColor
