@@ -5,12 +5,16 @@ import INSPullToRefresh
 class ALWebsiteTableViewController : ALSwipeTabContentViewController {
 	internal let tableView = UITableView()
 	
-	internal var separatorInset: UIEdgeInsets? {
-		return nil
-	}
-	
 	internal var websites = [ALWebsite]()
 	
+    internal var separatorInset: UIEdgeInsets? {
+        nil
+    }
+    
+    internal var cell: ALWebsiteTableViewCell {
+        tableView.dequeueReusableCell(withIdentifier: "ALWebsiteTableViewCell") as? ALWebsiteTableViewCell ?? ALWebsiteTableViewCell(setting: ALWebsiteTableViewCellSetting())
+    }
+    
     override init(title: String, isSloppySwipe: Bool, swipeTabViewController: ALSwipeTabViewController? = nil) {
 		super.init(title: title, isSloppySwipe: isSloppySwipe, swipeTabViewController: swipeTabViewController)
 		
@@ -90,11 +94,8 @@ class ALWebsiteTableViewController : ALSwipeTabContentViewController {
         }
 	}
 	
-    func cell(website: ALWebsite) -> ALWebsiteTableViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: "ALWebsiteTableViewCell") as? ALWebsiteTableViewCell ?? ALWebsiteTableViewCell(website: website, setting: ALWebsiteTableViewCellSetting())
-    }
-    
 	func open(alWebsite: ALWebsite) {
+        fatalError("open(alWebsite:) has not been implemented")
 	}
 	
 	func refresh() {
@@ -127,7 +128,11 @@ extension ALWebsiteTableViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return self.cell(website: self.websites[indexPath.row])
+        let website = self.websites[indexPath.row]
+        
+        return self.cell.apply {
+            $0.website = website
+        }
 	}
 }
 

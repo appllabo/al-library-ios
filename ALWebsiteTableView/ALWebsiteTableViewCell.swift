@@ -19,11 +19,12 @@ public class ALWebsiteTableViewCellSetting : NSObject {
 }
 
 class ALWebsiteTableViewCell : UITableViewCell {
-    private let website: ALWebsite
     private let setting: ALWebsiteTableViewCellSetting
     
-	init(website: ALWebsite, setting: ALWebsiteTableViewCellSetting) {
-        self.website = website
+    internal var website: ALWebsite?
+    internal var websiteLayouted: ALWebsite?
+    
+	init(setting: ALWebsiteTableViewCellSetting) {
         self.setting = setting
         
         super.init(style: .default, reuseIdentifier: setting.reuseIdentifier)
@@ -33,27 +34,6 @@ class ALWebsiteTableViewCell : UITableViewCell {
             $0.layer.borderColor = UIColor.clear.cgColor
             $0.layer.borderWidth = 0
             $0.layer.cornerRadius = setting.radiusImage
-        }
-		
-        if let url = website.urlImage {
-            let request = URLRequest(url: url)
-            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: self.setting.sizeImage, radius: self.setting.radiusImage)
-            
-            ImageDownloader.default.download(request, filter: filter) { [weak self] response in
-                guard let image = response.result.value else {
-					return
-				}
-				
-				self?.imageView?.image = image
-				
-				self?.setNeedsLayout()
-            }
-        }
-        
-        self.textLabel?.run {
-            $0.text = website.name
-            $0.font = setting.font
-            $0.textColor = setting.colorText
         }
         
 		self.accessoryType = .disclosureIndicator
@@ -66,14 +46,40 @@ class ALWebsiteTableViewCell : UITableViewCell {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.layout()
+        guard let website = self.website else {
+            return
+        }
+        
+        if website == self.websiteLayouted {
+            return
+        }
+        
+        self.websiteLayouted = website
+        
+        self.layout(website: website)
     }
     
-    public func layout() {
-//        if let url = website.urlImage, self.imageView?.image == nil {
-//            let placeholderImage = UIImage()
-//            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: self.setting.sizeImage, radius: self.setting.radiusImage)
-//            self.imageView?.af_setImage(withURL: url, placeholderImage: placeholderImage, filter: filter)
-//        }
+    public func layout(website: ALWebsite) {
+        if let url = website.urlImage {
+            let request = URLRequest(url: url)
+            let filter = AspectScaledToFillSizeWithRoundedCornersFilter(size: self.setting.sizeImage, radius: self.setting.radiusImage)
+            self.imageView?.image = UIImage()
+            
+            ImageDownloader.default.download(request, filter: filter) { [weak self] response in
+                guard let image = response.result.value else {
+                    return
+                }
+                
+                self?.imageView?.image = image
+                
+                self?.setNeedsLayout()
+            }
+        }
+        
+        self.textLabel?.run {
+            $0.text = website.name
+            $0.font = setting.font
+            $0.textColor = setting.colorText
+        }
     }
 }
