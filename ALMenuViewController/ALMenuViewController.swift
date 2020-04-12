@@ -10,7 +10,7 @@ class ALMenuViewController : ALSwipeTabContentViewController {
         case String(String)
         case Array([SectionData])
         case Dictionary([String: SectionData])
-        case Closure((UITableView, IndexPath) -> Void)
+        case Closure(() -> UIViewController?)
     }
     
 	internal let tableView = UITableView(frame: CGRect.zero, style: .grouped).apply {
@@ -141,7 +141,7 @@ extension ALMenuViewController: UITableViewDataSource {
 
 extension ALMenuViewController: UITableViewDelegate {
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard case let .Array(contents)? = self.sections[indexPath.section]["contents"] else {
+        guard case let .Array(contents) = self.sections[indexPath.section]["contents"] else {
             return
         }
         
@@ -149,8 +149,12 @@ extension ALMenuViewController: UITableViewDelegate {
             return
         }
         
-        if case let .Closure(method)? = content["method"] {
-            method(tableView, indexPath)
+        if case let .Closure(method) = content["method"] {
+            guard let viewController = method() else {
+                return
+            }
+            
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
 	}
 }
