@@ -111,9 +111,7 @@ extension ALMenuViewController: UITableViewDataSource {
 	}
 	
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell").apply {
-            $0.accessoryType = .disclosureIndicator
-        }
+        let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
         
         guard case let .Array(contents)? = self.sections[indexPath.section]["contents"] else {
             return cell
@@ -135,6 +133,10 @@ extension ALMenuViewController: UITableViewDataSource {
             cell.detailTextLabel?.font = self.setting.font
         }
 		
+        if case .Closure(_)? = content["method"] {
+            cell.accessoryType = .disclosureIndicator
+        }
+        
 		return cell
 	}
 }
@@ -151,10 +153,14 @@ extension ALMenuViewController: UITableViewDelegate {
         
         if case let .Closure(method) = content["method"] {
             guard let viewController = method() else {
+                tableView.deselectRow(at: indexPath, animated: true)
+                
                 return
             }
             
             self.navigationController?.pushViewController(viewController, animated: true)
+        } else {
+            tableView.deselectRow(at: indexPath, animated: true)
         }
 	}
 }
